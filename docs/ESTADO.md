@@ -7,7 +7,7 @@ Actualizado: 18 de noviembre de 2026
 | Fase | Estado | Último commit |
 | --- | --- | --- |
 | 0 | completa | feat(step-7): añadir helper checkView |
-| 1 | sesión A lista; sesión B pendiente | feat(step-8), fix(step-9) |
+| 1 | completa | docs(step-12): cerrar Fase 1 |
 | 2 | pendiente | |
 | 3 | pendiente | |
 | 4 | pendiente | |
@@ -16,25 +16,21 @@ Actualizado: 18 de noviembre de 2026
 | 7 | pendiente | |
 | 8 | pendiente | |
 
-## Rutas reales verificadas
+## Rutas verificadas
 
-- `index.html`, `src/styles/shell.css`, `src/styles/layout.css`, `src/ui/preferences.js`: cabecera sticky de 101 px, navegación, tema y movimiento.
-- `src/ui/simulator-shell.js`, `src/ui/flow-step-contract.js`, `src/ui/simulator.js`: navegación validada por contrato; render y cámara de flujo permanecen integrados en el simulador.
-- `src/diagram/`, `src/core/`, `src/ui/scenes/`: layout/render SVG, parser/intérprete y escenas reutilizadas sin cambiar semántica.
-- `e2e/shared-navigation-header.spec.js`, `e2e/simulator-focus.spec.js`, `e2e/simulator-keyboard-contract.spec.js`, `e2e/ui-layout.js`: aceptación de cabecera, foco, atajos y layout.
-- `docs/informes/fase-0/INFORME.md`, `docs/PROGRESO.md`: evidencias anteriores; reutilizadas sin duplicar informes ni capturas.
+- `src/ui/simulator-shell.js`, `src/ui/flow-step-contract.js`: shell genérico, contrato, validador y navegación determinista.
+- `src/ui/simulator.js`, `src/ui/scenes/`, `src/ui/simulator-intro.js`: render de flujo, escenas reversibles, seguimiento, paneles, modos y pantalla previa con preferencia persistente.
+- `src/diagram/`, `src/core/`: layout SVG e intérprete sin cambios de semántica. Tipos de escena sin renderer propio usan `process.render` como respaldo genérico.
+- `docs/contrato-paso.md`, `docs/como-agregar-tema.md`: contrato y guía de extensión.
+- `e2e/simulator-keyboard-contract.spec.js`, `e2e/simulator-intro.spec.js`, `e2e/ui-layout.js`: teclado, pantalla previa y layout.
 
-## Supuestos tomados
+## Validación y riesgos
 
-- Ninguno de §2.2; no aplica a esta fase.
+- `npm test`: 32/32 archivos; Chromium: 147/147 casos en cuatro fragmentos, incluido tema claro y tamaños 390, 1366 y 1920.
+- `src/ui/simulator.js` conserva integrados el render SVG y la cámara de flujo; el shell ya acepta plantillas ficticias sin lógica de flujo.
+- No se reescribieron parser, intérprete ni compilador. `reference/` quedó intacto.
+- Se preservaron cambios locales previos en `docs/PROGRESO.md`, `docs/informes/fase-1/INVENTARIO.md` y `mejoras imp/`.
 
-## Pendientes y riesgos
+## Revisión manual
 
-- Fase 0 completa; Fase 1 sesión A lista (contrato/carcasa de pasos, teclado, cámara, controles, globo y layout). El render de flujo sigue ligado a `simulator.js`.
-- Validación Fase 1: 2/2 archivos Node y 21/21 E2E de área; prueba keyboard y checkView, 2/2 en Chromium. Suite completa queda para sesión B.
-- Sesión B pendiente: panel Variables, escenas, pantalla previa, modos didácticos y pulido final.
-- Se conservaron cambios locales preexistentes en `docs/PROGRESO.md`, `docs/informes/fase-1/INVENTARIO.md` y `mejoras imp/`.
-
-## Acciones que solo puede hacer el usuario
-
-- Revisar visualmente la fase en el navegador.
+- El usuario puede revisar visualmente el simulador en navegador.

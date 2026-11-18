@@ -17,10 +17,11 @@ Conteos derivados de los catálogos actuales: **5 temas, 40 lecciones, 108 ejerc
 | `src/ui/lab.js`, `src/ui/lab/` | Mecánicas, sesiones y persistencia del Laboratorio | `lab-generators`, `lab-progress`, `source-lab` |
 | `src/ui/source-simulator.js` | Simulador de recolección de fuentes | `source-requirements`, E2E de fuentes |
 | `src/ui/simulator-shell.js`, `src/ui/flow-step-contract.js` | Navegación genérica y validación de pasos para plantillas de simulador | `simulator-shell`, `flow-step-contract` |
-| `src/ui/simulator.js`, `src/ui/builder.js` | Render del simulador de flujo y Constructor visual | E2E de Simulador y Constructor |
+| `src/ui/simulator.js`, `src/ui/simulator-intro.js`, `src/ui/builder.js` | Render y modos del simulador de flujo, preferencias de pantalla previa y Constructor visual | E2E de Simulador y Constructor |
 | `src/styles/` | Tokens, vistas, componentes y responsive | `contrast`, E2E |
 | `tests/` | Contratos, contenido, motor, accesibilidad y regresiones | `npm test` |
 | `e2e/navigation.js`, `e2e/ui-layout.js` | Navegación de aceptación y detección de desbordamiento/solapamiento en las nueve rutas principales | `shared-navigation-header`, E2E |
-| `e2e/` | Recorridos de aceptación en navegador: 144 casos | `npm run test:browser -- --workers=2` |
+| `e2e/` | Recorridos de aceptación en navegador: 147 casos | `npm run test:browser -- --workers=2` |
 | `docs/CONTRATO_TEMA.md` | Proceso para añadir un tema completo | Revisión del contrato en cada tema |
+| `docs/contrato-paso.md`, `docs/como-agregar-tema.md` | Contrato de pasos y guía corta para registrar plantillas y temas | Revisión del contrato en cada tema |
 | `reference/` | Prototipo original preservado como referencia | Solo lectura; hash protegido |

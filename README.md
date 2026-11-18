@@ -19,7 +19,7 @@ Cuatro espacios: **Lecciones, Ejercicios, Simulador y Laboratorio**. El selector
 
 - **Lecciones:** 40 lecciones por tema, con explicación intuitiva y técnica, escenas, ejemplos, errores frecuentes y comprobación. El progreso se conserva localmente.
 - **Ejercicios:** catálogo de 108 retos (45 algoritmos, 24 fuentes y 39 matemáticas), con búsqueda, filtros y ficha de solución.
-- **Simulador:** parser e intérprete restringidos para pseudocódigo educativo. Una traza determinista alimenta el diagrama SVG, el pseudocódigo activo, En escena, Variables, Pantalla, Historial y la línea de tiempo. Incluye avance, retroceso, reproducción, predicción, zoom, ajuste, cámara, pantalla completa, tema, tamaño de texto y movimiento reducido.
+- **Simulador:** parser e intérprete restringidos para pseudocódigo educativo. Una pantalla «Intenta primero» presenta el enunciado y los datos de ejemplo antes del recorrido. Una traza determinista alimenta el diagrama SVG, el pseudocódigo activo, En escena, Variables, Pantalla, Historial y la línea de tiempo. Incluye avance, retroceso, reproducción, predicción, zoom, ajuste, cámara, pantalla completa, tema, tamaño de texto y movimiento reducido.
 - **Laboratorio:** 10 mecánicas de diagramas, 6 de fuentes y 18 de matemáticas. Incluye además un constructor gráfico estructurado que compila al mismo motor del Simulador.
 
 ## Constructor · historial de cambios

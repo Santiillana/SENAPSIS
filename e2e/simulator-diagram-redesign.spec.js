@@ -19,7 +19,6 @@ test("las figuras y bifurcaciones se leen sin recortes en móvil, tableta y escr
     await expect(page.locator("#flow-diagram-container .for-part-0")).toHaveClass(/is-active-part/);
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
     expect(overflow).toBeLessThanOrEqual(1);
-    if(width===1280)await page.locator("#diagram-stage").screenshot({path:"test-results/simulator-diagram-redesign.png"});
   }
 });
 

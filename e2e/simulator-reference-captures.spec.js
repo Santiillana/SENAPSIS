@@ -1,6 +1,6 @@
 import { test, expect, goToSpace } from "./navigation.js";
 
-test("captura el ejercicio 24 en pasos 1, 3 y 7 en escritorio y móvil",async({page},testInfo)=>{
+test("el ejercicio 24 mantiene la traza en pasos elegidos, escritorio y móvil",async({page})=>{
   const sizes=[
     {name:"desktop",width:1920,height:1080},
     {name:"mobile",width:390,height:844}
@@ -23,10 +23,6 @@ test("captura el ejercicio 24 en pasos 1, 3 y 7 en escritorio y móvil",async({p
       },step);
       await expect(page.locator("#timeline-count")).toContainText("/");
       await expect(page.locator("#flow-svg")).toBeVisible();
-      await page.screenshot({
-        path:testInfo.outputPath("exercise-24-step-"+step+"-"+size.name+".png"),
-        fullPage:true,animations:"disabled"
-      });
     }
   }
 });
