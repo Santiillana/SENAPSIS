@@ -109,6 +109,7 @@ export function renderDiagram(container,diagram,options={}){
 export function highlightDiagram(container,diagram,options={}) {
   if (!container||!diagram) return;
   const active=options.activeNodeId==null?null:String(options.activeNodeId);
+  const activeKey=options.activeNodeKey==null?null:String(options.activeNodeKey);
   const visited=new Set((options.visitedNodeIds??[]).map(String));
   const routeNodeId=options.routeNodeId==null?null:String(options.routeNodeId);
   const route=options.route??null;
@@ -120,9 +121,10 @@ export function highlightDiagram(container,diagram,options={}) {
   container.querySelectorAll(".diagram-node").forEach(element=>{
     const id=element.id.replace("flow-node-","");
     const model=diagram.byId.get(id);
-    element.classList.toggle("is-active",Boolean(model&&active===String(model.sourceId)));
+    const isActive=activeKey!==null?id===activeKey:Boolean(model&&active!==null&&model.sourceId!==null&&active===String(model.sourceId));
+    element.classList.toggle("is-active",isActive);
     element.classList.toggle("is-visited",Boolean(model&&model.sourceId!==null&&visited.has(String(model.sourceId))));
-    element.querySelectorAll(".for-part").forEach((part,index)=>part.classList.toggle("is-active-part",Boolean(model&&active===String(model.sourceId)&&index===activePart)));
+    element.querySelectorAll(".for-part").forEach((part,index)=>part.classList.toggle("is-active-part",isActive&&index===activePart));
   });
   edgeElements.forEach(element=>{
     const edge=diagram.edges.find(candidate=>candidate.id===element.dataset.edgeId);

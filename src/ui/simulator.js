@@ -631,7 +631,7 @@ function animateTokenRoute(route,event,animate=choreographyPlayback){
   if(!token)return;
   if(tokenRaf){cancelAnimationFrame(tokenRaf);tokenRaf=0;}
   const points=routeCoordinates(route);
-  const node=diagram?.nodes.find(item=>String(item.sourceId)===String(event?.nodeId));
+  const node=diagramNodeForEvent(event);
   const target=points.length?points[points.length-1]:node?{x:node.x,y:Math.max(10,node.y-12)}:null;
   if(!target){token.setAttribute("visibility","hidden");return;}
   const reduced=reducedMotion(),speed=currentSpeedFactor();
@@ -684,9 +684,9 @@ function animateTokenRoute(route,event,animate=choreographyPlayback){
   tokenRaf=requestAnimationFrame(frame);
 }
 function centerActiveNode(event,behavior){
-  if(!cameraReady||!cameraAuto||!event||event.nodeId===null||event.nodeId===undefined)return;
+  if(!cameraReady||!cameraAuto||!event)return;
   const stage=$("#diagram-stage");
-  const model=diagram?.nodes.find(item=>String(item.sourceId)===String(event.nodeId)||String(item.id)===String(event.nodeId));
+  const model=diagramNodeForEvent(event);
   const node=model?document.getElementById("flow-node-"+model.id):null;
   if(!stage||!node||!model)return;
   const stageRect=stage.getBoundingClientRect();
@@ -718,7 +718,7 @@ function centerActiveNode(event,behavior){
     };
     cameraRaf=requestAnimationFrame(step);
   }
-  stage.dataset.cameraTarget=String(event.nodeId);
+  stage.dataset.cameraTarget=String(model.id);
 }
 function currentSpeedFactor(){
   const value=Number($("#simulator-speed")?.value??1);
@@ -1083,11 +1083,13 @@ function render(){
     :[];
   pseudocode(method().pseudocode,e.sourceLine,seen.map(x=>x.sourceLine).filter(Boolean),activeVariableNames);
   if(diagram){
+    const activeModel=diagramNodeForEvent(e);
     const routeEvent=[...seen].reverse().find(item=>item.route&&(item.type==="branch"||item.type==="decision"||item.type==="loop-condition"));
     const previousSource=[...seen.slice(0,-1)].reverse().find(item=>item.nodeId!==null&&item.nodeId!==undefined)?.nodeId;
     const walked=previousSource!==null&&e.nodeId!==null&&e.nodeId!==undefined?routeBetweenNodes(previousSource,e.nodeId):[];
     highlightDiagram($("#flow-diagram-container"),diagram,{
       activeNodeId:e.nodeId,visitedNodeIds:seen.map(x=>x.nodeId).filter(x=>x!==null&&x!==undefined),
+      activeNodeKey:activeModel?.id,
       route:routeEvent?.route??null,routeNodeId:routeEvent?.nodeId??null,previousNodeId:previousSource??null,
       walkEdgeIds:walked.map(item=>item.edgeId),
       activePart:e.type==="loop-init"?0:e.type==="loop-condition"?1:e.type==="loop-update"?2:-1

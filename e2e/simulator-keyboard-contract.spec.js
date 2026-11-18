@@ -51,3 +51,38 @@ test("los atajos del simulador funcionan sin clic previo y respetan el foco", as
   await page.keyboard.press("ArrowRight");
   await expect(page.locator("body")).toHaveAttribute("data-active-space", "learn");
 });
+
+test("el diagrama encuadra la figura inicial al entrar y al cerrar la pantalla previa", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 950 });
+  await page.goto("/");
+  await goToSpace(page, "simulator", { dismissSimulatorIntro: false });
+  await expect(page.locator("#simulator-intro")).toBeVisible();
+  await page.locator("#simulator-reveal").click();
+  const geometry = await page.evaluate(() => {
+    const node = document.querySelector("#flow-diagram-container .diagram-node.is-active");
+    const stage = document.querySelector("#diagram-stage");
+    const free = () => {
+      const stageBox = stage.getBoundingClientRect();
+      const leftPanel = document.querySelector("#PL").getBoundingClientRect();
+      const rightPanel = document.querySelector("#RC").getBoundingClientRect();
+      const dock = document.querySelector("#dock").getBoundingClientRect();
+      return {
+        left: Math.max(stageBox.left + 18, leftPanel.right + 16),
+        right: Math.min(stageBox.right - 18, rightPanel.left - 16),
+        top: stageBox.top + 12,
+        bottom: Math.min(stageBox.bottom - 18, dock.top - 14)
+      };
+    };
+    const nodeBox = node.getBoundingClientRect(), area = free();
+    return {
+      nodeX: nodeBox.left + nodeBox.width / 2,
+      nodeY: nodeBox.top + nodeBox.height / 2,
+      areaX: (area.left + area.right) / 2,
+      areaY: (area.top + area.bottom) / 2,
+      cameraTarget: stage.dataset.cameraTarget
+    };
+  });
+  expect(Math.abs(geometry.nodeX - geometry.areaX)).toBeLessThan(36);
+  expect(Math.abs(geometry.nodeY - geometry.areaY)).toBeLessThan(36);
+  expect(geometry.cameraTarget).toBeTruthy();
+});
