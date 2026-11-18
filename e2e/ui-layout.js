@@ -74,3 +74,31 @@ export async function expectPageLayout(page, label = "vista") {
   expect(result.overflow, `${label}: elementos fuera del viewport`).toEqual([]);
   expect(result.overlaps, `${label}: regiones principales solapadas`).toEqual([]);
 }
+
+export async function checkView(page, ruta, opciones = {}) {
+  await expectPageLayout(page, ruta);
+
+  for (const [selectorA, selectorB] of opciones.noSolapar ?? []) {
+    const [a, b] = await Promise.all([
+      page.locator(selectorA).boundingBox(),
+      page.locator(selectorB).boundingBox()
+    ]);
+    if (!a || !b) continue;
+    const overlaps = Math.min(a.x + a.width, b.x + b.width) > Math.max(a.x, b.x) + 1 &&
+      Math.min(a.y + a.height, b.y + b.height) > Math.max(a.y, b.y) + 1;
+    expect(overlaps, `${ruta}: ${selectorA} se solapa con ${selectorB}`).toBe(false);
+  }
+
+  for (const selector of opciones.sinCorte ?? []) {
+    const element = page.locator(selector);
+    if (!(await element.isVisible())) continue;
+    const dimensions = await element.evaluate(node => ({
+      clientHeight: node.clientHeight,
+      scrollHeight: node.scrollHeight,
+      clientWidth: node.clientWidth,
+      scrollWidth: node.scrollWidth
+    }));
+    expect(dimensions.scrollHeight, `${ruta}: contenido cortado en ${selector}`).toBeLessThanOrEqual(dimensions.clientHeight + 1);
+    expect(dimensions.scrollWidth, `${ruta}: contenido cortado en ${selector}`).toBeLessThanOrEqual(dimensions.clientWidth + 1);
+  }
+}

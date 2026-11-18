@@ -1,5 +1,5 @@
 import { test, expect, goToSpace } from "./navigation.js";
-import { expectPageLayout } from "./ui-layout.js";
+import { checkView } from "./ui-layout.js";
 
 const spaces = ["learn", "exercises", "simulator", "lab", "hoy", "clases", "actividades", "biblioteca"];
 
@@ -76,7 +76,10 @@ for (const size of layoutSizes) {
       await page.evaluate(value => { document.documentElement.dataset.theme = value; }, theme);
       for (const route of layoutRoutes) {
         await goToSpace(page, route);
-        await expectPageLayout(page, `${route} ${theme} ${size.width}×${size.height}`);
+        await checkView(page, `${route} ${theme} ${size.width}×${size.height}`, {
+          noSolapar: [["#hd", "#main-content"]],
+          sinCorte: ["#hd"]
+        });
       }
     });
   }
