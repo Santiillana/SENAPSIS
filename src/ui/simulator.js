@@ -1104,16 +1104,13 @@ function render(){
   updateActiveNodeHint(e);
   /* La escena presenta una figura y una sola explicación del evento actual. */
   const sceneView=renderScene(e,{events:execution.events,inputValues:parseInputs(),execution});
-  const scene=sceneView.model?.scene??e.scene??{title:typeName(e.type)};
   const sceneContent=$("#scene-content");
   sceneContent.dataset.eventType=e.type;
   const symbolMarkup=symbolExplanationMarkup(e);
   const orderMarkup='<details class="scene-order-explanation"><summary>¿Por qué se ejecuta en este orden?</summary><p>'+esc(orderExplanation(e))+'</p></details>';
-  sceneContent.innerHTML='<div class="scene-figure-host" role="img" aria-label="'+sceneView.alt+'">'+sceneView.markup+'</div>'+
-    '<span class="scene-event-type">'+typeName(e.type)+'</span>'+
-    '<h4 class="scene-event-title">'+esc(scene.title??typeName(e.type))+'</h4>'+
-    symbolMarkup+orderMarkup+
-    '<p class="scene-event-body">'+esc(brief(e))+'</p>';
+  sceneContent.innerHTML=symbolMarkup+
+    '<div class="scene-figure-host" role="img" aria-label="'+sceneView.alt+'">'+sceneView.markup+'</div>'+
+    '<p class="scene-event-body">'+esc(brief(e))+'</p>'+orderMarkup;
   sceneContent.scrollTop=0;
   const vars=e.variables??{},names=Object.keys(vars),change=e.change;
   const variableMarkup=names.map(name=>{
@@ -1123,7 +1120,9 @@ function render(){
       '<span class="variable-card-name">'+esc(name)+'</span><span class="variable-card-values">'+old+'<strong>'+esc(fmt(vars[name]))+'</strong></span></button>';
   }).join("");
   $("#variables-content").innerHTML=names.length?'<div class="variable-cards">'+variableMarkup+'</div>':'<p class="empty-state-copy">La memoria aún está vacía. La primera asignación mostrará aquí cada cajita.</p>';
-  $("#variable-change").textContent=change?"Por qué cambia: "+brief(e):"Sin cambios de variable en este paso.";
+  $("#variable-change").textContent=change
+    ?change.previous===undefined?change.name+" nace con "+fmt(change.value)+".":change.name+" pasa de "+fmt(change.previous)+" a "+fmt(change.value)+"."
+    :"Este paso no cambia variables.";
   $("#variables-content").scrollTop=0;
   const activeModel=diagramNodeForEvent(e),activeNode=activeModel?document.getElementById("flow-node-"+activeModel.id):null;
   document.querySelectorAll("#flow-svg .diagram-node").forEach(node=>{node.classList.remove("has-active-variable");node.style.removeProperty("--active-variable-color");});

@@ -44,3 +44,21 @@ test("Mostrar completo revela la ficha de inmediato y mantiene el paso activo",a
   await expect(page.locator("#timeline-count")).toContainText("/");
   await expect(page.locator("#flow-diagram-container .flow-token")).toHaveAttribute("visibility","visible");
 });
+
+test("la escena resume el paso con una ilustración animada y variables sincronizadas",async({page})=>{
+  await page.setViewportSize({width:1440,height:950});
+  await page.goto("/");
+  await goToSpace(page,"simulator");
+  await expect(page.locator("#scene-content .scene-symbol-explanation")).toContainText("Óvalo · Inicio");
+  await page.locator("#simulator-next").click();
+  await expect(page.locator("#scene-content .scene-input .scene-tape-item.is-current")).toHaveText("8");
+  await expect(page.locator("#variable-change")).toHaveText("a nace con 8.");
+  await page.locator("#simulator-next").click();
+  await page.locator("#simulator-next").click();
+  await expect(page.locator("#scene-content .scene-operation-breakdown strong")).toContainText("8 + 5 = 13");
+  await expect(page.locator("#variable-change")).toHaveText("s nace con 13.");
+  await expect(page.locator("#scene-content .scene-event-body")).toBeVisible();
+  await page.emulateMedia({reducedMotion:"reduce"});
+  const animation=await page.locator("#scene-content .scene-operation-breakdown strong").evaluate(node=>getComputedStyle(node).animationName);
+  expect(animation).toBe("none");
+});
