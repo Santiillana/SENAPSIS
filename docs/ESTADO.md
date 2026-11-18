@@ -7,7 +7,7 @@ Actualizado: 18 de noviembre de 2026
 | Fase | Estado | Último commit |
 | --- | --- | --- |
 | 0 | completa | feat(step-7): añadir helper checkView |
-| 1 | pendiente | |
+| 1 | sesión A lista; sesión B pendiente | feat(step-8), fix(step-9) |
 | 2 | pendiente | |
 | 3 | pendiente | |
 | 4 | pendiente | |
@@ -18,10 +18,11 @@ Actualizado: 18 de noviembre de 2026
 
 ## Rutas reales verificadas
 
-- `index.html`, `src/styles/shell.css`, `src/styles/layout.css`: cabecera compartida sticky de 101 px, selector, subsecciones y acciones de tema/movimiento.
-- `src/ui/simulator.js`, `src/ui/preferences.js`: Concentración oculta la cabecera; controles de tema y movimiento guardan preferencias.
-- `e2e/shared-navigation-header.spec.js`, `e2e/simulator-focus.spec.js`, `e2e/ui-layout.js`: geometría, modo Concentración y chequeos de vistas responsive.
-- `docs/informes/fase-0/INFORME.md`, `docs/PROGRESO.md`: evidencias anteriores de la Fase 0; reutilizadas, sin duplicar informes ni capturas.
+- `index.html`, `src/styles/shell.css`, `src/styles/layout.css`, `src/ui/preferences.js`: cabecera sticky de 101 px, navegación, tema y movimiento.
+- `src/ui/simulator-shell.js`, `src/ui/flow-step-contract.js`, `src/ui/simulator.js`: navegación validada por contrato; render y cámara de flujo permanecen integrados en el simulador.
+- `src/diagram/`, `src/core/`, `src/ui/scenes/`: layout/render SVG, parser/intérprete y escenas reutilizadas sin cambiar semántica.
+- `e2e/shared-navigation-header.spec.js`, `e2e/simulator-focus.spec.js`, `e2e/simulator-keyboard-contract.spec.js`, `e2e/ui-layout.js`: aceptación de cabecera, foco, atajos y layout.
+- `docs/informes/fase-0/INFORME.md`, `docs/PROGRESO.md`: evidencias anteriores; reutilizadas sin duplicar informes ni capturas.
 
 ## Supuestos tomados
 
@@ -29,9 +30,10 @@ Actualizado: 18 de noviembre de 2026
 
 ## Pendientes y riesgos
 
-- Fase 0 verificada: helper `checkView(page, ruta, opciones)` cubre nueve rutas, sin scroll horizontal, con chequeos opcionales de solapamiento y recorte.
-- Validación: 30/30 archivos Node y 145/145 pruebas E2E Chromium aprobadas; matriz visual 390, 768, 1366 y 1920 px en ambos temas.
-- El árbol tenía cambios locales previos en `index.html`, `src/ui/simulator.js`, `docs/PROGRESO.md` y otros archivos; se conservaron fuera de este commit.
+- Fase 0 completa; Fase 1 sesión A lista (contrato/carcasa de pasos, teclado, cámara, controles, globo y layout). El render de flujo sigue ligado a `simulator.js`.
+- Validación Fase 1: 2/2 archivos Node y 21/21 E2E de área; prueba keyboard y checkView, 2/2 en Chromium. Suite completa queda para sesión B.
+- Sesión B pendiente: panel Variables, escenas, pantalla previa, modos didácticos y pulido final.
+- Se conservaron cambios locales preexistentes en `docs/PROGRESO.md`, `docs/informes/fase-1/INVENTARIO.md` y `mejoras imp/`.
 
 ## Acciones que solo puede hacer el usuario
 

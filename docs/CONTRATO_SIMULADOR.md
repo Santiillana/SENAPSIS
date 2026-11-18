@@ -1,10 +1,11 @@
 # Contrato del simulador por tema
 
-El simulador actual de Diagramas de flujo está en `src/ui/simulator.js` y usa
-el intérprete existente. Al incorporar otros motores, se conserva un marco
-común para controles, cámara, Predice, ventana contextual, tamaño de texto y
-Concentración. Cada tema aporta un productor de pasos, una zona principal y
-escenas. La interfaz presenta los eventos; no vuelve a calcular resultados.
+El simulador actual de Diagramas de flujo usa el intérprete existente. Su
+controlador genérico de pasos está en `src/ui/simulator-shell.js`; la plantilla
+de flujo adapta la traza al contrato. El render SVG, la cámara y los controles
+siguen integrados en `src/ui/simulator.js` y se migrarán gradualmente. Cada
+tema aporta un productor de pasos, una zona principal y escenas. La interfaz
+presenta los eventos; no vuelve a calcular resultados.
 
 ## Forma de un paso
 
@@ -22,11 +23,12 @@ escenas. La interfaz presenta los eventos; no vuelve a calcular resultados.
 }
 ```
 
-El adaptador de diagramas `src/ui/flow-step-contract.js` agrega estos campos
-sin descartar ni recalcular el evento original del intérprete. Los campos
-originales se conservan para que los renderizadores existentes sigan siendo
-compatibles durante la extracción gradual. `validateSteps` comprueba ids
-únicos y la estructura mínima antes de que el simulador presente la traza.
+El adaptador `src/ui/flow-step-contract.js` agrega estos campos sin descartar ni
+recalcular el evento original del intérprete. `validateSteps` comprueba ids
+únicos y la estructura mínima. `createSimulatorShell` recibe una plantilla,
+construye y valida sus pasos, y proporciona navegación determinista. Conserva
+los campos originales para que el renderizador de flujo siga siendo compatible
+durante la extracción gradual.
 
 ## Adaptación de un tema nuevo
 
