@@ -1,11 +1,12 @@
 import { exercises, getExercise } from "../content/exercises.js";
 import { traceExpression } from "../core/expression.js";
-import { executePseudocode, createTimeline } from "../core/interpreter.js";
+import { executePseudocode } from "../core/interpreter.js";
 import { parsePseudocode } from "../core/parser.js";
 import { layoutFlow } from "../diagram/layout.js";
 import { renderDiagram, highlightDiagram } from "../diagram/renderer.js";
 import { renderScene } from "./scenes/index.js";
-import { buildFlowSteps, validateSteps } from "./flow-step-contract.js";
+import { flowTemplate } from "./flow-step-contract.js";
+import { createSimulatorShell } from "./simulator-shell.js";
 import { variableTone } from "./variable-tone.js";
 
 const $ = s => document.querySelector(s);
@@ -1262,10 +1263,8 @@ function run(){
   stop();
   try{
     execution=executePseudocode(method().pseudocode,parseInputs());
-    execution.events=buildFlowSteps(execution.events);
-    const contract=validateSteps(execution.events);
-    if(!contract.valid)throw new Error("La traza no cumple el contrato del simulador: "+contract.reason);
-    timeline=createTimeline(execution);
+    timeline=createSimulatorShell(flowTemplate,exercise,execution);
+    execution.events=timeline.steps;
     selectedVariable=null;
     history();render();
     $("#simulator-status").textContent=execution.ok?"Simulación lista · "+execution.events.length+" pasos":"Ejecución detenida";

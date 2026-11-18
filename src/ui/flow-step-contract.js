@@ -18,6 +18,12 @@ export function buildFlowSteps(events) {
   }));
 }
 
+export const flowTemplate = Object.freeze({
+  construirPasos(_exercise, execution) {
+    return buildFlowSteps(execution?.events);
+  }
+});
+
 export function validateSteps(steps) {
   if (!Array.isArray(steps)) return { valid: false, reason: "steps-not-array" };
   const ids = new Set();
