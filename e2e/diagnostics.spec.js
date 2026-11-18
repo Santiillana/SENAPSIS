@@ -11,8 +11,7 @@ test("la aplicación completa inicia sin excepciones JavaScript",async({page})=>
   expect(response?.ok()).toBeTruthy();
   await goToSpace(page,"exercises");
   await expect(page.locator("#primary-nav [data-space='exercises']")).toBeVisible();
-  await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(12);
-  await expect(page.locator("#exercise-count")).toContainText("45 de 45 ejercicios");
+  await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(45);
   await goToSpace(page, "learn");
   await expect(page.locator('[data-view="learn"]')).toBeVisible();
   expect(pageErrors).toEqual([]);

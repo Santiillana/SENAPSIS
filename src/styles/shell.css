@@ -41,7 +41,7 @@
 .primary-nav{
   position:relative;z-index:2;display:flex;flex:0 0 44px;width:100%;
   align-items:stretch;justify-content:center;min-height:44px;height:44px;
-  border-top:1px solid var(--line);padding:0 clamp(12px,2vw,28px)
+  margin-top:-30px;border-top:1px solid var(--line);padding:0 clamp(12px,2vw,28px)
 }
 .subnav-group{display:flex;align-items:stretch;justify-content:center;gap:clamp(2px,.5vw,9px);min-width:0}
 .subnav-group[hidden]{display:none}
@@ -103,6 +103,18 @@
 :root[data-motion="soft"] .home-flow .flow-ball{animation-play-state:paused;offset-distance:50%}
 :root[data-motion="soft"] .home-card:hover .flow-ball,:root[data-motion="soft"] .home-card:focus-visible .flow-ball{animation-play-state:running}
 :root[data-motion="reduced"] .home-flow .flow-ball{animation:none;offset-distance:50%}
+
+/* El Simulador conserva la misma cabecera de dos filas que el resto de la app. */
+body[data-active-space="simulator"] .topbar#hd{position:sticky!important;inset:auto!important;height:auto!important;min-height:0!important}
+body[data-active-space="simulator"] .topbar#hd .primary-nav{flex:0 0 44px!important;width:100%!important;max-width:none!important;height:44px!important;min-height:44px!important}
+body[data-active-space="simulator"] .topbar#hd .topbar-main{height:var(--topbar-h)!important;min-height:var(--topbar-h)!important}
+body[data-active-space="simulator"] .topbar#hd .subnav-group{width:auto!important;max-width:100%!important}
+body[data-active-space="simulator"] .topbar#hd .primary-nav .nav-button{flex:0 0 auto!important;min-height:44px!important;padding-inline:14px!important;border-radius:0!important}
+body[data-active-space="simulator"].focus #hd{display:none!important}
+@media(max-width:700px){
+  body[data-active-space="simulator"] .topbar#hd .primary-nav{overflow-x:auto!important;justify-content:flex-start!important}
+  body[data-active-space="simulator"] .topbar#hd .subnav-group{flex:0 0 auto!important;width:max-content!important;justify-content:flex-start!important}
+}
 
 /* Vistas de Mi ficha mientras se implementan sus módulos de datos. */
 .ficha-placeholder{max-width:var(--content-width);margin-inline:auto}

@@ -3195,6 +3195,49 @@ body[data-active-space="simulator"] #PV .scene-order-explanation{align-self:stre
 .math-player-area{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}.math-player-area>div{display:grid;gap:8px;justify-items:center}.math-player-area section{display:grid;grid-template-columns:repeat(var(--area-columns),minmax(8px,20px));gap:3px}.math-player-area section i{aspect-ratio:1;border:1px solid var(--accent);border-radius:3px;background:color-mix(in srgb,var(--accent) 25%,var(--card))}.math-player-area span{color:var(--text-2);font-size:13px}.math-player-area strong{font:600 15px ui-monospace,monospace}.math-player-area>b{color:var(--accent-text);font-size:25px}
 .math-player-empty{max-width:760px;margin:8vh auto;padding:clamp(20px,5vw,48px);border:1px solid var(--line);border-radius:18px;background:var(--card)}.math-player-empty h2{font-size:clamp(26px,4vw,38px)}.math-player-empty p:not(.eyebrow){line-height:1.6;color:var(--text-2)}
 body.math-focus #hd,body.math-focus #primary-nav,body.math-focus .simulator-statusbar{display:none!important}body.math-focus #view-simulator{min-height:100vh}body.math-focus .math-player{max-width:1120px}
+
+/* Mantener la cabecera de navegación compartida también dentro del Simulador. */
+body[data-active-space="simulator"] .topbar#hd{
+  position:sticky!important;inset:auto!important;display:flex!important;flex-direction:column!important;
+  width:100%!important;height:auto!important;min-height:0!important;max-width:none!important;
+  margin:0!important;padding:0!important;border:0!important;border-bottom:1px solid var(--line)!important;
+  box-shadow:none!important;gap:0!important;overflow:visible!important
+}
+body[data-active-space="simulator"] .topbar#hd .topbar-main{
+  position:relative!important;display:grid!important;flex:0 0 var(--topbar-h)!important;
+  grid-template-columns:minmax(100px,1fr) auto minmax(60px,1fr)!important;grid-template-rows:none!important;
+  width:100%!important;height:var(--topbar-h)!important;min-height:var(--topbar-h)!important;
+  padding:0 clamp(12px,2.5vw,38px)!important;gap:8px!important
+}
+body[data-active-space="simulator"] .topbar#hd .brand{display:inline-flex!important;grid-column:auto!important;grid-row:auto!important;width:max-content!important}
+body[data-active-space="simulator"] .topbar#hd .brand-copy{display:block!important}
+body[data-active-space="simulator"] .topbar#hd .section-switch{display:inline-flex!important}
+body[data-active-space="simulator"] .topbar#hd .topbar-actions{grid-column:auto!important;grid-row:auto!important;width:auto!important;min-width:0!important}
+body[data-active-space="simulator"] .topbar#hd .primary-nav{
+  position:relative!important;display:flex!important;flex:0 0 44px!important;grid-column:auto!important;grid-row:auto!important;
+  align-items:stretch!important;justify-content:center!important;width:100%!important;height:44px!important;min-height:44px!important;
+  margin:0!important;padding:0 clamp(12px,2vw,28px)!important;border-top:0!important;overflow:visible!important
+}
+body[data-active-space="simulator"] .topbar#hd .subnav-group{display:flex!important;width:auto!important;max-width:100%!important;justify-content:center!important;gap:clamp(2px,.5vw,9px)!important}
+body[data-active-space="simulator"] .topbar#hd .primary-nav .nav-button{
+  display:inline-flex!important;flex:0 0 auto!important;min-width:0!important;min-height:44px!important;max-width:none!important;
+  padding:0 14px!important;border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;
+  background:transparent!important;font-size:13px!important;letter-spacing:normal!important
+}
+body[data-active-space="simulator"] .topbar#hd .primary-nav .nav-button.is-active{border-bottom-color:var(--accent)!important}
+body[data-active-space="simulator"].focus #hd{display:none!important}
+body[data-active-space="simulator"].focus #main-content.page-shell,
+body[data-active-space="simulator"].focus #view-simulator.simulator-view{z-index:auto!important}
+@media(max-width:700px){
+  body[data-active-space="simulator"] .topbar#hd .topbar-main{grid-template-columns:minmax(0,1fr) auto minmax(0,auto)!important;padding-inline:12px!important;gap:6px!important}
+  body[data-active-space="simulator"] .topbar#hd .brand-copy{display:none!important}
+  body[data-active-space="simulator"] .topbar#hd .primary-nav{justify-content:flex-start!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none!important}
+  body[data-active-space="simulator"] .topbar#hd .primary-nav::-webkit-scrollbar{display:none}
+  body[data-active-space="simulator"] .topbar#hd .subnav-group{flex:0 0 auto!important;width:max-content!important;justify-content:flex-start!important}
+  body[data-active-space="simulator"] .topbar#hd .primary-nav .nav-button{padding-inline:clamp(7px,2vw,14px)!important;font-size:12px!important}
+  body[data-active-space="simulator"] .topbar#hd .section-switch button{padding-inline:clamp(8px,2vw,16px)!important;font-size:12px!important}
+  body[data-active-space="simulator"] .topbar#hd .topbar-actions{gap:2px!important}
+}
 @media(max-width:760px){#view-simulator[data-math-player="true"]{padding:12px}.math-player-head{flex-direction:column}.math-player-head>.button{align-self:flex-start}.math-player-layout{grid-template-columns:1fr}.math-player-side{grid-template-columns:repeat(2,minmax(0,1fr))}.math-player-side>.math-player-tools{grid-column:1/-1}.math-player-controls{flex-wrap:wrap}.math-player-controls input{order:2;flex-basis:100%}.math-player-controls label{margin-left:auto}}
 @media(max-width:480px){.math-player-main,.math-player-side>section,.math-player-side>details{padding:14px}.math-player-side{grid-template-columns:1fr}.math-predict{grid-template-columns:1fr}.math-predict button{min-height:44px}.math-player-stage{min-height:210px;padding:12px}.math-player-controls{gap:5px;padding:7px}.math-player-controls button{min-width:34px;height:38px}.math-player-controls label{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.math-cross-lines path{animation:none}.math-number-token{transition:none}}

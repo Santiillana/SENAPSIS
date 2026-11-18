@@ -74,7 +74,7 @@ export function initNavigation() {
     root.dataset.section = section;
     document.body.dataset.activeSpace = space;
     document.body.dataset.activeSection = section;
-    if (header) header.dataset.sectionSwitcherHidden = String(space === "simulator");
+    if (header) header.dataset.sectionSwitcherHidden = "false";
     document.title = meta.title + " · Traza";
 
     if (space !== "home") {

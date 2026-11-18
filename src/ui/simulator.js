@@ -1370,9 +1370,17 @@ const FOCUS_LAYOUT=[
   ["#diagram-stage.simulator-diagram-stage",{position:"absolute",inset:"0",width:"100vw",height:"100svh",minWidth:"0",minHeight:"0",margin:"0",padding:"0",overflow:"hidden"}]
 ];
 function setFocusLayout(enabled){
+  const focusTop="0px";
+  const focusHeight="100svh";
   for(const [selector,properties] of FOCUS_LAYOUT){
     const element=$(selector);if(!element)continue;
-    for(const [property,value] of Object.entries(properties)){
+    const layout={...properties};
+    if(enabled&&(selector==="#main-content"||selector==="#view-simulator")){
+      layout.inset=`${focusTop} 0 0`;
+      layout.height=focusHeight;
+      layout.maxHeight=focusHeight;
+    }
+    for(const [property,value] of Object.entries(layout)){
       if(enabled)element.style.setProperty(property.replace(/[A-Z]/g,letter=>"-"+letter.toLowerCase()),value,"important");
       else element.style.removeProperty(property.replace(/[A-Z]/g,letter=>"-"+letter.toLowerCase()));
     }
