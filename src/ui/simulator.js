@@ -1649,6 +1649,7 @@ function bind(){
       if(event.currentTarget.disabled)return;
       event.preventDefault();
       action();
+      requestAnimationFrame(()=>$("#flow-diagram-container")?.focus({preventScroll:true}));
     });
   }
   $("#simulator-timeline")?.addEventListener("input",event=>seek(Number(event.target.value)));
@@ -1669,7 +1670,7 @@ function bind(){
   $("#diagram-zoom-out")?.addEventListener("click",()=>zoomDiagram(-1));
   $("#diagram-fit")?.addEventListener("click",centerDiagram);
   bindDiagramPan();
-  document.addEventListener("keydown",event=>{
+  const onSimulatorKeydown=event=>{
     const key=event.key;
     if(key==="Escape"&&$("#simulator-controls-panel")&&!$("#simulator-controls-panel").hidden){event.preventDefault();toggleControls(false);return;}
     if(key==="Escape"&&document.body.classList.contains("focus")){event.preventDefault();toggleDiagramFullscreen();return;}
@@ -1677,8 +1678,8 @@ function bind(){
     if(target instanceof HTMLElement&&(target.isContentEditable||/INPUT|TEXTAREA|SELECT/.test(target.tagName)))return;
     if(event.altKey||event.ctrlKey||event.metaKey)return;
     if(key===" "){event.preventDefault();play();}
-    else if(key==="ArrowRight"){event.preventDefault();move(1);}
-    else if(key==="ArrowLeft"){event.preventDefault();move(-1);}
+    else if(key==="ArrowRight"||key==="ArrowDown"){event.preventDefault();move(1);}
+    else if(key==="ArrowLeft"||key==="ArrowUp"){event.preventDefault();move(-1);}
     else if(key==="Home"){event.preventDefault();seek(0);}
     else if(key==="End"){event.preventDefault();seek((timeline?.length??1)-1);}
     else if(key==="+"||key==="="){event.preventDefault();zoomDiagram(1);}
@@ -1688,7 +1689,13 @@ function bind(){
     else if(key.toLowerCase()==="p"){event.preventDefault();togglePredictionMode();}
     else if(key.toLowerCase()==="f"){event.preventDefault();toggleDiagramFullscreen();}
     else if(key==="?"){event.preventDefault();const help=$("#simulator-shortcuts");if(help)help.hidden=!help.hidden;}
-  });
+  };
+  const syncSimulatorKeyListener=event=>{
+    if(event.detail?.space==="simulator")document.addEventListener("keydown",onSimulatorKeydown);
+    else document.removeEventListener("keydown",onSimulatorKeydown);
+  };
+  document.addEventListener("traza:space-change",syncSimulatorKeyListener);
+  if(document.body.dataset.activeSpace==="simulator")document.addEventListener("keydown",onSimulatorKeydown);
   document.querySelector('[data-space="simulator"]')?.addEventListener("click",()=>{
     if(!execution)prepare();
     setMobilePanel("diagram");
