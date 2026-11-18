@@ -9,15 +9,15 @@ La aplicación reúne **5 temas activos y 40 lecciones**: 17 de diagramas de flu
 ## Espacios
 
 ### Inicio
-Acceso a Mi ficha y Aprende, continuidad del último espacio visitado y progreso de las 40 lecciones con porcentaje y barra accesible. Añade accesos directos a Ejercicios, Simulador y Laboratorio.
+Acceso a Mi ficha y Aprende y continuidad del último espacio visitado. El progreso detallado de las 40 lecciones está en la vista Lecciones.
 
 ### Mi ficha
-Cinco espacios para organizar el trabajo académico: **Hoy, Semana, Calendario, Actividades y Biblioteca**. Incluye cuatro actividades publicadas; el seguimiento personal se conserva en este navegador.
+Cuatro espacios para organizar el trabajo académico: **Centro de control, Clases, Actividades y Biblioteca**. Clases ofrece vistas diaria, semanal y mensual. Incluye cuatro actividades publicadas; el seguimiento personal se conserva en este navegador.
 
 ### Aprende
-Cuatro espacios: **Aprende, Ejercicios, Simulador y Laboratorio**.
+Cuatro espacios: **Lecciones, Ejercicios, Simulador y Laboratorio**. El selector principal conserva el nombre «Aprende».
 
-- **Aprende:** 40 lecciones por tema, con explicación intuitiva y técnica, escenas, ejemplos, errores frecuentes y comprobación. El progreso se conserva localmente.
+- **Lecciones:** 40 lecciones por tema, con explicación intuitiva y técnica, escenas, ejemplos, errores frecuentes y comprobación. El progreso se conserva localmente.
 - **Ejercicios:** catálogo de 108 retos (45 algoritmos, 24 fuentes y 39 matemáticas), con búsqueda, filtros y ficha de solución.
 - **Simulador:** parser e intérprete restringidos para pseudocódigo educativo. Una traza determinista alimenta el diagrama SVG, el pseudocódigo activo, En escena, Variables, Pantalla, Historial y la línea de tiempo. Incluye avance, retroceso, reproducción, predicción, zoom, ajuste, cámara, pantalla completa, tema, tamaño de texto y movimiento reducido.
 - **Laboratorio:** 10 mecánicas de diagramas, 6 de fuentes y 18 de matemáticas. Incluye además un constructor gráfico estructurado que compila al mismo motor del Simulador.

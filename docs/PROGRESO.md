@@ -9,8 +9,7 @@ El plan de `docs/PLAN_MAESTRO.md` coincide byte por byte con `/home/santiago/Des
 | Área | Estado | Evidencia inicial y trabajo restante |
 | --- | --- | --- |
 | Steps 1–20 | Implementados en commits separados | `git log` contiene `feat(step-1)` a `feat(step-20)`. Verificar criterios a lo largo de las fases que los usan; no recrear capacidades existentes. |
-| Fase 0, pasos 1–6 | Parcial | Cambios locales recién guardados en `a282d0d` unifican CSS de cabecera, preservan selector en Simulador, modo enfoque y etiqueta de diagnóstico. La cabecera aún mide 101 px; hay estilos duplicados y falta probar consistencia completa. |
-| Fase 0, paso 7 | Pendiente | La suite no incluye todavía un helper reutilizable de detección de desbordamiento y solapamiento aplicado a todas las rutas/tamaños. |
+| Fase 0, pasos 1–7 | Completa | Cabecera sticky consistente (101 px), nueve rutas, subsección «Lecciones», modo Concentración opcional y helper E2E en cuatro tamaños/dos temas. Informe y 72 capturas en `docs/informes/fase-0/`. La matriz y la suite completa pasaron. |
 | Fases 1–8 | Pendientes de auditoría detallada | Se evaluarán en orden después de cerrar Fase 0, sin rehacer código existente. La referencia se copió a `docs/referencia-simulador/`. |
 
 ## Paso 0
@@ -22,8 +21,17 @@ El plan de `docs/PLAN_MAESTRO.md` coincide byte por byte con `/home/santiago/Des
 
 ## Paso 1: suite E2E
 
-En curso. Comando: `npm run test:browser -- --workers=2`. Registrar clasificación, arreglos y commits aquí al completar.
+**Completo** (`b6bd177`). El baseline estable tuvo 26 fallos de 136; cada uno se clasificó y los de expectativa obsoleta se actualizaron con justificación. Se corrigieron el panel de mecánicas del Laboratorio y la reanudación de cámara al avanzar después de un paneo. Se añadieron comprobaciones responsive que encontraron y corrigieron desbordamientos en móvil/tableta. La clasificación detallada está en `docs/informes/fase-0/INFORME.md`.
+
+- `npm test`: 345/345.
+- `PLAYWRIGHT_BASE_URL=http://127.0.0.1:4173 npm run test:browser -- --workers=2`: 144/144 en 4,3 min. Se usó servidor local persistente después de observar que el servidor integrado dejó de responder en corridas largas; no hubo `ERR_CONNECTION_REFUSED` en la corrida final.
+- El humo de producción tiene límite específico de 35 s basado en medición: 10,9 s aislado, 20,7 s bajo contención; terminó en 13 s en la corrida final.
 
 ## Fase 0
 
-En curso. Se cerrará con helper UI, pruebas verdes, capturas y un informe en `docs/informes/`.
+**Completa.** La cabecera mide 101 px, conserva su geometría entre vistas, permanece sticky y el modo Concentración la oculta solo bajo solicitud. La subsección usa «Lecciones» y el documento no presenta scroll horizontal global. El helper `e2e/ui-layout.js` cubre nueve rutas y cada prueba matricial cubre los cuatro tamaños de la sección 4.5 bajo un tema; las ocho combinaciones pasaron.
+
+- Informe: `docs/informes/fase-0/INFORME.md`.
+- Capturas: `docs/informes/fase-0/capturas/README.md` (72 archivos: nueve rutas × cuatro tamaños × dos temas).
+- Documentación de capacidades y navegación sincronizada en `README.md` y `docs/MAPA_DEL_REPO.md`.
+- Cierre registrado en commits separados para reparación E2E y documentación/evidencia.

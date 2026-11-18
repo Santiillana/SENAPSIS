@@ -15,5 +15,6 @@ Fecha de registro: 17 de noviembre de 2026. Las decisiones concedidas por el usu
 | 2026-11-17 | Fase 7 solo local: código, migraciones, API, panel y pruebas con D1 local de Wrangler; no crear D1 remoto, activar Access ni desplegar. | Límite explícito del usuario. | Requiere ejecución manual del usuario documentada en `docs/PASOS_USUARIO.md`. |
 | 2026-11-17 | Escenas del simulador: redactar diseño, implementar con criterios del plan y marcar pendiente de revisión del usuario. | Aprobación concedida expresamente. | Editar diseño/escenas antes de publicar decisiones de contenido. |
 | 2026-11-17 | Auditoría de ejercicios: informe sin eliminar ni reescribir existentes; nuevos ejercicios solo como borradores. | Preservar el contenido auditado. | Retirar únicamente borradores nuevos tras revisión. |
+| 2026-11-17 | La subnavegación del Simulador puede desplazarse dentro de su propia barra en anchos donde sus opciones no caben. | Mantiene las rutas y evita scroll horizontal del documento; coincide con el tratamiento de chips de la sección 4.5. | Retirar el overflow interno cuando una futura cabecera pueda mostrar las opciones sin recorte. |
 
 Para decisiones adicionales se elegirá la opción más conservadora y reversible, y se añadirá aquí antes de aplicarla.

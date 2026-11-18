@@ -4,7 +4,7 @@ Conteos derivados de los catálogos actuales: **5 temas, 40 lecciones, 108 ejerc
 
 | Ruta | Responsabilidad | Pruebas principales |
 |---|---|---|
-| `index.html` | Shell semántico, navegación y espacios | `architecture`, E2E |
+| `index.html` | Shell semántico, cabecera común y navegación de los nueve espacios | `architecture`, `shared-navigation-header`, E2E |
 | `src/app.js` | Inicialización de vistas y módulos | `ui-modules`, E2E |
 | `src/content/temas.js` | Registro de temas y competencias activas | `content`, `source-requirements`, `source-lab` |
 | `src/content/lessons.js`, `sources-lessons.js`, `math-lessons.js` | Lecciones por tema | `content`, `lesson-programs`, `math-lessons` |
@@ -19,6 +19,7 @@ Conteos derivados de los catálogos actuales: **5 temas, 40 lecciones, 108 ejerc
 | `src/ui/simulator.js`, `src/ui/builder.js` | Simulador y Constructor visual | E2E módulos 3–4 |
 | `src/styles/` | Tokens, vistas, componentes y responsive | `contrast`, E2E |
 | `tests/` | Contratos, contenido, motor, accesibilidad y regresiones | `npm test` |
-| `e2e/` | Recorridos de aceptación en navegador | `npm run test:browser` |
+| `e2e/navigation.js`, `e2e/ui-layout.js` | Navegación de aceptación y detección de desbordamiento/solapamiento en las nueve rutas principales | `shared-navigation-header`, E2E |
+| `e2e/` | Recorridos de aceptación en navegador: 144 casos | `npm run test:browser -- --workers=2` |
 | `docs/CONTRATO_TEMA.md` | Proceso para añadir un tema completo | Revisión del contrato en cada tema |
 | `reference/` | Prototipo original preservado como referencia | Solo lectura; hash protegido |

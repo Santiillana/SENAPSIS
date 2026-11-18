@@ -1,0 +1,15 @@
+# Capturas de Fase 0
+
+Capturas del viewport a escala 1:1, tomadas después de cambiar a cada ruta y aplicar el tema. No son recortes ni mockups.
+
+| Vista | 390x844 light | 390x844 dark | 768x1024 light | 768x1024 dark | 1366x768 light | 1366x768 dark | 1920x1080 light | 1920x1080 dark |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| home | [PNG](./home-390x844-light.png) | [PNG](./home-390x844-dark.png) | [PNG](./home-768x1024-light.png) | [PNG](./home-768x1024-dark.png) | [PNG](./home-1366x768-light.png) | [PNG](./home-1366x768-dark.png) | [PNG](./home-1920x1080-light.png) | [PNG](./home-1920x1080-dark.png) |
+| hoy | [PNG](./hoy-390x844-light.png) | [PNG](./hoy-390x844-dark.png) | [PNG](./hoy-768x1024-light.png) | [PNG](./hoy-768x1024-dark.png) | [PNG](./hoy-1366x768-light.png) | [PNG](./hoy-1366x768-dark.png) | [PNG](./hoy-1920x1080-light.png) | [PNG](./hoy-1920x1080-dark.png) |
+| clases | [PNG](./clases-390x844-light.png) | [PNG](./clases-390x844-dark.png) | [PNG](./clases-768x1024-light.png) | [PNG](./clases-768x1024-dark.png) | [PNG](./clases-1366x768-light.png) | [PNG](./clases-1366x768-dark.png) | [PNG](./clases-1920x1080-light.png) | [PNG](./clases-1920x1080-dark.png) |
+| actividades | [PNG](./actividades-390x844-light.png) | [PNG](./actividades-390x844-dark.png) | [PNG](./actividades-768x1024-light.png) | [PNG](./actividades-768x1024-dark.png) | [PNG](./actividades-1366x768-light.png) | [PNG](./actividades-1366x768-dark.png) | [PNG](./actividades-1920x1080-light.png) | [PNG](./actividades-1920x1080-dark.png) |
+| biblioteca | [PNG](./biblioteca-390x844-light.png) | [PNG](./biblioteca-390x844-dark.png) | [PNG](./biblioteca-768x1024-light.png) | [PNG](./biblioteca-768x1024-dark.png) | [PNG](./biblioteca-1366x768-light.png) | [PNG](./biblioteca-1366x768-dark.png) | [PNG](./biblioteca-1920x1080-light.png) | [PNG](./biblioteca-1920x1080-dark.png) |
+| learn | [PNG](./learn-390x844-light.png) | [PNG](./learn-390x844-dark.png) | [PNG](./learn-768x1024-light.png) | [PNG](./learn-768x1024-dark.png) | [PNG](./learn-1366x768-light.png) | [PNG](./learn-1366x768-dark.png) | [PNG](./learn-1920x1080-light.png) | [PNG](./learn-1920x1080-dark.png) |
+| exercises | [PNG](./exercises-390x844-light.png) | [PNG](./exercises-390x844-dark.png) | [PNG](./exercises-768x1024-light.png) | [PNG](./exercises-768x1024-dark.png) | [PNG](./exercises-1366x768-light.png) | [PNG](./exercises-1366x768-dark.png) | [PNG](./exercises-1920x1080-light.png) | [PNG](./exercises-1920x1080-dark.png) |
+| simulator | [PNG](./simulator-390x844-light.png) | [PNG](./simulator-390x844-dark.png) | [PNG](./simulator-768x1024-light.png) | [PNG](./simulator-768x1024-dark.png) | [PNG](./simulator-1366x768-light.png) | [PNG](./simulator-1366x768-dark.png) | [PNG](./simulator-1920x1080-light.png) | [PNG](./simulator-1920x1080-dark.png) |
+| lab | [PNG](./lab-390x844-light.png) | [PNG](./lab-390x844-dark.png) | [PNG](./lab-768x1024-light.png) | [PNG](./lab-768x1024-dark.png) | [PNG](./lab-1366x768-light.png) | [PNG](./lab-1366x768-dark.png) | [PNG](./lab-1920x1080-light.png) | [PNG](./lab-1920x1080-dark.png) |
