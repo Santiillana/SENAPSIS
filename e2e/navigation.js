@@ -11,7 +11,17 @@ async function activate(locator) {
   }
 }
 
-export async function goToSpace(page, space) {
+export async function goToSpace(page, space, options = {}) {
+  if (space === "simulator" && options.dismissSimulatorIntro !== false) {
+    await page.evaluate(() => {
+      try {
+        let preference = { skip: false, seen: [] };
+        preference = JSON.parse(localStorage.getItem("traza:v1:simulator-intro") || "null") || preference;
+        localStorage.setItem("traza:v1:simulator-intro", JSON.stringify({ ...preference, skip: true }));
+      }
+      catch { /* La preferencia de pruebas parte de un valor válido. */ }
+    });
+  }
   const brand = page.locator('.brand[data-go="home"]');
   if (space === "home") {
     await activate(brand);
@@ -29,6 +39,15 @@ export async function goToSpace(page, space) {
 
   const target = page.locator('#primary-nav [data-space="' + space + '"]');
   await activate(target);
+  if (space === "simulator" && options.dismissSimulatorIntro !== false) {
+    const reveal = page.locator("#simulator-reveal");
+    if (await reveal.isVisible()) await reveal.click();
+  }
+}
+
+export async function dismissSimulatorIntro(page) {
+  const reveal = page.locator("#simulator-reveal");
+  if (await reveal.isVisible()) await reveal.click();
 }
 
 export async function openDiagramLessons(page) {

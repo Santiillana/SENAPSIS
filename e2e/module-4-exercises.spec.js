@@ -1,4 +1,4 @@
-import { test, expect, goToSpace } from "./navigation.js";
+import { test, expect, goToSpace, dismissSimulatorIntro } from "./navigation.js";
 
 async function openExercises(page){await page.goto("/");await goToSpace(page,"exercises");}
 
@@ -41,6 +41,7 @@ test("el detalle guía el intento y revela el pseudocódigo solo al pedirlo",asy
   await page.locator("[data-reveal-solution]").click();
   await expect(page.locator("#exercise-detail .exercise-solution pre")).toBeVisible();
   await page.locator("[data-start-exercise]").click();
+  await dismissSimulatorIntro(page);
   await expect(page.locator('[data-view="simulator"]')).toBeVisible();
   await expect(page.locator("#simulator-exercise-title")).toContainText("Fibonacci");
 });

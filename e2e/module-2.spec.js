@@ -1,4 +1,4 @@
-import { test, expect, goToSpace, openDiagramLessons } from "./navigation.js";
+import { test, expect, goToSpace, openDiagramLessons, dismissSimulatorIntro } from "./navigation.js";
 
 test("Aprende conserva las 17 lecciones y cada escena tiene identidad visual",async({page})=>{
   await page.goto("/");
@@ -65,6 +65,7 @@ test("la ficha del ejercicio protege la solución y abre su ejecución",async({p
   await expect(page.locator("#exercise-detail h3")).toHaveText("Fibonacci: términos que no superen 40");
   await expect(page.locator("#exercise-detail")).not.toContainText("PSEUDOCÓDIGO");
   await page.locator("[data-start-exercise]").click();
+  await dismissSimulatorIntro(page);
   await expect(page.locator('[data-view="simulator"]')).toBeVisible();
   await expect(page.locator("#simulator-exercise-title")).toContainText("Fibonacci");
   await expect(page.locator("#pseudocode-lines")).toContainText("mientras");

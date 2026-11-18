@@ -8,6 +8,7 @@ import { renderScene } from "./scenes/index.js";
 import { flowTemplate } from "./flow-step-contract.js";
 import { createSimulatorShell } from "./simulator-shell.js";
 import { variableTone } from "./variable-tone.js";
+import { readIntroPreference, shouldShowIntro, rememberIntro, saveIntroPreference } from "./simulator-intro.js";
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -21,6 +22,33 @@ let cameraRaf=0, pointerState=new Map(), pinchState=null;
 let predictEnabled=false,predictionPending=null,predictionResume=false,predictionCorrect=0,predictionAttempts=0;
 let focusIdleTimer=0;
 let routeGraph=new Map(), routeWeights=new Map(), routeCache=new Map(), tokenRaf=0;
+let introPreference=readIntroPreference();
+
+function dismissSimulatorIntro(){
+  const dialog=$("#simulator-intro");
+  if(!dialog?.open)return;
+  introPreference=rememberIntro(exerciseId,introPreference,$("#simulator-intro-skip-checkbox")?.checked);
+  saveIntroPreference(introPreference);
+  dialog.close();
+  $("#simulator-run")?.focus({preventScroll:true});
+}
+function showSimulatorIntro(){
+  queueMicrotask(()=>{
+    const dialog=$("#simulator-intro");
+    introPreference=readIntroPreference();
+    if(["#source-simulator","#math-player"].some(selector=>{const player=$(selector);return player&&!player.hidden;}))return;
+    if(!dialog||document.body.dataset.activeSpace!=="simulator"||!exercise||!shouldShowIntro(exerciseId,introPreference))return;
+    $("#simulator-intro-level").textContent=labels[exercise.level]??exercise.level;
+    $("#simulator-intro-level").className="exercise-level "+(exercise.level==="basic"?"level-basic":exercise.level==="intermediate"?"level-intermediate":"level-advanced");
+    $("#simulator-intro-number").textContent="Ejercicio "+String(exercise.id).padStart(2,"0");
+    $("#simulator-intro-exercise").textContent=exercise.title;
+    $("#simulator-intro-statement").textContent=exercise.statement;
+    $("#simulator-intro-data").textContent="Datos de ejemplo: "+((method()?.sample??[]).join(", ")||"Este ejercicio no requiere datos de entrada.");
+    $("#simulator-intro-skip-checkbox").checked=introPreference.skip;
+    if(!dialog.open)dialog.showModal();
+    $("#simulator-reveal")?.focus({preventScroll:true});
+  });
+}
 
 function readPseudocodeSize(){
   try{
@@ -792,6 +820,7 @@ function prepare(){
   }
   run();
   requestAnimationFrame(()=>fitDiagramWhenVisible());
+  showSimulatorIntro();
 }
 function typeName(type){
   return ({ "program-start":"INICIO",input:"ENTRADA",assignment:"ASIGNACIÓN",output:"SALIDA",
@@ -1541,6 +1570,8 @@ function toggleControls(open){
 }
 
 function bind(){
+  $("#simulator-reveal")?.addEventListener("click",dismissSimulatorIntro);
+  $("#simulator-intro")?.addEventListener("cancel",event=>{event.preventDefault();dismissSimulatorIntro();});
   $("#sim-exercise-strip")?.addEventListener("input",event=>{
     if(["sim-exercise-search","sim-exercise-level-filter"].includes(event.target.id))paintExerciseSelector();
   });
@@ -1698,6 +1729,7 @@ function bind(){
   if(document.body.dataset.activeSpace==="simulator")document.addEventListener("keydown",onSimulatorKeydown);
   document.querySelector('[data-space="simulator"]')?.addEventListener("click",()=>{
     if(!execution)prepare();
+    showSimulatorIntro();
     setMobilePanel("diagram");
     requestAnimationFrame(()=>{syncDockHeight();fitDiagramWhenVisible();if(timeline&&cameraAuto)centerActiveNode(timeline.current,"auto");});
   });

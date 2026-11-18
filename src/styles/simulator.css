@@ -1,4 +1,16 @@
 /* Módulo 3: simulación determinista y diagrama sincronizado */
+.simulator-intro{width:min(680px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 32px);overflow:auto;padding:clamp(20px,4vw,40px);border:1px solid var(--line);border-radius:var(--radius-lg);color:var(--ink);background:var(--surface);box-shadow:0 24px 80px rgba(0,0,0,.28)}
+.simulator-intro::backdrop{background:rgba(5,12,18,.7);backdrop-filter:blur(5px)}
+.simulator-intro-meta{display:flex;align-items:center;gap:var(--space-3);color:var(--muted);font-size:13px;font-weight:700}
+.simulator-intro h2{margin:var(--space-4) 0 var(--space-2);font-size:clamp(25px,4vw,34px);line-height:1.2}
+.simulator-intro h3{margin:0 0 var(--space-3);font-size:20px}
+.simulator-intro>p{margin:var(--space-3) 0;color:var(--muted-strong);line-height:1.55}
+.simulator-intro-data{padding:var(--space-3);border-radius:var(--radius-sm);background:var(--surface-soft);font-family:ui-monospace,monospace;font-size:14px;overflow-wrap:anywhere}
+.simulator-intro ol{display:grid;gap:var(--space-2);padding-left:1.4rem;color:var(--ink-soft)}
+.simulator-intro #simulator-reveal{margin-top:var(--space-3)}
+.simulator-intro-skip{display:flex;align-items:flex-start;gap:var(--space-2);margin-top:var(--space-3);color:var(--muted);font-size:13px;line-height:1.45;cursor:pointer}
+.simulator-intro-skip input{width:18px;height:18px;flex:none;margin:0;accent-color:var(--accent)}
+@media(prefers-reduced-motion:reduce){.simulator-intro::backdrop{backdrop-filter:none}}
 .simulator-grid{grid-template-columns:minmax(245px,.78fr) minmax(390px,1.45fr) minmax(255px,.82fr);grid-template-areas:"problem diagram inspector" "trace trace trace" "dock dock dock";align-items:start}
 .problem-panel{display:flex;flex-direction:column;max-height:calc(100vh - 130px);overflow:hidden}
 .simulator-problem-body{padding:0 16px 16px;overflow:auto}
@@ -359,7 +371,7 @@ body[data-active-space="simulator"] .topbar-actions{display:flex;flex:0 0 auto;g
 body[data-active-space="simulator"] .topbar-actions .icon-button{width:32px;height:32px}
 body[data-active-space="simulator"] #main-content.page-shell{width:100%;max-width:none;margin:0;padding:0}
 body[data-active-space="simulator"] #main-content>.page-heading,
-body[data-active-space="simulator"] .simulator-intro{display:none}
+body[data-active-space="simulator"] .simulator-intro:not([open]){display:none}
 body[data-active-space="simulator"] .simulator-view{display:block;position:static;width:100%;min-height:0;margin:0;padding:0}
 body[data-active-space="simulator"] .simulator-mobile-tabs{display:none}
 body[data-active-space="simulator"] .simulator-grid{

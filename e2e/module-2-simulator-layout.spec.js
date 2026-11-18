@@ -60,7 +60,6 @@ for(const viewport of [
    expect(columns.diagram.width).toBeGreaterThan(columns.problem.width*1.5);
    expect(columns.diagram.width).toBeGreaterThan(columns.inspector.width*1.15);
   }
-  await page.locator("#hd").screenshot({path:"test-results/module-2-simulator-"+viewport.width+".png"});
  });
 }
 

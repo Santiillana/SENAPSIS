@@ -1,4 +1,4 @@
-import { test, expect, goToSpace } from "./navigation.js";
+import { test, expect, goToSpace, dismissSimulatorIntro } from "./navigation.js";
 
 test("el simulador ejecuta la suma y sincroniza diagrama, salida y variables",async({page})=>{
   const errors=[];page.on("pageerror",error=>errors.push(error.message));
@@ -34,6 +34,7 @@ test("el catálogo abre el ejercicio seleccionado en el simulador",async({page})
   await page.locator("#exercise-search").fill("14");
   await page.locator('[data-select-exercise="14"]').click();
   await page.locator("[data-start-exercise]").click();
+  await dismissSimulatorIntro(page);
   await expect(page.locator('[data-view="simulator"]')).toBeVisible();
   await expect(page.locator("#simulator-exercise-title")).toHaveText("Sumar los números de 1 hasta N");
   await page.locator("#simulator-last").click();
