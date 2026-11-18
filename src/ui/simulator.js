@@ -1582,12 +1582,14 @@ function bind(){
     exerciseId=Number(event.target.value)||1;methodIndex=0;selectedVariable=null;prepare();
   });
   $("#simulator-controls-toggle")?.addEventListener("click",()=>toggleControls());
-  $("#simulator-controls-panel")?.addEventListener("click",event=>{
+  const chooseExercise=event=>{
     const button=event.target.closest("[data-exercise-shortcut]");
     if(!button)return;
     exerciseId=Number(button.dataset.exerciseShortcut)||1;methodIndex=0;selectedVariable=null;
     prepare();toggleControls(false);
-  });
+  };
+  $("#simulator-controls-panel")?.addEventListener("click",chooseExercise);
+  $("#simulator-exercise-nav")?.addEventListener("click",chooseExercise);
   document.addEventListener("pointerdown",event=>{
     const panel=$("#simulator-controls-panel"),target=event.target instanceof Element?event.target:null;
     if(!panel||panel.hidden||target?.closest("#simulator-controls-panel,#simulator-controls-toggle"))return;

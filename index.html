@@ -199,6 +199,7 @@
         <button type="button" role="tab" data-mobile-panel="variables" aria-selected="false">Variables</button>
       </div>
       <div class="simulator-grid simulator-grid-four">
+        <nav class="simulator-exercise-nav" id="simulator-exercise-nav" aria-label="Ejercicios del simulador"></nav>
         <aside class="problem-panel sim-left-window-stack" id="PL" aria-label="Problema y pseudocódigo">
           <section class="panel sim-glass sim-window" id="sim-window-context" data-window-id="context" aria-labelledby="problem-title">
             <div class="panel-heading"><div><p class="eyebrow">01 · PROBLEMA</p><h3 id="problem-title">Problema y datos</h3></div><span id="simulator-exercise-number" class="exercise-number">01</span></div>
@@ -251,7 +252,7 @@
               <section class="simulator-control-dock" aria-label="Controles del diagrama">
                 <button type="button" class="simulator-controls-trigger" id="simulator-controls-toggle" aria-expanded="false" aria-controls="simulator-controls-panel" title="Abrir controles del simulador">⚙ Controles</button>
                 <div class="simulator-controls-panel" id="simulator-controls-panel" hidden>
-                  <div class="sim-controls-section"><h4>Ejercicio</h4><div class="sim-exercise-strip" id="sim-exercise-strip" aria-label="Buscar y seleccionar ejercicio"></div><nav class="simulator-exercise-nav" id="simulator-exercise-nav" aria-label="Ejercicios numerados"></nav></div>
+                  <div class="sim-controls-section"><h4>Ejercicio</h4><div class="sim-exercise-strip" id="sim-exercise-strip" aria-label="Buscar y seleccionar ejercicio"></div></div>
                   <div class="sim-controls-section"><h4>Vista</h4><div class="sim-control-buttons">
                     <button type="button" id="diagram-zoom-out" aria-label="Alejar diagrama" title="Alejar">−</button><button type="button" id="diagram-zoom-in" aria-label="Acercar diagrama" title="Acercar">+</button><button type="button" id="diagram-fit" aria-label="Centrar diagrama" title="Centrar">Ajustar</button><button type="button" id="diagram-camera-toggle" aria-label="Desactivar cámara automática" aria-pressed="true" title="Cámara automática">Cámara automática</button><button type="button" id="diagram-fullscreen" aria-label="Entrar en Concentración" aria-pressed="false" title="Concentración">⛶ Concentración</button></div></div>
                   <div class="sim-controls-section"><h4>Ventanas</h4><div class="sim-window-toggles">

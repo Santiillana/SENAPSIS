@@ -3,6 +3,9 @@ import { test, expect, goToSpace } from "./navigation.js";
 test("el simulador ofrece los 45 ejercicios y filtra por texto y nivel",async({page})=>{
   await page.goto("/");
   await goToSpace(page, "simulator");
+  await expect(page.locator("#simulator-exercise-nav")).toBeVisible();
+  await page.locator('#simulator-exercise-nav [data-exercise-shortcut="22"]').click();
+  await expect(page.locator("#simulator-exercise-title")).toContainText("Potencia");
   await page.locator("#simulator-controls-toggle").click();
   await expect(page.locator("#sim-exercise-select option")).toHaveCount(45);
   await expect(page.locator("#simulator-exercise-nav [data-exercise-shortcut]")).toHaveCount(45);

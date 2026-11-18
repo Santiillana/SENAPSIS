@@ -3267,3 +3267,64 @@ body[data-active-space="simulator"].focus #view-simulator.simulator-view{z-index
 @media(max-width:760px){#view-simulator[data-math-player="true"]{padding:12px}.math-player-head{flex-direction:column}.math-player-head>.button{align-self:flex-start}.math-player-layout{grid-template-columns:1fr}.math-player-side{grid-template-columns:repeat(2,minmax(0,1fr))}.math-player-side>.math-player-tools{grid-column:1/-1}.math-player-controls{flex-wrap:wrap}.math-player-controls input{order:2;flex-basis:100%}.math-player-controls label{margin-left:auto}}
 @media(max-width:480px){.math-player-main,.math-player-side>section,.math-player-side>details{padding:14px}.math-player-side{grid-template-columns:1fr}.math-predict{grid-template-columns:1fr}.math-predict button{min-height:44px}.math-player-stage{min-height:210px;padding:12px}.math-player-controls{gap:5px;padding:7px}.math-player-controls button{min-width:34px;height:38px}.math-player-controls label{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.math-cross-lines path{animation:none}.math-number-token{transition:none}}
+
+/* Selector de ejercicios visible fuera del menú de controles. */
+@media(min-width:901px){
+ body[data-active-space="simulator"] .simulator-grid.simulator-grid-four{
+  grid-template-rows:40px minmax(0,1fr) auto!important;
+  grid-template-areas:"exercise exercise exercise" "problem diagram inspector" "dock dock dock"!important
+ }
+ body[data-active-space="simulator"] #simulator-exercise-nav{
+  position:relative!important;inset:auto!important;grid-area:exercise!important;transform:none!important;
+  display:flex!important;align-items:center;gap:6px;width:100%!important;max-width:none!important;
+  min-width:0;max-height:40px!important;margin:0!important;padding:2px 4px!important;
+  overflow-x:auto!important;overflow-y:hidden!important;overscroll-behavior-x:contain;
+  border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+  backdrop-filter:none!important;scrollbar-width:thin
+ }
+ body[data-active-space="simulator"] #simulator-exercise-nav button{
+  flex:0 0 32px!important;width:32px!important;height:32px!important;min-height:32px!important;
+  border-radius:50%;font-size:11px!important
+ }
+}
+@media(max-width:900px){body[data-active-space="simulator"] #simulator-exercise-nav{display:none!important}}
+
+/* En escena prioriza la ilustración y conserva una sola frase breve por paso. */
+body[data-active-space="simulator"] #PV #scene-content{
+ display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:9px!important;
+ min-height:0!important;overflow:auto!important;padding:10px 13px 13px!important;text-align:left!important
+}
+body[data-active-space="simulator"] #PV .scene-symbol-explanation{
+ align-self:flex-start!important;min-height:30px;padding:4px 8px!important;border-radius:8px!important
+}
+body[data-active-space="simulator"] #PV .scene-figure-host{
+ min-height:112px!important;max-height:190px!important;padding:8px!important;overflow:auto!important
+}
+body[data-active-space="simulator"] #PV .scene-event-body{
+ margin:0!important;padding:8px 10px!important;border-left:3px solid var(--traza-blue);
+ border-radius:0 8px 8px 0;background:color-mix(in srgb,var(--traza-blue) 8%,var(--traza-glass));
+ color:var(--traza-text)!important;font-size:14px!important;line-height:1.45!important
+}
+body[data-active-space="simulator"] #PV .scene-order-explanation{margin-top:0!important}
+body[data-active-space="simulator"] #PV .scene-input .scene-tape-item.is-current,
+body[data-active-space="simulator"] #PV .scene-input .scene-variable-box,
+body[data-active-space="simulator"] #PV .scene-process-result strong,
+body[data-active-space="simulator"] #PV .scene-output-paper strong,
+body[data-active-space="simulator"] #PV .scene-question-card,
+body[data-active-space="simulator"] #PV .scene-terminal-shape,
+body[data-active-space="simulator"] #PV .scene-decision-paths .scene-path.is-active{
+ animation:scene-value-land 420ms cubic-bezier(.22,1,.36,1) both
+}
+body[data-active-space="simulator"] #PV .scene-input .scene-transfer-lane{animation:scene-lane-flow 560ms ease-in-out both}
+@keyframes scene-lane-flow{0%{opacity:.35;transform:translateY(-4px)}55%{opacity:1;transform:translateY(3px)}100%{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){
+ body[data-active-space="simulator"] #PV .scene-input .scene-tape-item.is-current,
+ body[data-active-space="simulator"] #PV .scene-input .scene-variable-box,
+ body[data-active-space="simulator"] #PV .scene-process-result strong,
+ body[data-active-space="simulator"] #PV .scene-output-paper strong,
+ body[data-active-space="simulator"] #PV .scene-question-card,
+ body[data-active-space="simulator"] #PV .scene-terminal-shape,
+ body[data-active-space="simulator"] #PV .scene-decision-paths .scene-path.is-active,
+ body[data-active-space="simulator"] #PV .scene-input .scene-transfer-lane{animation:none!important}
+}
+:root[data-motion="reduced"] body[data-active-space="simulator"] #PV .scene-figure *{animation:none!important;transition:none!important}
