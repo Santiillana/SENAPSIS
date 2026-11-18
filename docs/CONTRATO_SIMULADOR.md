@@ -10,17 +10,23 @@ escenas. La interfaz presenta los eventos; no vuelve a calcular resultados.
 
 ```js
 {
-  id,                    // identificador estable dentro de la ejecución
-  indice,                // posición desde cero
-  tipo,                  // nombre del evento
-  foco,                  // figura o elemento activo
-  cambia: [{ nombre, antes, despues }],
-  porQue,                // explicación corta para la ventana contextual
-  caption,               // una frase para el reproductor
+  id,                    // string único y estable dentro de la ejecución
+  foco,                  // id del elemento del lienzo o null
+  globo,                 // microtexto junto al foco
   escena: { tipo, datos },
-  pregunta               // opcional; opciones derivadas del motor
+  estado: { variables, cambios },
+  salida: [],             // salida acumulada hasta este paso
+  frase,                  // texto breve para el reproductor
+  lineaCodigo,            // línea activa o null
+  pregunta                // opcional, derivada del estado real
 }
 ```
+
+El adaptador de diagramas `src/ui/flow-step-contract.js` agrega estos campos
+sin descartar ni recalcular el evento original del intérprete. Los campos
+originales se conservan para que los renderizadores existentes sigan siendo
+compatibles durante la extracción gradual. `validateSteps` comprueba ids
+únicos y la estructura mínima antes de que el simulador presente la traza.
 
 ## Adaptación de un tema nuevo
 

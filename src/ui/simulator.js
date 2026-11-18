@@ -5,6 +5,7 @@ import { parsePseudocode } from "../core/parser.js";
 import { layoutFlow } from "../diagram/layout.js";
 import { renderDiagram, highlightDiagram } from "../diagram/renderer.js";
 import { renderScene } from "./scenes/index.js";
+import { buildFlowSteps, validateSteps } from "./flow-step-contract.js";
 import { variableTone } from "./variable-tone.js";
 
 const $ = s => document.querySelector(s);
@@ -1261,6 +1262,9 @@ function run(){
   stop();
   try{
     execution=executePseudocode(method().pseudocode,parseInputs());
+    execution.events=buildFlowSteps(execution.events);
+    const contract=validateSteps(execution.events);
+    if(!contract.valid)throw new Error("La traza no cumple el contrato del simulador: "+contract.reason);
     timeline=createTimeline(execution);
     selectedVariable=null;
     history();render();
