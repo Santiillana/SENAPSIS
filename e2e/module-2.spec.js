@@ -44,31 +44,27 @@ test("las 17 lecciones presentan fases visuales y una escena vinculada a eventos
 test("el catálogo filtra ejercicios por dificultad y conceptos combinados",async({page})=>{
   await page.goto("/");
   await goToSpace(page, "exercises");
-  await expect(page.locator("#exercise-count")).toContainText("45");
-  await page.locator("#exercise-level").selectOption("expert");
+  await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(45);
+  await page.locator('[data-exercise-difficulty="4"]').click();
   await expect(page.locator("[data-select-exercise]")).toHaveCount(5);
-  await page.locator("#exercise-level").selectOption("all");
+  await page.locator('[data-exercise-difficulty="4"]').click();
   await page.locator("#exercise-concept-details > summary").click();
   await page.locator('[data-concept-filter="Ciclo Para"]').click();
   await expect(page.locator("[data-select-exercise]")).not.toHaveCount(0);
-  await page.locator('[data-concept-mode="any"]').click();
   await page.locator('[data-concept-filter="Decisiones"]').click();
   await expect(page.locator("#exercise-filter-summary")).toContainText("concepto(s)");
   await page.locator("#exercise-filters-clear").click();
-  await expect(page.locator("#exercise-count")).toContainText("45");
+  await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(45);
 });
 
-test("la ficha del ejercicio no revela la solución hasta confirmar en el modal",async({page})=>{
+test("la ficha del ejercicio protege la solución y abre su ejecución",async({page})=>{
   await page.goto("/");
   await goToSpace(page, "exercises");
-  await page.locator("[data-page-next]").click();
+  await page.locator("#exercise-search").fill("23");
   await page.locator('[data-select-exercise="23"]').click();
   await expect(page.locator("#exercise-detail h3")).toHaveText("Fibonacci: términos que no superen 40");
   await expect(page.locator("#exercise-detail")).not.toContainText("PSEUDOCÓDIGO");
   await page.locator("[data-start-exercise]").click();
-  await expect(page.locator("#exercise-try-modal")).toBeVisible();
-  await expect(page.locator("#exercise-try-statement")).toContainText("40");
-  await page.locator("#exercise-try-confirm").click();
   await expect(page.locator('[data-view="simulator"]')).toBeVisible();
   await expect(page.locator("#simulator-exercise-title")).toContainText("Fibonacci");
   await expect(page.locator("#pseudocode-lines")).toContainText("mientras");

@@ -349,6 +349,7 @@ function showLabMode(mode,preferredActivity=null){
   });
   if($("#lab-mode-cards"))$("#lab-mode-cards").hidden=true;
   if($("#lab-practice-workspace"))$("#lab-practice-workspace").hidden=false;
+  if($("#lab-task-panel"))$("#lab-task-panel").hidden=false;
   if($("#lab-builder-stage"))$("#lab-builder-stage").hidden=true;
   renderLabActivityMenu();
   const first=labActivities[labMode]?.[0];

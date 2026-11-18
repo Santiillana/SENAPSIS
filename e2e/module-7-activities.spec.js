@@ -27,20 +27,28 @@ test("Actividades permite consultar, filtrar y registrar seguimiento personal", 
   await page.locator('#activity-result-form select[name="juicio"]').selectOption("no_aprobado");
   await page.locator('#activity-result-form textarea[name="correccion"]').fill("Corregir la condición del ejercicio.");
   await page.locator('#activity-result-form button[type=submit]').click();
+  await page.locator('[data-activity-view="culminadas"]').click();
+  await page.locator('[data-activity-select="actividad-comparaciones"]').click();
   await expect(page.locator("#ficha-activity-detail .ficha-state")).toContainText("Por corregir");
   await expect(page.locator("#activity-result-form button[type=submit]")).toBeDisabled();
 
-  for (const field of ["subida", "enviada", "confirmada"]) {
-    await page.locator('[data-checklist-field="' + field + '"]').check();
-  }
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("traza:v4:ficha")));
+  expect(saved.actividades["actividad-comparaciones"].intentos).toHaveLength(1);
+  expect(saved.actividades["actividad-comparaciones"].notas).toBe("Revisar los ejemplos antes de enviar.");
+});
+
+test("Actividades permite registrar una aprobación y bloquea el checklist", async ({ page }) => {
+  await page.goto("/");
+  await goToSpace(page, "actividades");
+  await page.locator('[data-activity-select="actividad-comparaciones"]').click();
+  await page.locator('[data-checklist-field="confirmada"]').check();
+  await expect(page.locator('#activity-result-form button[type=submit]')).toBeEnabled();
   await page.locator('#activity-result-form select[name="juicio"]').selectOption("aprobado");
   await page.locator('#activity-result-form button[type=submit]').click();
+  await page.locator('[data-activity-view="culminadas"]').click();
+  await page.locator('[data-activity-select="actividad-comparaciones"]').click();
   await expect(page.locator("#ficha-activity-detail .ficha-state")).toContainText("Aprobada");
   await expect(page.locator('[data-checklist-field="confirmada"]')).toBeDisabled();
-
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("traza:v4:ficha")));
-  expect(saved.actividades["actividad-comparaciones"].intentos).toHaveLength(2);
-  expect(saved.actividades["actividad-comparaciones"].notas).toBe("Revisar los ejemplos antes de enviar.");
 });
 
 test("Actividades muestra el aviso de demostración y la sección de documentos sin fingir archivos", async ({ page }) => {

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 export { test, expect };
 
-const FICHA_SPACES = new Set(["hoy", "clases", "semana", "calendario", "actividades", "biblioteca"]);
+const FICHA_SPACES = new Set(["hoy", "clases", "actividades", "biblioteca"]);
 
 async function activate(locator) {
   if (await locator.isVisible()) {

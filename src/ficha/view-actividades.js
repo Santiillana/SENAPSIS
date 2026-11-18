@@ -42,6 +42,7 @@ function nombreCompetencia(competenciaId) {
 
 function estadoActividad(actividad, personal) {
   const registro = registroActividad(personal, actividad.id);
+  if ([ESTADO.APROBADA, ESTADO.POR_CORREGIR].includes(registro.estado)) return registro.estado;
   const clasificacion = clasificar(actividad, personal, hoy());
   return clasificacion === "atrasada"
     ? ESTADO.ATRASADA

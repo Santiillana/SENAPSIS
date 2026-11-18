@@ -3165,6 +3165,20 @@ body[data-active-space="simulator"] #PV .scene-order-explanation{align-self:stre
   }
 }
 
+@media(max-width:900px){
+  body[data-active-space="simulator"] #dock.execution-dock.simulator-dock{
+    grid-template-columns:100px minmax(0,1fr) 64px!important;
+  }
+  body[data-active-space="simulator"] #dock .dock-speed{
+    display:flex!important;flex-direction:column!important;align-items:stretch!important;
+    min-width:0!important;max-width:64px!important;overflow:hidden!important;
+  }
+  body[data-active-space="simulator"] #dock .dock-speed select{
+    width:100%!important;min-width:0!important;max-width:100%!important;
+    box-sizing:border-box!important;padding-inline:1px!important;font-size:9px!important;
+  }
+}
+
 #view-simulator[data-math-player="true"]{min-height:100vh;padding:clamp(12px,3vw,36px);background:var(--lienzo)}
 #view-simulator[data-math-player="true"]>:not(#math-player){display:none!important}
 .math-player{--mp-accent:#6C9CFF;max-width:1440px;margin:0 auto;color:var(--text);font-size:calc(1rem * var(--math-player-scale,1))}

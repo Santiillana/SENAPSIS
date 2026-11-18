@@ -773,8 +773,8 @@ body.has-exercise-modal{overflow:hidden}
 .exercise-card-difficulty i,.exercise-difficulty-filter i{display:block;width:15px;height:5px;border-radius:5px;background:var(--line-strong)}
 .exercise-card-difficulty i.is-filled,.exercise-difficulty-filter i.is-filled{background:var(--struct)}
 .exercises-view .exercise-card-concepts i{padding:4px 7px;border-radius:999px;font-size:11px}
-.exercise-difficulty-filter{display:grid;gap:6px}.exercise-difficulty-filter>span{color:var(--muted);font-size:11px;font-weight:750}
-#exercise-difficulty-options{display:flex;gap:5px}#exercise-difficulty-options button{display:flex;align-items:center;gap:2px;min-width:44px;min-height:44px;justify-content:center;border:1px solid var(--line);border-radius:10px;background:var(--surface-raised)}
+.exercise-difficulty-filter{display:grid;gap:6px;min-width:0}.exercise-difficulty-filter>span{color:var(--muted);font-size:11px;font-weight:750}
+#exercise-difficulty-options{display:flex;flex-wrap:wrap;gap:5px;min-width:0}#exercise-difficulty-options button{display:flex;align-items:center;gap:2px;min-width:44px;min-height:44px;justify-content:center;border:1px solid var(--line);border-radius:10px;background:var(--surface-raised)}
 #exercise-difficulty-options button[aria-pressed="true"]{border-color:var(--struct);background:var(--accent-soft)}
 .exercise-concept-search{display:grid;gap:5px;margin:10px 0;color:var(--muted);font-size:12px}
 .exercise-concept-search input{min-height:40px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:var(--surface-raised);font:inherit}

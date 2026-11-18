@@ -4,7 +4,7 @@ test.beforeEach(async({page})=>{await page.goto("/");});
 
 test("el catálogo muestra los cinco ejercicios expertos sin revelar soluciones",async({page})=>{
   await goToSpace(page, "exercises");
-  await page.locator("#exercise-level").selectOption("expert");
+  await page.locator('[data-exercise-difficulty="4"]').click();
   await expect(page.locator("[data-select-exercise]")).toHaveCount(5);
   await page.locator('[data-select-exercise="43"]').click();
   await expect(page.locator("#exercise-detail h3")).toContainText("Cramer");
@@ -14,21 +14,21 @@ test("el catálogo muestra los cinco ejercicios expertos sin revelar soluciones"
 
 test("el filtro por clase se combina con conceptos y niveles",async({page})=>{
   await goToSpace(page, "exercises");
-  await page.locator("#exercise-class-only").check();
+  await page.locator('label.catalog-class-filter').click();
   await expect(page.locator("[data-select-exercise]")).toHaveCount(4);
-  await page.locator("#exercise-class-only").uncheck();
+  await page.locator('label.catalog-class-filter').click();
   await page.locator("#exercise-concept-details > summary").click();
   await page.locator('[data-concept-filter="Ciclo Mientras"]').click();
   await expect(page.locator("[data-select-exercise]")).not.toHaveCount(0);
-  await page.locator("#exercise-level").selectOption("advanced");
+  await page.locator('[data-exercise-difficulty="3"]').click();
   await expect(page.locator("[data-select-exercise]")).not.toHaveCount(0);
 });
 
 test("el constructor se encuentra dentro de Arma el diagrama y permite editar",async({page})=>{
   await goToSpace(page, "simulator");
   await goToSpace(page, "lab");
-  await page.locator('[data-lab-mode="build"]').click();
-  await page.locator("#lab-open-builder").click();
+  await page.locator('[data-lab-activity="build-diagram"]').click();
+  await page.locator("#lab-prepare-play").click();
   await expect(page.locator("#lab-builder-stage")).toBeVisible();
   const cards=page.locator("#builder-canvas-list .builder-node-card");
   const initial=await cards.count();
@@ -40,22 +40,23 @@ test("el constructor se encuentra dentro de Arma el diagrama y permite editar",a
   await expect(cards).toHaveCount(initial+1);
 });
 
-test("el catálogo busca por número y pagina sin perder los filtros",async({page})=>{
+test("el catálogo busca por número y conserva los filtros sin paginación",async({page})=>{
   await goToSpace(page, "exercises");
   await page.locator("#exercise-search").fill("45");
   await expect(page.locator("[data-select-exercise]")).toHaveCount(1);
   await expect(page.locator('[data-select-exercise="45"]')).toBeVisible();
   await page.locator("#exercise-search").fill("");
-  await expect(page.locator("[data-page-next]")).toBeEnabled();
-  await page.locator("[data-page-next]").click();
-  await expect(page.locator(".exercise-pagination")).toContainText("Página 2");
+  await expect(page.locator("[data-select-exercise]")).toHaveCount(45);
+  await page.locator('[data-exercise-difficulty="4"]').click();
+  await page.locator("#exercise-search").fill("43");
+  await expect(page.locator('[data-select-exercise="43"]')).toBeVisible();
+  await expect(page.locator("[data-select-exercise]")).toHaveCount(1);
 });
 
 test("Arma el diagrama ofrece el acceso al Lienzo libre dentro del Laboratorio",async({page})=>{
   await goToSpace(page, "lab");
-  await page.locator('[data-lab-mode="build"]').click();
-  await expect(page.locator("#lab-open-builder")).toBeVisible();
-  await page.locator("#lab-open-builder").click();
+  await page.locator('[data-lab-activity="build-diagram"]').click();
+  await page.locator("#lab-prepare-play").click();
   await expect(page.locator("#lab-builder-stage")).toBeVisible();
   await expect(page.locator("#view-lab")).toBeVisible();
   await expect(page.locator("#view-builder")).toHaveCount(0);
@@ -64,8 +65,8 @@ test("Arma el diagrama ofrece el acceso al Lienzo libre dentro del Laboratorio",
 test("se puede deshacer y rehacer el diagrama con atajos desde el lienzo libre",async({page})=>{
   await goToSpace(page, "simulator");
   await goToSpace(page, "lab");
-  await page.locator('[data-lab-mode="build"]').click();
-  await page.locator("#lab-open-builder").click();
+  await page.locator('[data-lab-activity="build-diagram"]').click();
+  await page.locator("#lab-prepare-play").click();
   await page.locator('[data-builder-preset="decision"]').click();
   const cards=page.locator("#builder-canvas-list .builder-node-card");
   const initial=await cards.count();

@@ -8,7 +8,7 @@ test("la portada presenta Mi ficha y Aprende como dos secciones principales", as
   await expect(page.locator('[data-view="home"]')).toBeVisible();
   await expect(page.locator('[data-home-section="ficha"]')).toBeVisible();
   await expect(page.locator('[data-home-section="aprende"]')).toBeVisible();
-  await expect(page.locator("#primary-nav [data-space]")).toHaveCount(9);
+  await expect(page.locator("#primary-nav [data-space]")).toHaveCount(8);
   await expect(page.locator('[data-space="home"]')).toBeAttached();
   expect(errors).toEqual([]);
 });
@@ -19,13 +19,13 @@ test("Mi ficha y Aprende conservan sus grupos de navegación y recuerdan su últ
   await expect(page.locator('[data-view="actividades"]')).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("data-section","ficha");
   await expect(page.locator('[data-section-switch="ficha"]')).toHaveAttribute("aria-pressed","true");
-  await expect(page.locator('#primary-nav [data-subnav-section="ficha"] .nav-button')).toHaveCount(5);
+  await expect(page.locator('#primary-nav [data-subnav-section="ficha"] .nav-button')).toHaveCount(4);
 
   await goToSpace(page,"simulator");
   await expect(page.locator('[data-view="simulator"]')).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("data-section","aprende");
   await expect(page.locator('#primary-nav [data-subnav-section="aprende"] .nav-button')).toHaveCount(4);
-  await expect(page.locator('[data-section-switch="ficha"]')).toBeHidden();
+  await expect(page.locator('[data-section-switch="ficha"]')).toBeVisible();
 
   await goToSpace(page,"home");
   await page.locator('[data-section-switch="ficha"]').click();

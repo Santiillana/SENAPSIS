@@ -28,14 +28,13 @@ test("avanzar y retroceder reconstruye el estado del paso",async({page})=>{
   await expect(page.locator("#dock-step-title")).toHaveText(first);
 });
 
-test("el catálogo abre el ejercicio en el simulador solo tras confirmar",async({page})=>{
+test("el catálogo abre el ejercicio seleccionado en el simulador",async({page})=>{
   await page.goto("/");
   await goToSpace(page, "exercises");
-  await page.locator("[data-page-next]").click();
+  await page.locator("#exercise-search").fill("14");
   await page.locator('[data-select-exercise="14"]').click();
   await page.locator("[data-start-exercise]").click();
-  await expect(page.locator("#exercise-try-modal")).toBeVisible();
-  await page.locator("#exercise-try-confirm").click();
+  await expect(page.locator('[data-view="simulator"]')).toBeVisible();
   await expect(page.locator("#simulator-exercise-title")).toHaveText("Sumar los números de 1 hasta N");
   await page.locator("#simulator-last").click();
   await expect(page.locator("#simulator-output")).toContainText("10");

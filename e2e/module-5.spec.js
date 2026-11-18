@@ -61,8 +61,9 @@ test("arrastrar el escenario libera la cámara y avanzar la reactiva",async({pag
   await page.goto("/");
   await goToSpace(page, "simulator");
   await page.locator("#simulator-controls-toggle").click();
-  await page.locator("#diagram-camera-toggle").click();
-  const stage=page.locator("#diagram-stage"),rect=await stage.boundingBox();
+  await expect(page.locator("#diagram-camera-toggle")).toHaveAttribute("aria-pressed","true");
+  await page.locator("#simulator-controls-toggle").click();
+  const stage=page.locator("#diagram-stage"),rect=await page.locator("#diagram-pan-hit").boundingBox();
   await page.mouse.move(rect.x+rect.width*.5,rect.y+rect.height*.5);
   await page.mouse.down();
   await page.mouse.move(rect.x+rect.width*.5-80,rect.y+rect.height*.5+40,{steps:4});
@@ -123,7 +124,7 @@ test("en móvil se cambia entre Problema, Diagrama, En escena y Variables sin re
 test("Ejercicios sigue mostrando todos los 45 retos en su catálogo",async({page})=>{
   await page.goto("/");
   await goToSpace(page, "exercises");
-  await expect(page.locator("#exercise-count")).toContainText("45");
+  await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(45);
   await page.locator("#exercise-search").fill("Fibonacci");
   await expect(page.locator("[data-select-exercise]")).toHaveCount(1);
   await page.locator("#exercise-search").fill("");

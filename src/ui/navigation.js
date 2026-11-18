@@ -4,7 +4,7 @@ const SPACE_META = {
   clases: { title: "Clases", description: "Consulta tus clases por día, semana o mes." },
   actividades: { title: "Actividades", description: "Tus entregas, estados y retroalimentación." },
   biblioteca: { title: "Biblioteca", description: "Tus materiales y recursos de estudio." },
-  learn: { title: "Aprende", description: "Comprende cada figura, decisión y ciclo con ejemplos y escenas propias." },
+  learn: { title: "Lecciones", description: "Comprende cada figura, decisión y ciclo con ejemplos y escenas propias." },
   exercises: { title: "Ejercicios", description: "Elige un problema y revisa qué necesitas para resolverlo." },
   simulator: { title: "Simulador", description: "Observa el algoritmo paso a paso y entiende cada cambio." },
   lab: { title: "Laboratorio", description: "Sigue la ficha, arma diagramas y encuentra errores." }

@@ -8,7 +8,7 @@ test("la navegación declara portada y espacios de Mi ficha y Aprende", async ()
   const html = await read("../index.html");
   const spaces = [...html.matchAll(/data-space="([^"]+)"/g)].map(([,space]) => space);
   const views = [...html.matchAll(/data-view="([^"]+)"/g)].map(([,space]) => space);
-  assert.deepEqual(spaces, ["home", "hoy", "clases", "biblioteca", "learn", "exercises", "simulator", "lab"]);
+  assert.deepEqual(spaces, ["home", "hoy", "clases", "actividades", "biblioteca", "learn", "exercises", "simulator", "lab"]);
   assert.deepEqual(new Set(views), new Set(["home", "hoy", "clases", "actividades", "biblioteca", "learn", "exercises", "simulator", "lab"]));
   assert.doesNotMatch(html, /data-space="builder"/);
   assert.doesNotMatch(html, /data-view="builder"/);

@@ -4,12 +4,12 @@ async function openBuilder(page) {
   await page.goto("/");
   await goToSpace(page, "simulator");
   await goToSpace(page, "lab");
-  await page.locator('[data-lab-mode="build"]').click();
-  await page.locator("#lab-open-builder").click();
+  await page.locator('[data-lab-activity="build-diagram"]').click();
+  await page.locator("#lab-prepare-play").click();
   await expect(page.locator("#lab-builder-stage")).toBeVisible();
 }
 
-test("Inicio muestra el progreso real de Aprende y lo conserva después de recargar", async ({ page }) => {
+test("Mi progreso refleja el catálogo completo y conserva el avance después de recargar", async ({ page }) => {
   await page.goto("/");
   await page.evaluate(() => {
     localStorage.setItem("traza:v2:learn", JSON.stringify({
@@ -20,44 +20,30 @@ test("Inicio muestra el progreso real de Aprende y lo conserva después de recar
     }));
   });
   await page.reload();
+  await goToSpace(page, "learn");
+  await page.locator("#learn-open-progress").click();
 
-  await expect(page.locator("#home-learn-progress")).toHaveText("2 de 17 completadas");
-  await expect(page.locator("#home-learn-progress-percent")).toHaveText("12%");
-  await expect(page.locator("#home-learn-progress-bar")).toHaveAttribute("aria-valuenow", "2");
-  await expect(page.locator("#home-learn-progress-bar")).toHaveAttribute(
-    "aria-valuetext", "2 de 17 lecciones completadas"
-  );
-
-  await page.locator("#home-learn-continue").click();
-  await expect(page.locator('[data-view="learn"]')).toBeVisible();
-  await expect(page.locator('#lesson-catalog [data-lesson-id="terminals"]')).toBeVisible();
-
-  for (let step = 0; step < 5; step++) {
-    await page.locator("#lesson-detail [data-lesson-next]").click();
-  }
-
-  await goToSpace(page, "home");
-  await expect(page.locator("#home-learn-progress")).toHaveText("3 de 17 completadas");
-  await expect(page.locator("#home-learn-progress-percent")).toHaveText("18%");
-  await expect(page.locator("#home-learn-progress-bar")).toHaveAttribute("aria-valuenow", "3");
-  await expect(page.locator("#home-learn-progress-copy")).toContainText("14 lecciones");
+  await expect(page.locator("#learn-progress-total")).toHaveText("2 de 40 lecciones completadas");
+  await expect(page.locator("#learn-progress-percent")).toHaveText("5%");
+  await expect(page.locator("#learn-progress-ring")).toHaveAttribute("aria-valuemax", "40");
+  await expect(page.locator("#learn-progress-ring")).toHaveAttribute("aria-valuenow", "2");
 
   await page.reload();
-  await expect(page.locator('[data-view="home"]')).toBeVisible();
-  await expect(page.locator("#home-learn-progress")).toHaveText("3 de 17 completadas");
-  await expect(page.locator("#home-learn-progress-bar")).toHaveAttribute("aria-valuenow", "3");
+  await goToSpace(page, "learn");
+  await page.locator("#learn-open-progress").click();
+  await expect(page.locator("#learn-progress-total")).toHaveText("2 de 40 lecciones completadas");
 });
 
-test("Inicio ofrece accesos directos funcionales a Ejercicios, Simulador y Laboratorio", async ({ page }) => {
+test("Inicio abre Mi ficha y Aprende, y la navegación compartida ofrece sus espacios", async ({ page }) => {
   await page.goto("/");
-
+  await page.locator('.home-card[data-home-section="ficha"]').click();
+  await expect(page.locator('[data-view="hoy"]')).toBeVisible();
+  await page.locator('.brand[data-go="home"]').click();
+  await page.locator('.home-card[data-home-section="aprende"]').click();
+  await expect(page.locator('[data-view="learn"]')).toBeVisible();
   for (const space of ["exercises", "simulator", "lab"]) {
-    const shortcut = page.locator('.home-shortcut[data-go="' + space + '"]');
-    await expect(shortcut).toBeVisible();
-    await shortcut.click();
+    await goToSpace(page, space);
     await expect(page.locator('[data-view="' + space + '"]')).toBeVisible();
-    await goToSpace(page, "home");
-    await expect(page.locator('[data-view="home"]')).toBeVisible();
   }
 });
 

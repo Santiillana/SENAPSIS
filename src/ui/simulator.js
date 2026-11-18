@@ -13,6 +13,7 @@ const fmt = value => typeof value==="number" ? String(Number(value.toFixed(6))) 
 const labels = {basic:"Básico",intermediate:"Intermedio",advanced:"Avanzado",expert:"Experto"};
 let exerciseId=1, methodIndex=0, exercise=null, execution=null, timeline=null, diagram=null, timer=null;
 let cameraAuto=true, cameraReady=false, panState=null, pseudocodeSize=17, selectedVariable=null, defaultInputSample=[];
+let resumeCameraOnStep=false;
 let diagramFitWidth=0, diagramFitHeight=0, fitScale=1, zoom=1, panOffset={x:0,y:0};
 let cameraRaf=0, pointerState=new Map(), pinchState=null;
 let predictEnabled=false,predictionPending=null,predictionResume=false,predictionCorrect=0,predictionAttempts=0;
@@ -1290,6 +1291,7 @@ function move(delta){
   if(delta>0&&predictEnabled&&eventAskable(execution.events[destination])){
     predictionResume=timer!==null;stop();showPredictionQuestion(destination);return;
   }
+  if(resumeCameraOnStep){resumeCameraOnStep=false;setCameraFollowing();}
   stop();timeline.seek(destination);
   choreographyPlayback=true;
   try{render();}finally{choreographyPlayback=false;}
@@ -1306,6 +1308,7 @@ function play(){
     if(predictEnabled&&eventAskable(execution.events[destination])){
       predictionResume=true;stop();showPredictionQuestion(destination);return;
     }
+    if(resumeCameraOnStep){resumeCameraOnStep=false;setCameraFollowing();}
     cancelChoreography();
     timeline.next();
     choreographyPlayback=true;
@@ -1442,6 +1445,7 @@ function bindDiagramPan(){
     const dx=event.clientX-drag.x,dy=event.clientY-drag.y;
     if(Math.abs(dx)+Math.abs(dy)>2&&!drag.moved){
       drag.moved=true;
+      resumeCameraOnStep=true;
       stage.dataset.panStart=String((Number(stage.dataset.panStart)||0)+1);
       setCameraFree();
     }

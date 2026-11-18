@@ -18,7 +18,7 @@
 <body>
 <a class="skip-link" href="#main-content">Saltar al contenido</a>
 <div class="app-shell">
-  <header class="topbar" id="hd" data-section-switcher-hidden="false">
+  <header class="topbar" id="hd" data-layout-region="header" data-section-switcher-hidden="false">
     <div class="topbar-main">
       <a class="brand" href="#main-content" data-go="home" data-space="home" aria-label="Traza, volver a la portada">
         <span class="brand-mark" aria-hidden="true">
@@ -43,10 +43,11 @@
       <div class="subnav-group" data-subnav-section="ficha" hidden>
         <button class="nav-button" type="button" data-space="hoy" aria-current="false"><span class="subnav-icon" aria-hidden="true">⌂</span><span>Centro de control</span></button>
         <button class="nav-button" type="button" data-space="clases" aria-current="false"><span class="subnav-icon" aria-hidden="true">▦</span><span>Clases</span></button>
+        <button class="nav-button" type="button" data-space="actividades" aria-current="false"><span class="subnav-icon" aria-hidden="true">✓</span><span>Actividades</span></button>
         <button class="nav-button" type="button" data-space="biblioteca" aria-current="false"><span class="subnav-icon" aria-hidden="true">▤</span><span>Biblioteca</span></button>
       </div>
       <div class="subnav-group" data-subnav-section="aprende" hidden>
-        <button class="nav-button" type="button" data-space="learn" aria-current="false"><span class="subnav-icon" aria-hidden="true">◉</span><span>Aprende</span></button>
+        <button class="nav-button" type="button" data-space="learn" aria-current="false"><span class="subnav-icon" aria-hidden="true">◉</span><span>Lecciones</span></button>
         <button class="nav-button" type="button" data-space="exercises" aria-current="false"><span class="subnav-icon" aria-hidden="true">▤</span><span>Ejercicios</span></button>
         <button class="nav-button" type="button" data-space="simulator" aria-current="false"><span class="subnav-icon" aria-hidden="true">⌘</span><span>Simulador</span></button>
         <button class="nav-button" type="button" data-space="lab" aria-current="false"><span class="subnav-icon" aria-hidden="true">⌑</span><span>Laboratorio</span></button>
@@ -54,7 +55,7 @@
     </nav>
   </header>
 
-  <main class="page-shell" id="main-content">
+  <main class="page-shell" id="main-content" data-layout-region="content">
     <section class="page-heading" aria-label="Contexto del espacio">
       <div><p class="eyebrow" id="space-kicker">ESPACIO 02 / 04 · PRÁCTICA GUIADA</p>
         <h1 id="space-heading">Piensa el problema. Después, dibuja el camino.</h1>
@@ -163,7 +164,7 @@
     </section>
 
     <section class="space-view learn-view" id="view-learn" data-view="learn" aria-labelledby="learn-title" hidden>
-      <header class="section-intro learn-intro"><div><p class="eyebrow">APRENDE · ADSO</p><h2 id="learn-title">Aprende</h2></div><div class="learn-intro-actions"><span id="learn-streak" class="learn-streak">Racha: 0 días</span><button type="button" class="button button-secondary" id="learn-open-progress">Mi progreso</button></div></header>
+      <header class="section-intro learn-intro"><div><p class="eyebrow">LECCIONES · ADSO</p><h2 id="learn-title">Lecciones</h2></div><div class="learn-intro-actions"><span id="learn-streak" class="learn-streak">Racha: 0 días</span><button type="button" class="button button-secondary" id="learn-open-progress">Mi progreso</button></div></header>
       <section id="learn-catalog-home" class="learn-catalog-home" aria-label="Catálogo de competencias y temas"><div class="learn-catalog-controls"><label>Dificultad<select id="learn-difficulty"><option value="todas">Todas</option><option value="1">Básica</option><option value="2">Intermedia</option><option value="3">Avanzada</option><option value="4">Experta</option></select></label><div id="learn-competence-filters" class="learn-competence-filters" role="group" aria-label="Filtrar por competencia"></div></div><div id="learn-catalog-bands"></div></section>
       <section id="learn-progress-page" class="learn-progress-page" aria-labelledby="learn-progress-title" hidden><header><button type="button" class="text-link" data-learn-back>‹ Volver a Aprende</button><h2 id="learn-progress-title">Mi progreso</h2></header><section class="learn-progress-overview" aria-label="Progreso general de Aprende"><div class="learn-progress-ring" id="learn-progress-ring" role="progressbar" aria-label="Progreso de las 40 lecciones" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0"><span id="learn-progress-percent">0%</span></div><div class="learn-progress-copy"><p class="eyebrow">TU PROGRESO</p><strong id="learn-progress-total">0 de 40 lecciones completadas</strong><p id="learn-progress-next">Tu siguiente paso es Algoritmos y diagramas de flujo.</p><div class="learn-progress-track" aria-hidden="true"><span id="learn-progress-fill"></span></div></div><span class="learn-progress-count">40 <small>LECCIONES</small></span></section><div id="learn-progress-topics" class="learn-progress-topics"></div></section>
       <section id="learn-topic-space" class="learn-topic-space" hidden><header class="learn-topic-header"><div class="learn-topic-crumb"><button type="button" data-learn-back aria-label="Volver al catálogo">‹ Aprende</button><span>›</span><span id="learn-topic-competence"></span><span>›</span><strong id="learn-topic-title"></strong></div><label class="learn-topic-select-label">Tema<select id="learn-topic-select"></select></label></header><p id="learn-topic-note" class="learn-topic-note" hidden></p><nav id="learn-topic-tabs" class="learn-topic-tabs" aria-label="Vistas del tema"></nav><div class="learn-workspace" id="learn-lessons-content"><aside class="panel lesson-catalog-panel"><div class="panel-heading"><div><p class="eyebrow">LECCIONES</p><h3 id="learn-catalog-count">40 lecciones</h3></div><span class="panel-index">01</span></div><div class="lesson-route-progress"><strong id="lesson-route-count">1 de 40</strong><span><i id="lesson-route-fill"></i></span></div><div class="lesson-catalog" id="lesson-catalog"></div></aside><article class="panel lesson-detail-panel" id="lesson-detail"><div class="detail-empty"><span class="detail-empty-mark">40</span><p class="eyebrow">APRENDE PASO A PASO</p><h3>Elige una lección para empezar.</h3><p>Cada tema conecta una explicación sencilla, la definición técnica, una visualización manipulable, un ejemplo y una comprobación.</p></div></article></div><div id="learn-topic-empty" class="learn-topic-empty" hidden></div></section>

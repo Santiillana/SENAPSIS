@@ -3,8 +3,7 @@ import { test, expect, goToSpace } from "./navigation.js";
 const spaces = [
   "home",
   "hoy",
-  "semana",
-  "calendario",
+  "clases",
   "actividades",
   "biblioteca",
   "learn",
@@ -13,7 +12,7 @@ const spaces = [
   "lab"
 ];
 
-test("auditoría integral: los diez espacios abren sin errores JavaScript ni fallos de recursos", async ({ page }) => {
+test("auditoría integral: los nueve espacios abren sin errores JavaScript ni fallos de recursos", async ({ page }) => {
   const pageErrors = [];
   const consoleErrors = [];
   const failedAssets = [];
@@ -42,9 +41,9 @@ test("auditoría integral: los diez espacios abren sin errores JavaScript ni fal
   expect(failedAssets).toEqual([]);
 });
 
-test("las diez vistas no generan desbordamiento horizontal en escritorio, tableta y móvil", async ({ page }) => {
+test("los nueve espacios no generan desbordamiento horizontal en los cuatro breakpoints", async ({ page }) => {
   test.setTimeout(60000);
-  const widths = [390, 768, 1024, 1440];
+  const widths = [390, 768, 1366, 1920];
 
   for (const width of widths) {
     await page.setViewportSize({ width, height: width <= 768 ? 844 : 900 });
@@ -92,6 +91,6 @@ test("la aplicación mantiene navegación y preferencias cuando el almacenamient
   await page.locator('[data-action="toggle-theme"]').click();
   await page.locator('[data-action="toggle-motion"]').click();
   await goToSpace(page, "exercises");
-  await expect(page.locator("#exercise-count")).toContainText("45");
+  await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(45);
   expect(pageErrors).toEqual([]);
 });
