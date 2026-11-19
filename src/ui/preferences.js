@@ -3,7 +3,11 @@ const STORAGE_KEYS = {
   themePrefix: "traza:v4:theme:",
   motion: "traza:v2:motion"
 };
-const DEFAULT_THEMES = { home: "dark", aprende: "dark", ficha: "light" };
+const DEFAULT_THEMES = { ficha: "light" };
+
+function systemTheme() {
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
 
 function readPreference(key, fallback, legacyKey) {
   try {
@@ -24,10 +28,10 @@ function readSectionTheme(section) {
   if (saved === "dark" || saved === "light") return saved;
 
   if (section === "aprende") {
-    const legacy = readPreference(STORAGE_KEYS.legacyTheme, DEFAULT_THEMES.aprende, "traza-theme");
-    return legacy === "light" ? "light" : "dark";
+    const legacy = readPreference(STORAGE_KEYS.legacyTheme, null, "traza-theme");
+    if (legacy === "light" || legacy === "dark") return legacy;
   }
-  return DEFAULT_THEMES[section] || "dark";
+  return DEFAULT_THEMES[section] || systemTheme();
 }
 
 export function initPreferences() {
@@ -35,10 +39,19 @@ export function initPreferences() {
   const themeButton = document.querySelector('[data-action="toggle-theme"]');
   const motionButton = document.querySelector('[data-action="toggle-motion"]');
   const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  let themeTransitionTimer = 0;
 
   function applyTheme(theme, section = root.dataset.section || "home") {
     const normalized = theme === "light" ? "light" : "dark";
+    if (root.dataset.theme !== normalized) {
+      root.dataset.themeChanging = "true";
+      window.clearTimeout(themeTransitionTimer);
+      themeTransitionTimer = window.setTimeout(() => delete root.dataset.themeChanging, 180);
+    }
     root.dataset.theme = normalized;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute(
+      "content", normalized === "light" ? "#FBF8F1" : "#0E1522"
+    );
     savePreference(STORAGE_KEYS.themePrefix + section, normalized);
 
     if (themeButton) {

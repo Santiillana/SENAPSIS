@@ -100,6 +100,16 @@ button:disabled { cursor:not-allowed; opacity:.46; } .diagram-stage { position:r
 .nav-button.is-active{border-color:var(--accent);color:var(--accent-strong);background:var(--accent-soft)}
 .panel{border-radius:10px;box-shadow:var(--shadow-sm)}
 
+:root[data-section="aprende"] .button{border-radius:10px;border-width:2px}
+:root[data-section="aprende"] .button-primary{border-color:var(--edge);color:var(--on-strong);background:var(--c-green);box-shadow:0 3px 0 var(--edge)}
+:root[data-section="aprende"] .button-primary:hover{color:var(--on-strong);background:var(--c-green)}
+:root[data-section="aprende"] .button-primary:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+:root[data-section="aprende"] .button-secondary{border-color:var(--edge);color:var(--btn2-fg);background:var(--btn2-bg);box-shadow:0 3px 0 var(--edge)}
+:root[data-section="aprende"] .button-secondary:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+:root[data-section="aprende"] .panel,:root[data-section="aprende"] .theme-card,:root[data-section="aprende"] .catalog-filter-panel{border:2px solid var(--line);border-radius:14px;background:var(--surface-card);color:var(--text)}
+:root[data-section="aprende"] .progress-track,:root[data-section="aprende"] .learn-topic-track{background:var(--track);border:2px solid var(--line)}
+:root[data-section="aprende"] .tag-accent{color:var(--on-bright);background:var(--c-mustard)}
+
 
 /* Componentes compartidos de Traza v4. Todos consumen los tokens de sección. */
 .pill{

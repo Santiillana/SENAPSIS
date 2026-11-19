@@ -98,7 +98,23 @@
 .home-card:hover .agenda-day-left,.home-card:focus-visible .agenda-day-left{transform:rotate(-8deg) translate(-8px,5px) scale(.88)}
 .home-card:hover .agenda-day-right,.home-card:focus-visible .agenda-day-right{transform:rotate(8deg) translate(8px,5px) scale(.88)}
 .home-flow{overflow:visible}.home-flow text{fill:var(--home-aprende-text);font:14px var(--font-ui);text-anchor:middle}.home-flow .flow-shape{fill:var(--home-aprende-surface);stroke:var(--home-aprende-accent);stroke-width:2}.home-flow .flow-line{fill:none;stroke:var(--home-aprende-muted);stroke-width:2}.home-flow .flow-decision{fill:color-mix(in srgb,var(--home-aprende-accent) 12%,var(--home-aprende-surface))}.home-flow .flow-yes,.home-flow .flow-no{font-size:12px;fill:var(--home-aprende-muted)}.home-flow .flow-ball{fill:var(--home-aprende-accent);filter:drop-shadow(0 0 5px var(--home-aprende-accent));offset-path:path("M 180 24 L 180 71 L 180 146 L 180 190 L 180 24");animation:home-flow 7s cubic-bezier(.22,1,.36,1) infinite}
+:root[data-section="home"] .home-flow .flow-terminal{fill:var(--c-green);stroke:var(--figure-edge)}
+:root[data-section="home"] .home-flow .flow-input{fill:var(--c-blue);stroke:var(--figure-edge)}
+:root[data-section="home"] .home-flow .flow-decision{fill:var(--c-mustard);stroke:var(--figure-edge)}
+:root[data-section="home"] .home-flow .flow-text-strong{fill:var(--on-strong)}
+:root[data-section="home"] .home-flow .flow-text-bright{fill:var(--on-bright)}
+:root[data-section="home"] .home-flow .flow-line{stroke:var(--figure-stroke)}
+:root[data-section="home"] .home-flow .flow-yes{fill:var(--c-green)}
+:root[data-section="home"] .home-flow .flow-no{fill:var(--c-brick)}
+:root[data-section="home"] .home-flow .flow-ball{fill:var(--c-mustard);filter:drop-shadow(0 0 5px var(--c-mustard))}
 .home-card-enter{position:absolute;right:24px;bottom:22px;display:grid;place-items:center;width:56px;height:56px;border:1px solid currentColor;border-radius:50%;font-size:26px;opacity:.85}
+:root[data-section="home"] .home-card{border:2px solid var(--line);border-top:3px solid color-mix(in srgb,var(--home-card-accent) 28%,var(--surface-raised));border-radius:20px;background-image:linear-gradient(140deg,color-mix(in srgb,var(--home-card-accent) 5%,transparent),transparent 58%);box-shadow:var(--shadow-md)}
+:root[data-section="home"] .home-card[data-home-section="ficha"]{--home-card-accent:var(--home-ficha-accent)}
+:root[data-section="home"] .home-card[data-home-section="aprende"]{--home-card-accent:var(--home-aprende-accent)}
+:root[data-section="home"] .home-card-kicker{display:inline-flex;align-items:center;min-height:30px;padding:4px 10px;border:1px solid color-mix(in srgb,var(--home-card-accent) 24%,transparent);border-radius:999px;color:var(--home-card-accent);background:color-mix(in srgb,var(--home-card-accent) 8%,var(--surface-raised));font-size:12px;letter-spacing:.12em}
+:root[data-section="home"] .home-illustration{right:18px;bottom:18px;width:min(76%,390px);height:225px;padding:10px;border:1px solid color-mix(in srgb,var(--home-card-accent) 18%,var(--line));border-radius:16px;background:color-mix(in srgb,var(--home-card-accent) 5%,var(--surface-raised))}
+:root[data-section="home"] .home-card-enter{right:24px;bottom:26px;width:46px;height:46px;border-color:color-mix(in srgb,var(--home-card-accent) 36%,transparent);color:var(--home-card-accent);background:color-mix(in srgb,var(--home-card-accent) 10%,var(--surface-raised))}
+:root[data-section="home"] .home-card:hover{border-color:var(--line);box-shadow:var(--shadow-lg)}
 @keyframes home-flow{0%,8%{offset-distance:0%}20%,25%{offset-distance:25%}40%,45%{offset-distance:50%}62%,68%{offset-distance:72%}86%,100%{offset-distance:100%}}
 :root[data-motion="soft"] .home-flow .flow-ball{animation-play-state:paused;offset-distance:50%}
 :root[data-motion="soft"] .home-card:hover .flow-ball,:root[data-motion="soft"] .home-card:focus-visible .flow-ball{animation-play-state:running}
@@ -183,4 +199,8 @@ body[data-active-space="simulator"].focus #hd{display:none!important}
   .topbar-actions .icon-button{width:27px;height:27px}
   .primary-nav .nav-button{font-size:11px}
   .home-card{height:320px;padding:20px 18px}
+}
+@media(max-width:900px){
+  :root[data-section="home"] .home-illustration{right:-12px;bottom:10px;width:88%;height:190px;padding:8px}
+  :root[data-section="home"] .home-card-enter{right:16px;bottom:14px;width:44px;height:44px}
 }

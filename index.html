@@ -4,7 +4,8 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Laboratorio visual e interactivo para aprender a resolver problemas mediante diagramas de flujo.">
   <meta name="traza-release" content="simulador-v3-20261115-1850">
-  <meta name="theme-color" content="#101e23"><title>Traza — laboratorio de diagramas de flujo</title>
+  <meta name="theme-color" content="#0E1522"><title>Traza — laboratorio de diagramas de flujo</title>
+  <script>let theme;try{theme=localStorage.getItem("traza:v4:theme:home")}catch{}if(theme!=="light"&&theme!=="dark")theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=theme;document.querySelector('meta[name="theme-color"]').content=theme==="dark"?"#0E1522":"#FBF8F1"</script>
   <link rel="stylesheet" href="./src/styles/tokens.css"><link rel="stylesheet" href="./src/styles/layout.css">
   <link rel="stylesheet" href="./src/styles/components.css"><link rel="stylesheet" href="./src/styles/motion.css">
   <link rel="stylesheet" href="./src/styles/responsive.css"><link rel="stylesheet" href="./src/styles/content.css"><link rel="stylesheet" href="./src/styles/simulator.css"><link rel="stylesheet" href="./src/styles/lab-builder.css"><link rel="stylesheet" href="./src/styles/shell.css"><script type="module" src="./src/app.js"></script>
@@ -22,7 +23,7 @@
     <div class="topbar-main">
       <a class="brand" href="#main-content" data-go="home" data-space="home" aria-label="Traza, volver a la portada">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 48 48" fill="none"><path d="M9 40V28H22V16H34" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="40" r="3.2" fill="currentColor"/><circle cx="38" cy="16" r="11" fill="#FFC400" opacity=".28"/><circle cx="38" cy="16" r="6.2" fill="#FFC400"/></svg>
+          <svg viewBox="0 0 48 48" fill="none"><path d="M9 40V28H22V16H34" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="40" r="3.2" fill="currentColor"/><circle cx="38" cy="16" r="11" fill="var(--brand-dot)" opacity=".28"/><circle cx="38" cy="16" r="6.2" fill="var(--brand-dot)"/></svg>
         </span>
         <span class="brand-copy"><strong>traza<span>.</span></strong></span>
       </a>
@@ -86,9 +87,9 @@
           <p>Entiende la lógica, paso a paso.</p>
           <svg class="home-illustration home-flow" viewBox="0 0 360 230" aria-hidden="true">
             <path class="flow-line" d="M180 42v24m0 34v24m0 36v24"/>
-            <ellipse class="flow-shape" cx="180" cy="24" rx="48" ry="18"/><text x="180" y="29">Inicio</text>
-            <path class="flow-shape" d="m133 71 14-9h66l14 9-14 20h-66z"/><text x="180" y="84">Leer A</text>
-            <path class="flow-shape flow-decision" d="m180 122 43 24-43 24-43-24z"/><text x="180" y="150">¿A &gt; 0?</text>
+            <ellipse class="flow-shape flow-terminal" cx="180" cy="24" rx="48" ry="18"/><text class="flow-text-strong" x="180" y="29">Inicio</text>
+            <path class="flow-shape flow-input" d="m133 71 14-9h66l14 9-14 20h-66z"/><text class="flow-text-strong" x="180" y="84">Leer A</text>
+            <path class="flow-shape flow-decision" d="m180 122 43 24-43 24-43-24z"/><text class="flow-text-bright" x="180" y="150">¿A &gt; 0?</text>
             <text class="flow-yes" x="237" y="143">Sí ✓</text><text class="flow-no" x="91" y="143">No ✗</text>
             <circle class="flow-ball" r="7" cx="180" cy="24"/>
           </svg>
