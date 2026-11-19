@@ -3075,6 +3075,23 @@ body[data-active-space="simulator"] #PR .variable-card.is-changed strong{display
 @media(prefers-reduced-motion:reduce){body[data-active-space="simulator"] #PR .variable-card.is-changed,body[data-active-space="simulator"] #PR .variable-card.is-changed strong{animation:none!important}}
 :root[data-motion="reduced"] body[data-active-space="simulator"] #PR .variable-card.is-changed,:root[data-motion="reduced"] body[data-active-space="simulator"] #PR .variable-card.is-changed strong{animation:none!important}
 
+/* Paso 24: una escena con jerarquía visual clara para datos, operación y resultado. */
+body[data-active-space="simulator"] #PV .scene-figure-host{
+ border:1px solid color-mix(in srgb,var(--traza-blue) 30%,var(--line))!important;
+ background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--traza-blue) 11%,transparent),transparent 72%),var(--surface-soft)!important
+}
+body[data-active-space="simulator"] #PV .scene-figure-host>.scene-figure{gap:12px!important;font-size:15px!important}
+body[data-active-space="simulator"] #PV .scene-caption{font-size:11px!important;letter-spacing:.09em!important;font-weight:800!important;color:var(--traza-muted)!important}
+body[data-active-space="simulator"] #PV .scene-input .scene-data-tape{min-height:54px!important;align-content:center!important;gap:9px!important;padding:11px!important}
+body[data-active-space="simulator"] #PV .scene-input .scene-tape-item{min-width:36px;min-height:34px;padding:6px 10px;border:1px solid var(--line-strong);border-radius:9px;color:var(--traza-text);background:var(--traza-glass);font:750 16px/1.25 ui-monospace,monospace}
+body[data-active-space="simulator"] #PV .scene-input .scene-tape-item.is-current{border-color:var(--traza-amber);color:#17212a;background:var(--traza-amber);box-shadow:0 0 0 3px color-mix(in srgb,var(--traza-amber) 20%,transparent),0 8px 20px color-mix(in srgb,var(--traza-amber) 25%,transparent)}
+body[data-active-space="simulator"] #PV .scene-input .scene-variable-box{min-width:144px;min-height:64px;align-content:center;padding:10px 16px!important;border-width:2px!important;border-radius:12px!important;color:var(--traza-text)!important;background:color-mix(in srgb,var(--traza-green) 12%,var(--traza-glass))!important;font:700 18px/1.2 ui-monospace,monospace}
+body[data-active-space="simulator"] #PV .scene-input .scene-variable-box>strong{font:800 24px/1.1 ui-monospace,monospace!important;color:var(--traza-green)!important}
+body[data-active-space="simulator"] #PV .scene-process-result{min-height:58px!important;padding:10px 13px!important;border-radius:10px!important}
+body[data-active-space="simulator"] #PV .scene-process-result strong{font-size:clamp(17px,1.3vw,21px)!important}
+body[data-active-space="simulator"] #PV .scene-output-paper{min-height:74px!important;min-width:min(190px,100%)!important;align-content:center!important;padding:12px!important}
+body[data-active-space="simulator"] #PV .scene-output-paper>strong{font:800 24px/1.15 ui-monospace,monospace!important;color:var(--traza-green)!important}
+
 html[data-theme="light"] body[data-active-space="simulator"]{
   --bg:var(--traza-observatory);--grid:var(--traza-stage-grid);--card:var(--traza-glass);
   --ink:var(--traza-text);--pen:var(--traza-muted);
@@ -3382,7 +3399,7 @@ body[data-active-space="simulator"] #PV .scene-input .scene-transfer-lane{animat
 
 /* Presentación legible en portátiles: completa la ilustración y prioriza la memoria. */
 @media(min-width:901px){body[data-active-space="simulator"] #RC.simulator-inspector{grid-template-rows:minmax(0,1.12fr) minmax(0,.88fr)!important}}
-body[data-active-space="simulator"] #PV .scene-figure-host{min-height:170px!important;height:auto!important;max-height:none!important;overflow:visible!important;padding:12px!important}
+body[data-active-space="simulator"] #PV .scene-figure-host{display:grid!important;flex:0 0 auto!important;min-height:170px!important;height:auto!important;max-height:none!important;overflow:visible!important;padding:12px!important}
 body[data-active-space="simulator"] #PV .scene-figure-host>.scene-figure{width:100%!important;max-width:100%!important;min-height:140px!important}
 body[data-active-space="simulator"] #PR.variables-panel{overflow-y:auto!important;overscroll-behavior:contain}
 body[data-active-space="simulator"] #PR #variables-content{flex:0 0 auto!important;min-height:104px!important;overflow:visible!important}
