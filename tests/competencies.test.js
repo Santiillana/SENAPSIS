@@ -5,6 +5,7 @@ import { competenciasAprende, temas } from "../src/content/temas.js";
 import { readFile } from "node:fs/promises";
 
 const css = await readFile(new URL("../src/styles/tokens.css", import.meta.url), "utf8");
+const fichaCss = await readFile(new URL("../src/styles/ficha.css", import.meta.url), "utf8");
 const ids = ["establecer-requisitos", "evaluar-requisitos", "tics", "comunicacion", "matematicas"];
 
 function valuesFor(section, theme) {
@@ -62,4 +63,14 @@ test("los tokens por id derivan color, tinte, borde y texto del marcador base", 
       assert.match(css, new RegExp(`--competence-${id}-${part}:`), `Falta token ${id}/${part}`);
     }
   }
+});
+
+test("el horario identifica sus clases por competencia y no por género del instructor", () => {
+  const competenceIds = new Set(FICHA.competencias.map(item => item.id));
+  for (const block of FICHA.horario) {
+    assert.ok(competenceIds.has(block.competenciaId), `${block.id} no tiene competencia enlazada`);
+    assert.match(fichaCss, new RegExp(`\\.control-class\\[data-competence="${block.competenciaId}"\\]`), `${block.competenciaId} carece de estilo de horario`);
+  }
+  assert.ok(FICHA.instructores.every(item => !Object.hasOwn(item, "genero")));
+  assert.doesNotMatch(fichaCss, /gender|género|genero/i);
 });
