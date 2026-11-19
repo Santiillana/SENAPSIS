@@ -55,16 +55,33 @@ test("dificultad, clase y búsqueda se combinan y se limpian",async({page})=>{
   await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(45);
 });
 
-test("el detalle guía el intento y revela el pseudocódigo solo al pedirlo",async({page})=>{
+test("la hoja de ejercicio reúne sus apartados y conserva el pseudocódigo de referencia",async({page})=>{
   await openExercises(page);
   await page.locator('[data-select-exercise="23"]').click();
   await expect(page.locator("#exercise-detail h3")).toHaveText("Fibonacci: términos que no superen 40");
-  await expect(page.locator("#exercise-detail")).toContainText("DATOS DE EJEMPLO");
+  await expect(page.locator("#exercise-detail .exercise-sample")).toHaveCount(0);
   await expect(page.locator("#exercise-detail .exercise-guide li")).toHaveCount(3);
   await expect(page.locator("#exercise-detail svg")).toBeVisible();
-  await expect(page.locator("#exercise-detail pre")).toHaveCount(0);
-  await page.locator("[data-reveal-solution]").click();
-  await expect(page.locator("#exercise-detail .exercise-solution pre")).toBeVisible();
+  await expect(page.locator("#exercise-detail .exercise-source-solution pre")).toBeHidden();
+  await page.locator("#exercise-detail .exercise-source-solution summary").click();
+  await expect(page.locator("#exercise-detail .exercise-source-solution pre")).toBeVisible();
+  await page.locator("#exercise-detail [data-sheet-theme-toggle]").click();
+  await expect(page.locator("#exercise-detail .sheet-theme-surface")).toHaveAttribute("data-sheet-theme", "dark");
+  await expect(page.locator("#exercise-detail [data-sheet-theme-toggle]")).toHaveAttribute("aria-pressed", "true");
+  await page.locator("#exercise-detail .exercise-detail-scroll").evaluate(element=>{element.scrollTop=240;});
+  await page.locator('[data-select-exercise="24"]').click();
+  await page.locator('[data-select-exercise="23"]').click();
+  await expect.poll(()=>page.locator("#exercise-detail .exercise-detail-scroll").evaluate(element=>element.scrollTop)).toBe(240);
+  await page.locator("[data-exercise-resolved]").click();
+  await expect(page.locator("[data-exercise-resolved]")).toBeFocused();
+  await expect(page.locator('#exercise-grid [data-select-exercise="23"] .exercise-row-status')).toContainText("Resuelto");
+  await page.reload();
+  await goToSpace(page,"exercises",{exerciseTheme:false});await openExerciseTheme(page,"diagramas-flujo");
+  await expect(page.locator('#exercise-grid [data-select-exercise="23"] .exercise-row-status')).toContainText("Resuelto");
+  await page.locator('[data-select-exercise="23"]').click();
+  await expect(page.locator("#exercise-detail .sheet-theme-surface")).toHaveAttribute("data-sheet-theme", "dark");
+  await page.locator("[data-exercise-resolved]").click();
+  await expect(page.locator('#exercise-grid [data-select-exercise="23"] .exercise-row-status')).toContainText("Visto");
   await page.locator("[data-start-exercise]").click();
   await dismissSimulatorIntro(page);
   await expect(page.locator('[data-view="simulator"]')).toBeVisible();
@@ -81,7 +98,7 @@ test("la vista de lista y los filtros se adaptan a móvil sin desbordar",async({
   await expect(disclosure).not.toHaveAttribute("open","");
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
-  await expect(page.locator("#exercise-detail")).toContainText("ANTES DE EMPEZAR");
+  await expect(page.locator("#exercise-detail")).toContainText("Antes de empezar");
 });
 
 test("la lista compacta y la hoja caben en móvil, portátil y monitor",async({page})=>{

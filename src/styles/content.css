@@ -788,6 +788,19 @@ body.has-exercise-modal{overflow:hidden}
 .exercise-view-toggle{display:flex;gap:5px}.exercise-view-toggle button{width:40px;height:40px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:var(--surface)}.exercise-view-toggle button[aria-pressed="true"]{border-color:var(--struct);color:var(--on-struct);background:var(--struct)}
 .exercises-view .exercise-grid.is-list{grid-template-columns:1fr}.exercises-view .exercise-grid.is-list .exercise-card{min-height:84px;grid-template-columns:48px 1fr auto;align-items:center}.exercises-view .exercise-grid.is-list .exercise-card-top{grid-row:1/4}.exercises-view .exercise-grid.is-list .exercise-card>strong{min-height:0}
 .exercise-detail-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.exercise-detail-nav button{min-height:40px;padding:7px 10px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:var(--surface)}.exercise-detail-nav button:disabled{opacity:.45}
+.exercise-detail-scroll.sheet-theme-surface{padding:22px clamp(16px,3vw,38px);border:1px solid var(--sheet-line);border-radius:14px}
+.exercise-detail-scroll .lesson-sheet-theme-toggle{position:sticky;z-index:2;top:4px;float:right}
+.exercise-detail-scroll .exercise-prompt,.exercise-detail-scroll .exercise-sample,.exercise-detail-scroll .exercise-guide,.exercise-detail-scroll .exercise-solution-section{margin:18px 0;padding:4px 0;border:0;border-bottom:1px solid var(--sheet-line);border-radius:0;background:transparent}
+.exercise-solution-section h4,.exercise-concepts h4{margin:0 0 8px;font-size:17px}
+.exercise-solution-section p,.exercise-solution-section ol,.exercise-concepts{font-size:16px;line-height:1.65}
+.exercise-solution-section ol{padding-left:22px}
+.exercise-solution-section li{padding:3px 0}
+.exercise-concepts{margin:18px 0}
+.exercise-concepts .concept-tags{display:flex;flex-wrap:wrap;gap:8px}
+.exercise-concepts .text-link{padding:6px 10px;border:1px solid var(--sheet-line);border-radius:999px}
+.exercise-detail-scroll .exercise-prompt>p:last-child{font-size:19px}
+.exercise-resolved-toggle{display:block;margin:14px auto}
+.exercise-detail-scroll .exercise-level{margin-top:5px}
 .exercise-static-preview{display:grid;place-items:center;margin:16px 0;padding:15px;border:1px solid var(--line);border-radius:13px;background:var(--lienzo,var(--surface-soft))}.exercise-static-preview svg{width:min(100%,280px);height:96px;overflow:visible}.exercise-static-preview svg ellipse,.exercise-static-preview svg rect,.exercise-static-preview svg path:last-child{fill:var(--card);stroke:var(--struct);stroke-width:2}.exercise-static-preview svg path:not(:last-child){fill:none;stroke:var(--struct);stroke-width:2}
 .exercise-prompt,.exercise-sample,.exercise-guide,.exercise-solution{margin:15px 0;padding:15px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}.exercise-prompt>p:last-child{margin:5px 0;font-size:19px;line-height:1.6}.exercise-sample ul,.exercise-guide ol{margin:7px 0;padding-left:22px;color:var(--ink-soft);font-size:16px;line-height:1.6}.exercise-guide li{padding:3px 0}.exercise-solution{animation:exercise-reveal 250ms var(--ease) both}.exercise-solution pre{overflow:auto;padding:12px;border-radius:9px;color:var(--ink);background:var(--surface-soft);font:15px/1.6 ui-monospace,"Cascadia Code",Menlo,Consolas,monospace}.exercise-open-simulator{width:100%;min-height:48px;margin:8px 0}.exercise-detail-note{display:none}
 @keyframes exercise-reveal{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
