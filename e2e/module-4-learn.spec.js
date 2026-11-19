@@ -28,7 +28,7 @@ test("el progreso de lectura es continuo y completa solo tras practicar o saltar
   await page.locator("[data-skip-practice]").click();
   await expect(done).toBeEnabled();
   await done.click();
-  await expect(page.locator(".lesson-completion")).toHaveText("COMPLETADA");
+  await expect(page.locator("[data-lesson-complete]")).toHaveText("Lección completada");
   await expect(page.locator("[data-lesson-next]")).toBeVisible();
 });
 
@@ -85,6 +85,16 @@ test("la cuadrícula de la lección sigue el tema y recuerda su elección",async
   await page.reload();
   await openDiagramLessons(page);
   await expect(page.locator("#lesson-detail")).toHaveAttribute("data-sheet-theme",chosen);
+});
+
+test("la escena se reproduce al entrar en pantalla y se pausa al salir",async({page})=>{
+  await page.goto("/");
+  await openDiagramLessons(page);
+  await page.locator("#lesson-detail .lesson-visual").evaluate(element=>element.scrollIntoView({block:"center"}));
+  const play=page.locator("#lesson-detail [data-visual-play]");
+  await expect(play).toHaveAttribute("aria-pressed","true");
+  await page.evaluate(()=>window.scrollTo({top:0,behavior:"instant"}));
+  await expect(play).toHaveAttribute("aria-pressed","false");
 });
 
 test("las lecciones se mantienen dentro del ancho en móvil",async({page})=>{

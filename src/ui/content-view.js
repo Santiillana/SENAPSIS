@@ -38,6 +38,11 @@ let lessonScreenStep = 0;
 let lessonPlaybackFrame = 0;
 let lessonClock = null;
 let lessonPlaying = false;
+let lessonAutoplayStarted = false;
+let lessonPlaybackComplete = false;
+let lessonEntrySeen = new Set();
+let lessonFigureObserver = null;
+let lessonMotionObserver = null;
 let lessonTryResolved = false;
 let learnProgress = readLearnProgress();
 let selectedTheme = learnProgress.theme;
@@ -212,6 +217,7 @@ function renderTopicSpace(){
 
 function openTheme(id){
   const theme=temaPorId(id);if(!theme||theme.estado!=="disponible")return;
+  stopLessonPlayback();lessonAutoplayStarted=false;lessonPlaybackComplete=false;lessonEntrySeen.clear();
   selectedTheme=id;selectedCompetence=theme.competenciaId;
   if(!theme.lecciones.includes(selectedLesson)){selectedLesson=theme.lecciones[0]||lessons[0].id;lessonScreenStep=0;lessonVisualStep=0;}
   saveLearnProgress();
@@ -396,13 +402,58 @@ function visualMarkup(lesson){
 function stopLessonPlayback(){
   if(lessonPlaybackFrame)cancelAnimationFrame(lessonPlaybackFrame);
   lessonPlaybackFrame=0;lessonClock?.pause();lessonPlaying=false;
+  const play=$("[data-visual-play]");if(play){play.setAttribute("aria-pressed","false");play.textContent="▶ Reproducir";}
+}
+function reducedLessonMotion(){return document.documentElement.dataset.motion==="reduced"||window.matchMedia("(prefers-reduced-motion: reduce)").matches;}
+function observeLessonFigures(){
+  lessonFigureObserver?.disconnect();
+  const figures=$$(".lesson-idea-scene,.lesson-visual",$("#lesson-detail"));
+  if(reducedLessonMotion()||!("IntersectionObserver" in window)){
+    figures.forEach(figure=>figure.classList.add("is-in-view","has-entered"));
+    return;
+  }
+  lessonFigureObserver=new IntersectionObserver(entries=>{
+    for(const entry of entries){
+      const figure=entry.target,key=figure.classList.contains("lesson-visual")?"visual":"idea";
+      if(entry.isIntersecting){
+        figure.classList.add("is-in-view");
+        if(!lessonEntrySeen.has(key)){
+          lessonEntrySeen.add(key);figure.classList.add("is-entering");
+          figure.addEventListener("animationend",event=>{if(event.target===figure)figure.classList.replace("is-entering","has-entered");},{once:true});
+        }else figure.classList.add("has-entered");
+        if(key==="visual"){
+          if(!lessonAutoplayStarted){lessonAutoplayStarted=true;startLessonPlayback({automatic:true});}
+          else if(!lessonPlaybackComplete&&!lessonPlaying)startLessonPlayback({automatic:true});
+        }
+      }else{
+        figure.classList.remove("is-in-view");
+        if(key==="visual"&&lessonPlaying)stopLessonPlayback();
+      }
+    }
+  },{threshold:.24});
+  figures.forEach(figure=>lessonFigureObserver.observe(figure));
+}
+function observeLessonMotionPreference(){
+  if(lessonMotionObserver)return;
+  lessonMotionObserver=new MutationObserver(()=>{
+    if(reducedLessonMotion()){
+      stopLessonPlayback();lessonPlaybackComplete=true;renderLesson();
+    }else renderLesson();
+  });
+  lessonMotionObserver.observe(document.documentElement,{attributes:true,attributeFilter:["data-motion"]});
+  window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener?.("change",()=>{
+    if(reducedLessonMotion()){stopLessonPlayback();lessonPlaybackComplete=true;renderLesson();}
+    else renderLesson();
+  });
 }
 function startLessonPlayback(){
-  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches||document.documentElement.dataset.motion==="reduced")return;
+  if(reducedLessonMotion())return;
   const lesson=lessons.find(item=>item.id===selectedLesson)??lessons[0];
   const execution=runLesson(lesson),events=execution.ok?relevantLessonEvents(lesson,execution):[];
   if(!events.length)return;
   if(lessonVisualStep>=events.length-1)lessonVisualStep=0;
+  lessonAutoplayStarted=true;
+  lessonPlaybackComplete=false;
   lessonClock=createClock({duration:events.length*1300});
   lessonClock.seek(lessonVisualStep*1300);lessonClock.play();lessonPlaying=true;renderLesson();
   let previous=null;
@@ -416,7 +467,7 @@ function startLessonPlayback(){
     }
     previous=timestamp;
     if(lessonClock.playing)lessonPlaybackFrame=requestAnimationFrame(frame);
-    else{lessonPlaying=false;lessonPlaybackFrame=0;renderLesson();}
+    else{lessonPlaying=false;lessonPlaybackFrame=0;lessonPlaybackComplete=true;renderLesson();}
   };
   lessonPlaybackFrame=requestAnimationFrame(frame);
 }
@@ -430,12 +481,13 @@ function renderLesson(){
   const completed=learnProgress.completed.includes(lesson.id);
   const recipe=lessonRecipe(lesson.id);
   const execution=runLesson(lesson),events=execution.ok?relevantLessonEvents(lesson,execution):[];
+  if(reducedLessonMotion())lessonVisualStep=Math.max(0,events.length-1);
   const steps=events.map((item,index)=>'<li><span>'+String(index+1).padStart(2,"0")+'</span><p>'+escapeHTML(item.scene?.body??item.message??item.sourceText??"Paso del algoritmo")+'</p></li>').join("");
   const activeLine=events[Math.min(lessonVisualStep,Math.max(0,events.length-1))]?.sourceLine;
   const codeLines=(sceneLesson?lesson.example.steps:lesson.miniProgram.code.split("|")).map((line,index)=>'<li class="'+(activeLine===index+1?"is-active":"")+'"><span>'+(index+1)+'</span><code>'+escapeHTML(line)+'</code></li>').join("");
   const options=lesson.check.options.map((option,index)=>'<button type="button" class="lesson-option" data-check-option="'+index+'"><span>'+String.fromCharCode(65+index)+'</span>'+escapeHTML(option)+'</button>').join("");
   const prereq=lesson.id==="process"?"Variables":lesson.id==="arithmetic"?"Asignación":lesson.id==="for"?"Contador y acumulador":"";
-  const idea='<section class="lesson-reading-section" id="lesson-idea"><p class="eyebrow">01 · IDEA</p><p class="lesson-intuitive">'+escapeHTML(recipe?.idea??lesson.intuitive)+'</p><div class="lesson-idea-scene lesson-idea-scene-'+escapeHTML(lesson.visual.kind)+'" data-lesson-kind="'+escapeHTML(lesson.visual.kind)+'">'+lessonScene(lesson,0)+'</div>'+(prereq?'<p class="lesson-prerequisite">Antes conviene ver: <button type="button" data-prerequisite="'+escapeHTML(prereq)+'">'+escapeHTML(prereq)+'</button></p>':"")+'</section>';
+  const idea='<section class="lesson-reading-section" id="lesson-idea"><p class="eyebrow">01 · IDEA</p><p class="lesson-intuitive">'+escapeHTML(recipe?.idea??lesson.intuitive)+'</p><div class="lesson-idea-scene lesson-idea-scene-'+escapeHTML(lesson.visual.kind)+'" data-lesson-kind="'+escapeHTML(lesson.visual.kind)+'">'+lessonScene(lesson,reducedLessonMotion()?Math.max(0,events.length-1):0)+'</div>'+(prereq?'<p class="lesson-prerequisite">Antes conviene ver: <button type="button" data-prerequisite="'+escapeHTML(prereq)+'">'+escapeHTML(prereq)+'</button></p>':"")+'</section>';
   const concept='<section class="lesson-reading-section" id="lesson-concept"><p class="eyebrow">02 · CONCEPTO</p><p class="lesson-support-copy">'+escapeHTML(lesson.visual.caption)+'</p>'+visualMarkup(lesson)+'</section>';
   const term='<section class="lesson-reading-section" id="lesson-term"><p class="eyebrow">03 · PALABRA TÉCNICA</p><h4 class="lesson-term-title">'+escapeHTML(recipe?.term??LESSON_TERMS[lesson.id]??lesson.title)+'</h4><p class="lesson-term-definition">'+escapeHTML(lesson.technical)+'</p><p class="lesson-key-idea"><b>En pocas palabras</b> '+escapeHTML(lesson.summary??lesson.objective)+'</p>'+(mathLesson?'<details class="lesson-technical"><summary>Glosario del tema</summary><p>Entero, racional, numerador, denominador, mcm, razón, proporción, directa e inversa.</p></details>':sourceLesson?'<details class="lesson-technical"><summary>Nota de clasificación</summary><p>Según el autor, las fronteras entre fuentes primarias, secundarias y terciarias pueden cambiar. Revisa siempre de dónde viene el dato y cómo se obtuvo.</p></details>':'<details class="lesson-technical"><summary>Cómo se escribe o se representa</summary><p>'+escapeHTML(lesson.example.code.split("|").join(" · "))+'</p></details>')+'</section>';
   const example='<section class="lesson-reading-section" id="lesson-example"><p class="eyebrow">04 · EJEMPLO PASO A PASO</p><h4>'+escapeHTML(sceneLesson?lesson.title:lesson.miniProgram.title)+'</h4><div class="lesson-worked-layout"><ol class="lesson-code-lines" aria-label="'+(sceneLesson?"Momentos de la escena":"Pseudocódigo con la línea activa")+'">'+codeLines+'</ol><ol class="lesson-worked-steps">'+steps+'</ol></div><p class="lesson-example-note">'+escapeHTML(lesson.example.explanation)+'</p>'+(sceneLesson?"":'<details class="lesson-interactive-test"><summary>Probar con otros datos</summary><label class="lesson-data-control"><span>Datos de entrada</span><input id="lesson-data-input" type="text" value="'+escapeHTML(lesson.miniProgram.sample.join(", "))+'" aria-label="Datos de entrada separados por coma"></label><div class="lesson-example-output" id="lesson-data-result" role="status"></div><button type="button" class="button button-primary" data-run-mini-program>Ejecutar prueba</button></details>')+'</section>';
@@ -448,6 +500,7 @@ function renderLesson(){
     '<header class="lesson-detail-heading"><div><p class="eyebrow">LECCIÓN '+String(lesson.order).padStart(2,"0")+' / '+topicLessonCount+' · '+escapeHTML(lesson.duration.toUpperCase())+' · DIFICULTAD '+lessonDifficulty(lesson)+'/3</p><h3>'+escapeHTML(lesson.title)+'</h3><p>'+escapeHTML(lesson.objective)+'</p><button type="button" class="lesson-list-toggle" data-learn-list>‹ Lista de lecciones</button></div></header>'+
     '<div class="lesson-reading-progress" role="progressbar" aria-label="Progreso de lectura" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>'+idea+concept+term+example+practice+summary+'</div>';
   if($("#lesson-data-input"))updateLessonData();
+  observeLessonFigures();
   saveLearnProgress();
 }
 
@@ -613,7 +666,7 @@ function selectSourceExercise(id){
 
 function selectLesson(id){
   if(!lessons.some(lesson=>lesson.id===id))return;
-  stopLessonPlayback();selectedLesson=id;lessonVisualStep=0;lessonScreenStep=0;lessonTryResolved=false;
+  stopLessonPlayback();lessonAutoplayStarted=false;lessonPlaybackComplete=false;lessonEntrySeen.clear();selectedLesson=id;lessonVisualStep=0;lessonScreenStep=0;lessonTryResolved=false;
   saveLearnProgress();lessonList();renderLesson();
   renderTopicSpace();
   $("#learn-topic-space")?.classList.remove("is-list-open");
@@ -771,4 +824,5 @@ export function initContentViews(){
   renderConceptFilters();renderExerciseCards();renderExerciseDetail();
   bindContentEvents();
   initSheetThemes();
+  observeLessonMotionPreference();
 }
