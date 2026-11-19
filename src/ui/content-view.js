@@ -245,32 +245,32 @@ function renderLearnProgress(){
     return `<article class="learn-progress-competence" data-competence-id="${escapeHTML(competence.id)}"><header>${competenceMarker(competence.id)}<strong>${escapeHTML(competence.titulo)}</strong>${competence.tipo==="transversal"?'<small class="learn-competence-type">Transversal</small>':""}${progressRing(completed,lessonIds.length)}</header>${owned.map(theme=>{const count=theme.lecciones.filter(id=>learnProgress.completed.includes(id)).length;const pct=theme.lecciones.length?Math.round(count/theme.lecciones.length*100):0;const stars=theme.competenciaId==="matematicas"?Object.values(labData.topics?.[theme.id]?.concepts?.[theme.id]||{}).reduce((sum,mode)=>sum+(Number(mode?.stars)||0),0):theme.ejercicios.reduce((sum,id)=>sum+Object.values(lab[String(id)]||{}).reduce((n,mode)=>n+(Number(mode?.stars)||0),0),0);const medals=conceptMedals(labData,theme.id);const medalNames=medals.map(id=>escapeHTML(conceptos.find(item=>item.id===id)?.titulo??id));return `<div class="learn-progress-topic"><span>${escapeHTML(theme.titulo)}</span><span class="learn-topic-track"><i style="width:${pct}%"></i></span><small>${count} de ${theme.lecciones.length} lecciones · ${stars} estrellas del Laboratorio · ${medals.length} medallas</small>${medalNames.length?`<small class="learn-topic-medals" aria-label="Medallas logradas">🏅 ${medalNames.join(" · ")}</small>`:""}</div>`;}).join("")||'<p>Próximamente</p>'}</article>`;
   }).join("");
 }
+function lessonDifficulty(lesson,theme=temaPorId(selectedTheme)){
+  if(theme?.id==="diagramas-flujo")return Math.min(3,Math.max(1,rutas.findIndex(group=>group.ids.includes(lesson.id))+1));
+  return Math.min(3,Math.max(1,theme?.dificultad??1));
+}
 function lessonList(){
   const host=$("#lesson-catalog");
   if(!host)return;
-  const routeCount=$("#lesson-route-count"),routeFill=$("#lesson-route-fill");
+  const routeCount=$("#lesson-route-count");
   const theme=temaPorId(selectedTheme);
-  const topicLessons=theme?.lecciones?.length?theme.lecciones.map(id=>lessons.find(lesson=>lesson.id===id)).filter(Boolean):flowLessons;
+  const topicLessons=(theme?.lecciones?.length?theme.lecciones.map(id=>lessons.find(lesson=>lesson.id===id)).filter(Boolean):flowLessons)
+    .map((lesson,index)=>{
+      return {lesson,index,difficulty:lessonDifficulty(lesson,theme)};
+    })
+    .sort((a,b)=>a.difficulty-b.difficulty||a.index-b.index)
+    .map(item=>({...item.lesson,difficulty:item.difficulty}));
   const current=Math.max(0,topicLessons.findIndex(item=>item.id===selectedLesson))+1;
-  if(routeCount){routeCount.textContent=current+" de "+topicLessons.length;routeCount.parentElement?.setAttribute("role","progressbar");routeCount.parentElement?.setAttribute("aria-valuemin","0");routeCount.parentElement?.setAttribute("aria-valuemax",String(topicLessons.length));routeCount.parentElement?.setAttribute("aria-valuenow",String(current));}
-  if(routeFill)routeFill.style.width=Math.round(current/Math.max(1,topicLessons.length)*100)+"%";
-  const groups=theme?.id==="diagramas-flujo"||!theme?rutas:[{id:theme.id,title:theme.titulo,description:topicLessons.length+" lecciones para comprender y practicar el tema.",ids:topicLessons.map(item=>item.id)}];
-  host.innerHTML=groups.map(group=>{
-    const done=group.ids.filter(id=>learnProgress.completed.includes(id)).length;
-    const items=topicLessons.filter(lesson=>group.ids.includes(lesson.id)).map((lesson,index)=>{
-      const completedLesson=learnProgress.completed.includes(lesson.id);
-      const difficulty=mathLessonById(lesson.id)?Math.max(1,theme.dificultad):Math.max(1,rutas.findIndex(item=>item.ids.includes(lesson.id))+1);
-      return '<button class="lesson-list-item '+(lesson.id===selectedLesson?"is-selected":"")+'" type="button" data-lesson-id="'+escapeHTML(lesson.id)+'" aria-current="'+(lesson.id===selectedLesson?"true":"false")+'" aria-label="Lección '+String(index+1)+': '+escapeHTML(lesson.title)+(completedLesson?", completada":", pendiente")+'">'+
-        '<span class="lesson-list-number">'+String(index+1).padStart(2,"0")+'</span>'+
-        '<span class="lesson-list-copy"><strong>'+escapeHTML(lesson.title)+'</strong></span>'+
-        '<span class="lesson-list-state" aria-hidden="true">'+(completedLesson?"✓":lesson.id===selectedLesson?"◐":"○")+'</span>'+
-        '<span class="lesson-list-difficulty" aria-label="Dificultad '+difficulty+' de 4">'+[1,2,3,4].map(value=>'<i class="'+(value<=difficulty?"is-filled":"")+'"></i>').join("")+'</span></button>';
-    }).join("");
-    return '<section class="lesson-catalog-group" data-route-id="'+escapeHTML(group.id)+'" aria-label="'+escapeHTML(group.title)+'">'+
-      '<div class="lesson-catalog-group-heading"><div><p class="lesson-catalog-group-title">'+escapeHTML(group.title)+'</p><small>'+escapeHTML(group.description)+'</small></div>'+
-      '<span class="lesson-group-progress" aria-label="'+done+' de '+group.ids.length+' lecciones completadas">'+done+'/'+group.ids.length+'</span></div>'+
-      '<div class="lesson-catalog-items">'+items+'</div></section>';
-  }).join("")+'<details class="lesson-glossary"><summary>Glosario del tema</summary><dl>'+(theme?.id==="fuentes-informacion"?sourceLessonGlossary.map(([term,definition])=>'<dt>'+escapeHTML(term)+'</dt><dd>'+escapeHTML(definition)+'</dd>').join(""):topicLessons.map(lesson=>'<dt>'+escapeHTML(LESSON_TERMS[lesson.id]??lesson.title)+'</dt><dd>'+escapeHTML(lesson.technical)+'</dd>').join(""))+'</dl></details>';
+  if(routeCount)routeCount.textContent=current+" de "+topicLessons.length;
+  const items=topicLessons.map((lesson,index)=>{
+    const completed=learnProgress.completed.includes(lesson.id);
+    const status=completed?"Completada":lesson.id===selectedLesson?"En curso":"Pendiente";
+    return '<button class="lesson-list-item '+(lesson.id===selectedLesson?"is-selected":"")+'" type="button" data-lesson-id="'+escapeHTML(lesson.id)+'" aria-current="'+(lesson.id===selectedLesson?"true":"false")+'" aria-label="Lección '+String(index+1)+': '+escapeHTML(lesson.title)+", "+status+", dificultad "+lesson.difficulty+' de 3">'+
+      '<span class="lesson-list-number">'+String(index+1).padStart(2,"0")+'</span>'+
+      '<span class="lesson-list-copy"><strong>'+escapeHTML(lesson.title)+'</strong><small>'+status+'</small></span>'+
+      '<span class="lesson-list-difficulty" aria-hidden="true">'+[1,2,3].map(value=>'<i class="'+(value<=lesson.difficulty?"is-filled":"")+'"></i>').join("")+'</span></button>';
+  }).join("");
+  host.innerHTML='<div class="lesson-catalog-items">'+items+'</div><details class="lesson-glossary"><summary>Glosario del tema</summary><dl>'+(theme?.id==="fuentes-informacion"?sourceLessonGlossary.map(([term,definition])=>'<dt>'+escapeHTML(term)+'</dt><dd>'+escapeHTML(definition)+'</dd>').join(""):topicLessons.map(lesson=>'<dt>'+escapeHTML(LESSON_TERMS[lesson.id]??lesson.title)+'</dt><dd>'+escapeHTML(lesson.technical)+'</dd>').join(""))+'</dl></details>';
 }
 function lessonInputs(value){
   return String(value??"").split(/[;,]/).map(part=>part.trim()).filter(Boolean).map(Number);
@@ -444,7 +444,7 @@ function renderLesson(){
   if(currentLesson)currentLesson.textContent=lesson.title;
   if(currentLessonWrap)currentLessonWrap.hidden=false;
   host.innerHTML='<div class="lesson-reader">'+
-    '<header class="lesson-detail-heading"><div><p class="eyebrow">LECCIÓN '+String(lesson.order).padStart(2,"0")+' / '+topicLessonCount+' · '+escapeHTML(lesson.duration.toUpperCase())+'</p><h3>'+escapeHTML(lesson.title)+'</h3><p>'+escapeHTML(lesson.objective)+'</p><button type="button" class="lesson-list-toggle" data-learn-list>‹ Lista de lecciones</button></div><span class="lesson-completion">'+(completed?"COMPLETADA":"EN CURSO")+'</span></header>'+
+    '<header class="lesson-detail-heading"><div><p class="eyebrow">LECCIÓN '+String(lesson.order).padStart(2,"0")+' / '+topicLessonCount+' · '+escapeHTML(lesson.duration.toUpperCase())+' · DIFICULTAD '+lessonDifficulty(lesson)+'/3</p><h3>'+escapeHTML(lesson.title)+'</h3><p>'+escapeHTML(lesson.objective)+'</p><button type="button" class="lesson-list-toggle" data-learn-list>‹ Lista de lecciones</button></div></header>'+
     '<div class="lesson-reading-progress" role="progressbar" aria-label="Progreso de lectura" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>'+idea+concept+term+example+practice+summary+'</div>';
   if($("#lesson-data-input"))updateLessonData();
   saveLearnProgress();

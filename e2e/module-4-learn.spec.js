@@ -1,14 +1,16 @@
 import { test, expect, openDiagramLessons, goToSpace } from "./navigation.js";
 
-test("Aprende organiza las 17 lecciones en cuatro bloques y una ruta lateral",async({page})=>{
+test("Aprende organiza las 17 lecciones en una lista ligera y una ruta lateral",async({page})=>{
   await page.goto("/");
   await openDiagramLessons(page);
   await expect(page.locator("#lesson-catalog [data-lesson-id]")).toHaveCount(17);
-  await expect(page.locator(".lesson-catalog-group-title")).toHaveText([
-    "01 · Fundamentos","02 · Datos y operaciones","03 · Decisiones","04 · Ciclos"
-  ]);
+  await expect(page.locator(".lesson-catalog-group-title")).toHaveCount(0);
   await expect(page.locator("#lesson-route-count")).toHaveText("1 de 17");
+  await expect(page.locator("#lesson-catalog .lesson-list-difficulty i")).toHaveCount(51);
+  await expect(page.locator('#lesson-catalog [data-lesson-id="algorithm"]')).toHaveAttribute("aria-label",/dificultad 1 de 3/i);
   await expect(page.locator(".lesson-glossary summary")).toHaveText("Glosario del tema");
+  await expect(page.locator("#lesson-detail .lesson-reading-section")).toHaveCount(6);
+  await expect(page.locator(".lesson-completion")).toHaveCount(0);
 });
 
 test("el progreso de lectura es continuo y completa solo tras practicar o saltar",async({page})=>{
