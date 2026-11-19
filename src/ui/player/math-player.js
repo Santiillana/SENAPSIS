@@ -98,9 +98,11 @@ function stop(){if(raf)cancelAnimationFrame(raf);raf=0;clock?.pause();playing=fa
 function setStep(step){stop();activeStep=Math.max(0,Math.min(steps.length-1,step));clock?.seek(activeStep*1400);render();}
 function play(){if(playing){stop();render();return;}if(window.matchMedia("(prefers-reduced-motion: reduce)").matches||document.documentElement.dataset.motion==="reduced")return;if(activeStep>=steps.length-1)activeStep=0;clock=createClock({duration:steps.length*1400,speed:playSpeed});clock.seek(activeStep*1400);clock.play();playing=true;render();let previous=null;const frame=timestamp=>{if(!playing||!clock)return;if(previous!==null){clock.advance(Math.min(100,Math.max(0,timestamp-previous)));const next=Math.min(steps.length-1,Math.floor(clock.time/1400));if(next!==activeStep){activeStep=next;render();}}previous=timestamp;if(clock.playing)raf=requestAnimationFrame(frame);else{playing=false;raf=0;render();}};raf=requestAnimationFrame(frame);}
 function openExercise(id,provided){activeExercise=provided?.id===id?provided:mathExerciseById(id);if(!activeExercise)return;stop();steps=buildSteps(activeExercise);activeStep=0;clock=createClock({duration:Math.max(1,steps.length)*1400,speed:playSpeed});const root=$("#math-player"),view=$("#view-simulator");if(root){root.hidden=false;view.dataset.mathPlayer="true";}render();}
-function close(){stop();document.body.classList.remove("math-focus");const root=$("#math-player"),view=$("#view-simulator");if(root)root.hidden=true;if(view)delete view.dataset.mathPlayer;document.querySelector('#primary-nav [data-space="exercises"]')?.click();}
+function hidePlayer(){stop();document.body.classList.remove("math-focus");const root=$("#math-player"),view=$("#view-simulator");if(root)root.hidden=true;if(view)delete view.dataset.mathPlayer;}
+function close(){hidePlayer();document.querySelector('#primary-nav [data-space="exercises"]')?.click();}
 function bind(){
   document.addEventListener("traza:open-math-player",event=>openExercise(event.detail?.exerciseId,event.detail?.exercise));
+  document.addEventListener("traza:close-math-player",hidePlayer);
   document.addEventListener("traza:space-change",event=>{if(event.detail?.space==="simulator"&&activeExercise)render();});
   document.addEventListener("keydown",event=>{if(event.key==="Escape"&&document.body.classList.contains("math-focus")){document.body.classList.remove("math-focus");render();}});
   $("#math-player")?.addEventListener("click",event=>{

@@ -77,7 +77,8 @@ function play(){
   timer=requestAnimationFrame(frame);
 }
 function close(){
-  stop();predict=null;const host=root();if(!host)return;
+  const host=root();if(!host||host.hidden)return;
+  stop();predict=null;
   host.hidden=true;host.classList.remove("is-concentrated");
   for(const [element,state] of hiddenBefore){element.hidden=state.hidden;if(state.display)element.style.setProperty("display",state.display,state.priority);else element.style.removeProperty("display");}hiddenBefore.clear();
   const title=document.querySelector("#simulator-title"),status=document.querySelector("#simulator-status");if(title)title.textContent=originalTitle;if(status)status.textContent=originalStatus;
@@ -96,6 +97,7 @@ export function initSourceSimulator(){
   if(!root())return;
   const errors=validateSourceScenarios();if(errors.length)console.error("Escenarios de fuentes inválidos:",errors);
   document.addEventListener("traza:open-source-simulator",event=>open(event.detail?.scenarioId));
+  document.addEventListener("traza:close-source-simulator",close);
   root().addEventListener("click",event=>{
     const button=event.target.closest("button");if(!button)return;
     if(button.matches("[data-source-sim-exit]")){close();document.querySelector('#primary-nav [data-space="learn"]')?.click();return;}

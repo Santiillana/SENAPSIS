@@ -7,11 +7,13 @@ import { initBuilder } from "./ui/builder.js";
 import { initFicha } from "./ficha/init.js";
 import { initMathPlayer } from "./ui/player/math-player.js";
 import { initSourceSimulator } from "./ui/source-simulator.js";
+import { initSimulatorEntry } from "./ui/simulator-entry.js";
 
 initFicha();
 initNavigation();
 initPreferences();
 initContentViews();
+initSimulatorEntry();
 initSimulator();
 initLab();
 initBuilder();
