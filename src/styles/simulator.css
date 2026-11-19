@@ -3092,6 +3092,22 @@ body[data-active-space="simulator"] #PV .scene-process-result strong{font-size:c
 body[data-active-space="simulator"] #PV .scene-output-paper{min-height:74px!important;min-width:min(190px,100%)!important;align-content:center!important;padding:12px!important}
 body[data-active-space="simulator"] #PV .scene-output-paper>strong{font:800 24px/1.15 ui-monospace,monospace!important;color:var(--traza-green)!important}
 
+/* Paso 25: identidad y tipografía compartidas entre escena y memoria. */
+body[data-active-space="simulator"] #PV.scene-panel{--window-identity:var(--traza-blue)}
+body[data-active-space="simulator"] #PR.variables-panel{--window-identity:var(--traza-green)}
+body[data-active-space="simulator"] #PV>.panel-heading,
+body[data-active-space="simulator"] #PR>.panel-heading{border-left:4px solid var(--window-identity)!important;padding-left:14px!important}
+body[data-active-space="simulator"] #PV .panel-heading h3,
+body[data-active-space="simulator"] #PR .panel-heading h3{font-size:18px!important;line-height:1.25!important;letter-spacing:-.01em}
+body[data-active-space="simulator"] #PV .panel-heading .eyebrow,
+body[data-active-space="simulator"] #PR .panel-heading .eyebrow{font-size:10px!important;letter-spacing:.1em!important;color:var(--traza-muted)!important}
+body[data-active-space="simulator"] #PV .scene-event-body{border-left-color:var(--traza-blue)!important;color:var(--traza-text)!important;font-size:14px!important;line-height:1.5!important}
+body[data-active-space="simulator"] #PR .variable-change{border-top:1px solid var(--line)!important;background:color-mix(in srgb,var(--traza-green) 7%,var(--traza-glass));color:var(--traza-text)!important;font-size:14px!important;line-height:1.45!important}
+body[data-active-space="simulator"] #PR .variable-card{font-family:inherit!important}
+body[data-active-space="simulator"] #PR .variable-card-name{color:var(--window-identity)!important}
+body[data-active-space="simulator"] #PV .scene-order-explanation summary:focus-visible,
+body[data-active-space="simulator"] #PR details>summary:focus-visible{outline:3px solid var(--traza-amber);outline-offset:2px;border-radius:5px}
+
 html[data-theme="light"] body[data-active-space="simulator"]{
   --bg:var(--traza-observatory);--grid:var(--traza-stage-grid);--card:var(--traza-glass);
   --ink:var(--traza-text);--pen:var(--traza-muted);

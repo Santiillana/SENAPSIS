@@ -87,11 +87,16 @@ test("la escena conserva completa su ilustración y Variables muestra las cajita
       figure:figureBox&&{x:figureBox.x,y:figureBox.y,w:figureBox.width,h:figureBox.height,tag:figure.tagName,scrollH:figure.scrollHeight,clientH:figure.clientHeight},
       figureInside:!!hostBox&&!!figureBox&&figureBox.left>=hostBox.left-1&&figureBox.right<=hostBox.right+1&&figureBox.top>=hostBox.top-1&&figureBox.bottom<=hostBox.bottom+1,
       variablesFit:!!variables&&!!cards&&cards.getBoundingClientRect().bottom<=variables.getBoundingClientRect().bottom+1,
+      headingSize:Number.parseFloat(getComputedStyle(document.querySelector("#PV .panel-heading h3")).fontSize),
+      sceneAccent:getComputedStyle(document.querySelector("#PV .panel-heading")).borderLeftColor,
+      variablesAccent:getComputedStyle(document.querySelector("#PR .panel-heading")).borderLeftColor,
       cardCount:cards?.children.length??0
     };
   });
   expect(report.event).toBe("assignment");
   expect(report.figureInside,JSON.stringify(report)).toBe(true);
   expect(report.variablesFit,JSON.stringify(report)).toBe(true);
+  expect(report.headingSize).toBeGreaterThanOrEqual(17);
+  expect(report.sceneAccent).not.toBe(report.variablesAccent);
   expect(report.cardCount).toBe(3);
 });
