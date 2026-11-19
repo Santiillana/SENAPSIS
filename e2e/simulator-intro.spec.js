@@ -7,7 +7,9 @@ test("la pantalla Intenta primero acompaña el ejercicio y respeta el modo prese
   const intro = page.locator("#simulator-intro");
   await expect(intro).toBeVisible();
   await expect(intro).toContainText("Intenta primero");
-  await expect(intro.locator("li")).toHaveCount(3);
+  await expect(intro.locator(".simulator-thinking-guide li")).toHaveCount(4);
+  await expect(intro.locator(".simulator-thinking-guide")).toContainText("Entiende");
+  await expect(intro.locator(".simulator-thinking-guide")).toContainText("Comprueba");
   await expect(page.locator("#simulator-intro-data")).toContainText("Datos de ejemplo");
   for (const size of [{ width: 390, height: 844 }, { width: 1366, height: 768 }]) {
     await page.setViewportSize(size);
