@@ -13,8 +13,8 @@ Actualizado: 19 de noviembre de 2026
 | 4 | completa | `14e86de` |
 | 5 | en curso, step 7 | en curso |
 | 6 | pendiente; multi-ficha excluida | |
-| 7 | pendiente; configurar Cloudflare requiere al usuario | |
-| 8 | en curso, step 1 | auditoría |
+| 7 | en curso, step 1 | backend preparado; cuenta pendiente |
+| 8 | step 1 auditado | migración en espera de fase 7 |
 
 ## Rutas y decisiones verificadas
 
@@ -33,6 +33,7 @@ Actualizado: 19 de noviembre de 2026
 - La entrada del Simulador organiza los 108 ejercicios por competencia, tema y ejercicio, y deriva cada selección al reproductor dedicado de Flujo, Fuentes o Matemáticas. Abrirlo desde Aprende conserva el acceso directo al ejercicio seleccionado.
 - Fase 8, step 1: Fuentes usa `source-simulator.js` con fuente activa, pasos de escenario y cobertura de requisitos/áreas; sus carriles P/S/T, ruta y hoja ya expresan la plantilla `clasificacion`. Matemáticas usa `math-player.js`: pasos `table`, `area`, `cross`, `result`, `check`, `fraction` y `tree`, con operación exacta y resultado parcial. Ambos poseen controles y animación propios; no consumen aún `createSimulatorShell`.
 - Brecha fase 8: el contrato compartido exige `id`, `foco`, `globo`, `escena.tipo/datos`, `estado`, `salida` y `frase`. Las plantillas nuevas deben adaptar cada paso existente a esos campos y usar `createSimulatorShell`; `renderScene` solo contiene escenas de Flujo, por lo que clasificación y cálculo necesitan renderers de dominio con secuencia estática/reducida y sin alterar los bancos fuente.
+- Fase 7 step 1: el repo no incluye Worker, `wrangler` ni migraciones; se preparó un Worker API aislado, validación RS256 de Cloudflare Access con audiencia/emisor/lista de moderadores y D1 singleton de contenido/auditoría. Sin datos `ficha_id` ni estado personal. Configuración y despliegue quedan pendientes de la cuenta.
 - La multi-ficha queda fuera. No se deben añadir `ficha_id` ni selección de varias fichas.
 - La Fase 3b requiere aprobación del informe y solicitud expresa; no redactar ejercicios nuevos ni reescritos antes de eso.
 - `reference/` permanece protegida. Los archivos del usuario no relacionados se mantienen sin cambios ni se incluyen en commits.
@@ -48,3 +49,4 @@ Actualizado: 19 de noviembre de 2026
 - Fase 5 step 6: catálogo por competencia y tema, familias compactas, filtros con etiquetas textuales y resumen de estrellas implementados. Pruebas de lógica del Laboratorio: 4/4; E2E de Flujo, Matemáticas y Fuentes: 17/17; `node --check src/ui/lab.js` y `git diff --check`: limpios.
 - Fase 5 step 7: selector de competencia → tema → ejercicio para los tres reproductores; acceso directo desde Aprende preservado. `e2e/simulator-entry.spec.js`: 2/2; `e2e/module-4-exercises.spec.js`: 11/11, incluido el acceso directo a Flujo y Matemáticas.
 - Auditoría de fase 8: Fuentes produce secuencia de fuentes con aportes, requisitos y cobertura; Matemáticas produce secuencia exacta a partir de solución/reglas. El foco actual es exclusivamente vista; los reproductores conservan estado y controles dentro de sus módulos dedicados.
+- Fase 7 step 1: `node --test tests/access.test.js`: 1/1 archivo; validación SQL de migración con SQLite en memoria: 5 tablas; `node --check` y `git diff --check` limpios. Migración remota sin ejecutar hasta crear D1 en la cuenta.

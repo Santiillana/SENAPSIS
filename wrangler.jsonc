@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "traza-content-api",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-11-19",
+  "vars": {
+    "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
+    "ACCESS_AUD": "REPLACE_WITH_ACCESS_APPLICATION_AUD",
+    "ACCESS_ALLOWED_EMAILS": "REPLACE_WITH_MODERATOR_EMAIL",
+    "ALLOWED_ORIGIN": "REPLACE_WITH_PRODUCTION_ORIGIN"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "traza-content",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ]
+}
