@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es" data-theme="light" data-motion="full">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Administración protegida de la ficha académica.">
+  <meta name="traza-api-base" content="">
+  <meta name="theme-color" content="#FBF8F1"><title>Administrar · Traza</title>
+  <link rel="stylesheet" href="./src/styles/tokens.css"><link rel="stylesheet" href="./src/styles/admin.css">
+  <script type="module" src="./src/admin.js"></script>
+</head>
+<body class="admin-body">
+  <a class="admin-skip" href="#admin-main">Saltar al formulario</a>
+  <main id="admin-main" class="admin-shell">
+    <header class="admin-header"><a href="/" class="admin-brand">traza<span>.</span></a><div><p class="eyebrow">MODERACIÓN</p><h1>Administrar la ficha</h1><p id="admin-session" role="status">Comprobando acceso…</p></div><span id="admin-version" class="admin-version">Sin publicar</span></header>
+    <div id="admin-access-error" class="admin-alert" role="alert" hidden></div>
+    <form id="admin-daily-form" class="admin-panel" hidden>
+      <header class="admin-panel-heading"><div><p class="eyebrow">REGISTRO RÁPIDO DEL DÍA</p><h2>Clase y evidencias</h2><p>El borrador se guarda mientras editas. Solo «Publicar» lo comparte con los aprendices.</p></div><span id="admin-draft-status" class="admin-draft-status" role="status">Borrador sincronizado</span></header>
+      <div class="admin-form-grid">
+        <label>Fecha de la clase<input name="fecha" type="date" required></label>
+        <label>Competencia<select name="competencia" required></select></label>
+        <label>Instructor<select name="instructor"></select></label>
+        <fieldset class="admin-class-toggle"><legend>¿Hubo clase?</legend><label><input name="huboClase" type="radio" value="si" checked> Sí</label><label><input name="huboClase" type="radio" value="no"> No</label></fieldset>
+        <label class="admin-wide" data-class-field>Tema o título de la clase<input name="titulo" maxlength="180" placeholder="Ej. Ciclos y condiciones"></label>
+        <label class="admin-wide" data-class-field>Temas vistos, uno por línea<textarea name="temas" rows="4" placeholder="Tema uno&#10;Tema dos"></textarea></label>
+        <label class="admin-wide" data-class-field>Documentos compartidos, uno por línea: título | enlace HTTPS<textarea name="documentos" rows="3" placeholder="Guía de trabajo | https://…"></textarea></label>
+        <fieldset class="admin-evidence admin-wide"><legend>Evidencia pedida (opcional)</legend><div class="admin-form-grid"><label>Título<input name="evidenciaTitulo" maxlength="180"></label><label>Fecha límite<input name="evidenciaLimite" type="date"></label><label class="admin-wide">Descripción<textarea name="evidenciaDescripcion" rows="2" maxlength="1200"></textarea></label></div></fieldset>
+      </div>
+      <div class="admin-actions"><button class="admin-button admin-button-primary" type="submit">Guardar borrador</button><button class="admin-button" type="button" data-admin-publish disabled>Publicar</button><button class="admin-button admin-button-quiet" type="button" data-admin-undo disabled>Deshacer última publicación</button></div>
+      <p id="admin-feedback" class="admin-feedback" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+</body>
+</html>

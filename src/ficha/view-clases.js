@@ -20,6 +20,7 @@ function cambiarFecha(fecha, direccion = 1, recuperarFoco = false) {
 
 function estado(fecha) {
   const registro = claseRegistrada(fecha);
+  if(registro?.estado==="no_hubo")return {icono:"×",texto:"No hubo clase"};
   return registro ? { icono: "✓", texto: "Se dictó" } : { icono: "○", texto: "Por venir" };
 }
 

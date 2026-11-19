@@ -13,7 +13,7 @@ Actualizado: 19 de noviembre de 2026
 | 4 | completa | `14e86de` |
 | 5 | en curso, step 7 | en curso |
 | 6 | pendiente; multi-ficha excluida | |
-| 7 | en curso, step 3 | escritura y publicación API listas; panel pendiente |
+| 7 | en curso, step 4 | registro rápido diario listo; gestión pendiente |
 | 8 | step 1 auditado | migración en espera de fase 7 |
 
 ## Rutas y decisiones verificadas
@@ -36,6 +36,7 @@ Actualizado: 19 de noviembre de 2026
 - Fase 7 step 1: el repo no incluye Worker, `wrangler` ni migraciones; se preparó un Worker API aislado, validación RS256 de Cloudflare Access con audiencia/emisor/lista de moderadores y D1 singleton de contenido/auditoría. Sin datos `ficha_id` ni estado personal. Configuración y despliegue quedan pendientes de la cuenta.
 - Fase 7 step 2: API pública `version`/`state` con caché de 60 s y ETag; repositorio del cliente valida y restaura última publicación local antes de consultar red, refresca al volver el foco y registra service worker con fallback offline. Indicadores «Nuevo», «Actualizado hoy» y «Sin conexión». Falta conectar el Worker a la ruta del hosting.
 - Fase 7 step 3: borradores con If-Match, validación estricta del manifiesto, URLs HTTPS y fechas, Access firmado por solicitud, límite 30 escrituras/min/moderador, auditoría de secciones, publicación versionada e inversión como nueva versión. D1 sigue siendo una sola ficha.
+- Fase 7 step 4: `/administrar.html` comprueba sesión Access y registra clase/no-clase, temas, enlaces con tipo detectado y evidencia con fecha límite; precarga horario e información de la clase anterior, guarda borrador tras cambios y permite publicar/deshacer. Formularios nativos de teclado, metas de 44 px y diseño móvil.
 - La multi-ficha queda fuera. No se deben añadir `ficha_id` ni selección de varias fichas.
 - La Fase 3b requiere aprobación del informe y solicitud expresa; no redactar ejercicios nuevos ni reescritos antes de eso.
 - `reference/` permanece protegida. Los archivos del usuario no relacionados se mantienen sin cambios ni se incluyen en commits.
@@ -54,3 +55,4 @@ Actualizado: 19 de noviembre de 2026
 - Fase 7 step 1: `node --test tests/access.test.js`: 1/1 archivo; validación SQL de migración con SQLite en memoria: 5 tablas; `node --check` y `git diff --check` limpios. Migración remota sin ejecutar hasta crear D1 en la cuenta.
 - Fase 7 step 2: `node --test tests/state-api.test.js`: 4/4; `e2e/ficha-sync.spec.js`: 2/2, incluida vista móvil sin overflow; `e2e/simulator-entry.spec.js` + `e2e/module-4-exercises.spec.js`: 13/13 tras el arranque del repositorio; sintaxis y `git diff --check` limpios.
 - Fase 7 step 3: `node --test` en validación, Access firmado, CORS y endpoints sin sesión: 5/5 archivos; ambas migraciones SQL ejecutan en SQLite; sintaxis y `git diff --check` limpios.
+- Fase 7 step 4: `e2e/admin-daily.spec.js`: 1/1 a 390 px; valida borrador, clase/temas, documento HTTPS, evidencia, publicación y deshacer; `node --check` y `git diff --check` limpios.
