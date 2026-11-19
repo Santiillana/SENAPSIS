@@ -1,8 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { exercises } from "../src/content/exercises.js";
-import { adaptLegacyExercise, validateExercise } from "../src/content/exercise-adapter.js";
+import { adaptLegacyExercise, adaptMathExercise, adaptSourceExercise, validateExercise } from "../src/content/exercise-adapter.js";
 import { exerciseConceptLabels } from "../src/ui/content-view.js";
+import { sourceExercises } from "../src/content/source-exercises.js";
+import { mathExercises } from "../src/math/exercises.js";
 
 test("la capa adapta y valida los 45 ejercicios sin alterar sus oráculos",()=>{
   assert.equal(exercises.length,45);
@@ -16,4 +18,13 @@ test("la capa adapta y valida los 45 ejercicios sin alterar sus oráculos",()=>{
     assert.ok(adapted[index].preguntasGuia.length===3);
   }
   assert.deepEqual(adapted.filter(item=>item.esDeClase).map(item=>item.id),[22,23,24,28]);
+});
+
+test("el esquema común valida los bancos de fuentes y matemáticas sin tocar sus datos",()=>{
+  const adapted=[...sourceExercises.map(adaptSourceExercise),...mathExercises.map(adaptMathExercise)];
+  assert.equal(adapted.length,sourceExercises.length+mathExercises.length);
+  assert.ok(adapted.every(validateExercise));
+  assert.ok(adapted.some(item=>item.simulable===null));
+  const broken={...adapted[0],solucion:{...adapted[0].solucion,pasos:"no es una lista"}};
+  assert.equal(validateExercise(broken),false);
 });

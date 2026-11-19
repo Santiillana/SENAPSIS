@@ -8,26 +8,26 @@ Actualizado: 19 de noviembre de 2026
 | --- | --- | --- |
 | 0 | completa | feat(step-7): añadir helper checkView |
 | 1 | completa | docs(step-18): cerrar tanda de mejoras del simulador |
-| 2 | completa | `2b98fc8`–`c9b6cf6` |
-| 3 | omitida por instrucción del usuario | — |
-| 4 | pendiente | |
+| 2 | completa | `ba0ac0f` |
+| 3 | auditoría completa; 3b espera aprobación explícita | en curso |
+| 4 | completa | `14e86de` |
 | 5 | pendiente | |
-| 6 | pendiente, excluida la multi-ficha | |
-| 7 | pendiente, depende de infraestructura y ficha_id | |
+| 6 | pendiente; multi-ficha excluida | |
+| 7 | pendiente; configurar Cloudflare requiere al usuario | |
 | 8 | pendiente | |
 
 ## Rutas y decisiones verificadas
 
-- `src/content/ficha.js` es el catálogo único de competencias: id, nombre, tipo, orden, estado, forma y token; `src/content/temas.js` deriva de él las competencias de Aprende.
-- `src/styles/tokens.css` conserva los tonos existentes de Aprende y define solid, tint, border y text por id; Mi ficha, actividades y Biblioteca reutilizan esas variables.
-- `src/ficha/competencias-ui.js` genera el marcador común con forma y nombre asociado; Aprende, Actividades, Biblioteca, horario y evidencias derivan su identidad del id.
-- `src/ficha/competencias-ui.js` conserva los emblemas existentes; el horario colorea por competencia. No hay campo ni regla de color por género del instructor.
-- `logica-programacion` y `competencia-por-configurar` son entradas históricas sin equivalencia confirmada en Aprende; conservan su color anterior.
-- El informe de la Fase 3 no se crea. Las fases posteriores usarán los catálogos actuales sin cambiar ejercicios.
-- La multi-ficha queda fuera; la Fase 7 no debe asumir ni introducir `ficha_id` hasta que se defina ese modelo.
+- `src/content/ficha.js` y `src/content/temas.js` son fuentes de verdad de competencias y temas; `src/content/exercises.js`, `source-exercises.js` y `src/math/exercises.js` contienen los 108 ejercicios actuales.
+- `src/content/exercise-adapter.js` adapta los tres bancos al esquema común y valida estructura; no modifica datos fuente.
+- `scripts/auditar-ejercicios.mjs` genera `docs/auditoria-ejercicios.csv`; el análisis y la recomendación están en `docs/auditoria-ejercicios.md`.
+- El selector actual del Simulador carga 45 ejercicios de flujo; la referencia HTML contiene 30. El valor 44 del plan está desactualizado.
+- La multi-ficha queda fuera. No se deben añadir `ficha_id` ni selección de varias fichas.
+- La Fase 3b requiere aprobación del informe y solicitud expresa; no redactar ejercicios nuevos ni reescritos antes de eso.
+- `reference/` permanece protegida. Los archivos del usuario no relacionados se mantienen sin cambios ni se incluyen en commits.
 
-## Validación de Fase 2
+## Validación registrada
 
-- Contraste de los cinco marcadores sobre página y tarjeta en tema claro y oscuro: AA.
-- Pruebas Node completas: 356/356 correctas.
-- Playwright `e2e/module-4-learn.spec.js`: 8/8 correctas; Mi ficha conserva sus pruebas de horario y evidencias.
+- Fase 2: contraste AA en ambos temas; suite Node 356/356; Aprende E2E 8/8.
+- Fase 4: panel Mi progreso accesible; pruebas de esquema/contenido 3/3; Mi progreso E2E 2/2; retención de estrellas del Laboratorio 1/1.
+- Fase 3: los bancos validan el esquema; no se detectan duplicados exactos ni descensos de nivel por orden; `MAT-ENT-15` está pendiente de confirmar transcripción.
