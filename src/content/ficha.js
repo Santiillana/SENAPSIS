@@ -14,14 +14,14 @@ export const FICHA = {
     esDemostracion: true
   },
   competencias: [
-    { id: "logica-programacion", codigo: "LP-01", nombre: "Lógica de programación", comp: 1 },
-    { id: "competencia-por-configurar", codigo: "COMP-02", nombre: "Competencia por configurar", comp: 2 },
-    { id: "evaluar-requisitos", codigo: "Por confirmar", nombre: "Evaluar requisitos" },
-    { id: "comunicacion", codigo: "Por confirmar", nombre: "Comunicación" },
-    { id: "tics", codigo: "Por confirmar", nombre: "TICS" },
-    { id: "establecer-requisitos", codigo: "Por confirmar", nombre: "Establecer requisitos" },
-    { id: "matematicas", codigo: "Por confirmar", nombre: "Matemáticas" },
-    { id: "clase-sabado-por-confirmar", codigo: "Por confirmar", nombre: "Clase por confirmar" }
+    { id: "logica-programacion", codigo: "LP-01", nombre: "Lógica de programación", tipo: "principal", orden: 1, activa: true, forma: "circulo", token: "logica-programacion" },
+    { id: "competencia-por-configurar", codigo: "COMP-02", nombre: "Competencia por configurar", tipo: "principal", orden: 2, activa: true, forma: "cuadrado", token: "pendiente" },
+    { id: "evaluar-requisitos", codigo: "Por confirmar", nombre: "Evaluación de requisitos", tipo: "principal", orden: 2, activa: true, enAprende: true, forma: "rombo", token: "evaluar-requisitos" },
+    { id: "comunicacion", codigo: "Por confirmar", nombre: "Comunicación", tipo: "transversal", orden: 4, activa: true, enAprende: true, forma: "triangulo", token: "comunicacion" },
+    { id: "tics", codigo: "Por confirmar", nombre: "TICs", tipo: "transversal", orden: 3, activa: true, enAprende: true, forma: "cuadrado", token: "tics" },
+    { id: "establecer-requisitos", codigo: "Por confirmar", nombre: "Establecer requisitos", tipo: "principal", orden: 1, activa: true, enAprende: true, forma: "circulo", token: "establecer-requisitos" },
+    { id: "matematicas", codigo: "Por confirmar", nombre: "Matemáticas", tipo: "transversal", orden: 5, activa: true, enAprende: true, forma: "hexagono", token: "matematicas" },
+    { id: "clase-sabado-por-confirmar", codigo: "Por confirmar", nombre: "Clase por confirmar", tipo: "transversal", orden: 8, activa: true, forma: "circulo", token: "pendiente" }
   ],
   instructores: [
     { id: "instructor-por-configurar", nombre: "Instructor por configurar" },

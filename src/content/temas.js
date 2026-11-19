@@ -8,15 +8,10 @@ import { sourceLessonsByTopic } from "./sources-lessons.js";
 import { sourceExercises } from "./source-exercises.js";
 import { sourceLabMechanics } from "./source-lab.js";
 
-const competencia = id => FICHA.competencias.find(item => item.id === id);
-
-export const competenciasAprende = [
-  { id: "establecer-requisitos", titulo: "Establecer requisitos", forma: "circulo" },
-  { id: "evaluar-requisitos", titulo: "Evaluación de requisitos", forma: "rombo" },
-  { id: "tics", titulo: "TICs", forma: "cuadrado" },
-  { id: "comunicacion", titulo: "Comunicación", forma: "triangulo" },
-  { id: "matematicas", titulo: "Matemáticas", forma: "hexagono" }
-].map(item => ({ ...item, fuente: competencia(item.id) })).filter(item => item.fuente);
+export const competenciasAprende = FICHA.competencias
+  .filter(item => item.enAprende && item.activa)
+  .sort((a, b) => a.orden - b.orden)
+  .map(item => ({ ...item, titulo: item.nombre, fuente: item }));
 
 const leccionesDiagramas = lessons.map(item => item.id);
 const mecanicasMatematicas=MATH_LAB;
