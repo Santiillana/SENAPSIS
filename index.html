@@ -103,9 +103,17 @@
         <div class="exercise-hero-copy"><p class="eyebrow">APRENDE · PRACTICA</p><h2 id="exercise-title">Ejercicios</h2></div>
       </header>
 
+      <section id="exercise-catalog-home" class="exercise-catalog-home" aria-labelledby="exercise-catalog-title">
+        <header><p class="eyebrow">PRACTICA POR TEMA</p><h3 id="exercise-catalog-title">Elige una competencia y un tema</h3></header>
+        <div id="exercise-theme-grid" class="theme-grid" role="list" aria-label="Temas con ejercicios"></div>
+      </section>
+
+      <section id="exercise-topic-workspace" class="exercise-topic-workspace" aria-labelledby="exercise-topic-title" hidden>
+        <header class="exercise-topic-header"><button type="button" class="learn-catalog-back" id="exercise-topic-back">‹ Competencias y temas</button><div><p id="exercise-topic-competence" class="eyebrow"></p><h3 id="exercise-topic-title"></h3></div></header>
+
       <section class="catalog-filter-panel exercise-filter-panel" aria-label="Buscar y filtrar ejercicios">
         <div class="exercise-filter-main">
-          <label class="catalog-search"><span>Banco</span><select id="exercise-bank"><option value="diagramas">Diagramas de flujo</option><option value="matematicas">Matemáticas</option><option value="fuentes">Fuentes de información</option></select></label>
+          <select id="exercise-bank" hidden aria-hidden="true" tabindex="-1"><option value="diagramas">Diagramas de flujo</option><option value="matematicas">Matemáticas</option><option value="fuentes">Fuentes de información</option></select>
           <label class="catalog-search">
             <span>Buscar</span>
             <input id="exercise-search" type="search" placeholder="Título, número o concepto…" autocomplete="off">
@@ -161,6 +169,7 @@
           </div>
         </aside>
       </div>
+      </section>
 
     </section>
 

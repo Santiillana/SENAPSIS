@@ -12,6 +12,20 @@ async function activate(locator) {
 }
 
 export async function goToSpace(page, space, options = {}) {
+  let exerciseTopicContext = null;
+  if (space === "exercises") {
+    const topicTitle = page.locator("#learn-topic-title");
+    if (await topicTitle.isVisible()) {
+      const title = (await topicTitle.textContent())?.trim();
+      exerciseTopicContext = ({
+        "Diagramas de flujo": "diagramas-flujo",
+        "Formas de recolectar información": "fuentes-informacion",
+        "Números enteros": "enteros",
+        "Números racionales": "racionales",
+        "Regla de tres": "regla-de-tres"
+      })[title] ?? null;
+    }
+  }
   if (space === "simulator" && options.dismissSimulatorIntro !== false) {
     await page.evaluate(() => {
       try {
@@ -39,6 +53,9 @@ export async function goToSpace(page, space, options = {}) {
 
   const target = page.locator('#primary-nav [data-space="' + space + '"]');
   await activate(target);
+  if (space === "exercises" && options.exerciseTheme !== false) {
+    await openExerciseTheme(page, options.exerciseTheme ?? exerciseTopicContext ?? "diagramas-flujo");
+  }
   if (space === "simulator" && options.dismissSimulatorIntro !== false) {
     const reveal = page.locator("#simulator-reveal");
     if (await reveal.isVisible()) await reveal.click();
@@ -48,6 +65,11 @@ export async function goToSpace(page, space, options = {}) {
 export async function dismissSimulatorIntro(page) {
   const reveal = page.locator("#simulator-reveal");
   if (await reveal.isVisible()) await reveal.click();
+}
+
+export async function openExerciseTheme(page, theme = "diagramas-flujo") {
+  const card = page.locator('[data-exercise-theme="' + theme + '"]');
+  if (await card.isVisible()) await card.click();
 }
 
 export async function openDiagramLessons(page) {
