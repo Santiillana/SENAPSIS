@@ -1769,14 +1769,14 @@ body[data-active-space="simulator"] .legend-route{background:var(--traza-green)}
 body[data-active-space="simulator"] .legend-neutral{background:#82968d}
 body[data-active-space="simulator"] #RC.simulator-inspector{
   position:relative!important;inset:auto!important;z-index:8;grid-area:inspector;
-  display:grid!important;grid-template-rows:minmax(0,1.1fr) minmax(0,.9fr);gap:10px;
-  width:auto!important;height:100%;min-width:0;min-height:0;max-width:none;max-height:none;margin:0;padding:0;
+  display:grid!important;grid-template-rows:minmax(0,1fr) minmax(0,1fr)!important;grid-auto-rows:minmax(0,1fr);gap:10px;
+  width:auto!important;height:100%;min-width:0;min-height:0;max-width:none;max-height:none;margin:0;padding:0;box-sizing:border-box!important;
   overflow:hidden;border:0;border-radius:0;background:transparent;box-shadow:none;pointer-events:auto
 }
 body[data-active-space="simulator"] #PV.scene-panel,
 body[data-active-space="simulator"] #PR.variables-panel{
   position:relative!important;inset:auto!important;display:flex!important;flex-direction:column;
-  width:100%;height:auto!important;min-width:0;min-height:0;max-height:none;margin:0;padding:0;
+  width:100%;height:auto!important;min-width:0;min-height:0;max-height:none;margin:0;padding:0;box-sizing:border-box!important;
   overflow:hidden;border:1px solid rgba(149,177,166,.26);border-radius:12px;color:var(--traza-text);
   background:var(--traza-glass);backdrop-filter:blur(10px);box-shadow:var(--traza-shadow);pointer-events:auto
 }
@@ -2154,7 +2154,7 @@ body[data-active-space="simulator"] #flow-diagram-container{
   width:100%!important;height:100%!important;min-width:0!important;min-height:0!important
 }
 body[data-active-space="simulator"] .execution-dock.simulator-dock{
-  position:relative!important;grid-area:dock!important;display:grid!important;align-self:end!important;
+  position:relative!important;inset:auto!important;transform:none!important;grid-area:dock!important;display:grid!important;align-self:end!important;
   width:100%!important;min-width:0!important;max-width:none!important;box-sizing:border-box!important
 }
 body[data-active-space="simulator"] .simulator-control-dock{
@@ -3328,3 +3328,16 @@ body[data-active-space="simulator"] #PV .scene-input .scene-transfer-lane{animat
  body[data-active-space="simulator"] #PV .scene-input .scene-transfer-lane{animation:none!important}
 }
 :root[data-motion="reduced"] body[data-active-space="simulator"] #PV .scene-figure *{animation:none!important;transition:none!important}
+@media(min-width:901px){
+ body[data-active-space="simulator"] .problem-panel#PL.sim-left-window-stack,
+ body[data-active-space="simulator"] #RC.simulator-inspector{
+  height:auto!important;min-height:0!important;align-self:stretch!important
+ }
+ body[data-active-space="simulator"] #RC.simulator-inspector{
+  grid-template-rows:minmax(0,1fr) minmax(0,1fr)!important
+ }
+ body[data-active-space="simulator"] #RC #PV,
+ body[data-active-space="simulator"] #RC #PR{
+  min-height:0!important;max-height:100%!important
+ }
+}

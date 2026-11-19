@@ -41,3 +41,32 @@ test("la ficha contextual aparece asociada al paso y se mantiene dentro del esce
   expect(geometry.width).toBeGreaterThan(100);
   expect(geometry.height).toBeGreaterThan(30);
 });
+
+test("las ventanas del simulador ocupan zonas separadas en alturas de portátil y escritorio",async({page})=>{
+  for(const size of [{width:1366,height:768},{width:1920,height:1080}]){
+    await page.setViewportSize(size);
+    await page.goto("/");
+    await goToSpace(page,"simulator");
+    const boxes=await page.evaluate(()=>{
+      const grid=document.querySelector(".simulator-grid-four");
+      return ["#simulator-exercise-nav","#PL",".diagram-panel.sim-world-panel","#RC","#dock"].map(selector=>({selector,element:document.querySelector(selector)})).map(({selector,element})=>{
+      const {left,top,right,bottom}=element.getBoundingClientRect(),style=getComputedStyle(element);
+      return {selector,left,top,right,bottom,height:style.height,position:style.position,margin:style.margin,rows:grid?getComputedStyle(grid).gridTemplateRows:""};
+    });
+    });
+    for(let first=0;first<boxes.length;first++)for(let second=first+1;second<boxes.length;second++){
+      const a=boxes[first],b=boxes[second];
+      const overlaps=a.left<b.right-1&&a.right>b.left+1&&a.top<b.bottom-1&&a.bottom>b.top+1;
+      expect(overlaps,`${a.selector} ${JSON.stringify(a)} no debe montarse sobre ${b.selector} ${JSON.stringify(b)} en ${size.width}×${size.height}`).toBe(false);
+    }
+    const inspector=await page.locator("#RC").boundingBox();
+    for(const panel of ["#PV","#PR"]){
+      const box=await page.locator(panel).boundingBox();
+      const panelLayout=await page.locator("#RC").evaluate(node=>({rows:getComputedStyle(node).gridTemplateRows,children:[...node.children].map(child=>({id:child.id,rect:child.getBoundingClientRect().toJSON(),height:getComputedStyle(child).height,minHeight:getComputedStyle(child).minHeight}))}));
+      expect(box.x).toBeGreaterThanOrEqual(inspector.x);
+      expect(box.y).toBeGreaterThanOrEqual(inspector.y);
+      expect(box.x+box.width).toBeLessThanOrEqual(inspector.x+inspector.width+1);
+      expect(box.y+box.height,`${panel} ${JSON.stringify(box)} debe caber en inspector ${JSON.stringify(inspector)} a ${size.width}×${size.height}; ${JSON.stringify(panelLayout)}`).toBeLessThanOrEqual(inspector.y+inspector.height+1);
+    }
+  }
+});
