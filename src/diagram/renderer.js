@@ -84,7 +84,8 @@ export function renderDiagram(container,diagram,options={}){
     if (!d) return "";
     const from=diagram.byId.get(edge.from),to=diagram.byId.get(edge.to);
     const activeEdge=active&&(from.sourceId===Number(active)||to.sourceId===Number(active));
-    const cls="diagram-edge "+(edge.kind==="back"?"is-back":"")+(activeEdge?" is-near-active":"");
+    const branchClass=edge.label==="V"?" branch-true":edge.label==="F"?" branch-false":"";
+    const cls="diagram-edge "+(edge.kind==="back"?"is-back":"")+branchClass+(activeEdge?" is-near-active":"");
     const label=edgeLabel(edge,from);
     return '<g data-edge-id="'+escape(edge.id)+'" class="'+cls+'"><path d="'+d+'" marker-end="url(#flow-arrow)"/>'+label+'</g>';
   }).join("");

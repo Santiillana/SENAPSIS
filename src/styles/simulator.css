@@ -3066,6 +3066,68 @@ body[data-active-space="simulator"] #PR #variables-content{
 }
 body[data-active-space="simulator"] #PR .variable-cards{align-content:start!important}
 body[data-active-space="simulator"] #PR .variable-card{min-width:0!important}
+
+/* El Simulador va al final de la adopción: papel blanco y los diez
+   marcadores compartidos en las figuras, rutas y animaciones. */
+body[data-active-space="simulator"]{
+  --c-mustard:var(--simulator-c-mustard);--c-green:var(--simulator-c-green);--c-brick:var(--simulator-c-brick);
+  --c-blue:var(--simulator-c-blue);--c-violet:var(--simulator-c-violet);--c-pink:var(--simulator-c-pink);
+  --c-orange:var(--simulator-c-orange);--c-teal:var(--simulator-c-teal);--c-lime:var(--simulator-c-lime);
+  --stroke:var(--simulator-stroke);--edge:var(--simulator-edge);
+  --on-strong:var(--simulator-on-strong);--on-bright:var(--simulator-on-bright);--on-pink:var(--simulator-on-pink)
+}
+body[data-active-space="simulator"] #wrap.sim-wrap{
+  background-color:var(--simulator-paper)!important;
+  background-image:linear-gradient(to right,var(--simulator-grid) 1px,transparent 1px),linear-gradient(to bottom,var(--simulator-grid) 1px,transparent 1px)!important;
+  background-size:22px 22px!important
+}
+body[data-active-space="simulator"] .diagram-node.node-terminal rect{fill:var(--c-green);stroke:var(--edge);stroke-width:2}
+body[data-active-space="simulator"] .diagram-node.node-input polygon{fill:var(--c-blue);stroke:var(--edge);stroke-width:2}
+body[data-active-space="simulator"] .diagram-node.node-process rect{fill:var(--c-violet);stroke:var(--edge);stroke-width:2}
+body[data-active-space="simulator"] .diagram-node.node-output path{fill:var(--c-pink);stroke:var(--edge);stroke-width:2}
+body[data-active-space="simulator"] .diagram-node.node-output text{fill:var(--on-pink)}
+body[data-active-space="simulator"] .diagram-node.node-if polygon,
+body[data-active-space="simulator"] .diagram-node.node-while polygon,
+body[data-active-space="simulator"] .diagram-node.node-doWhile polygon{fill:var(--c-mustard);stroke:var(--edge);stroke-width:2}
+body[data-active-space="simulator"] .diagram-node.node-for polygon{fill:var(--c-orange);stroke:var(--edge);stroke-width:2}
+body[data-active-space="simulator"] .diagram-node.node-merge circle{fill:var(--c-teal);stroke:var(--edge);stroke-width:2}
+body[data-active-space="simulator"] .diagram-node.node-body rect{fill:color-mix(in srgb,var(--c-lime) 22%,var(--simulator-paper));stroke:var(--c-lime);stroke-width:2}
+body[data-active-space="simulator"] .diagram-node.node-terminal text,
+body[data-active-space="simulator"] .diagram-node.node-input text,
+body[data-active-space="simulator"] .diagram-node.node-process text,
+body[data-active-space="simulator"] .diagram-node.node-output text{fill:var(--on-strong)}
+body[data-active-space="simulator"] .diagram-node.node-if text,
+body[data-active-space="simulator"] .diagram-node.node-while text,
+body[data-active-space="simulator"] .diagram-node.node-doWhile text,
+body[data-active-space="simulator"] .diagram-node.node-for text,
+body[data-active-space="simulator"] .diagram-node.node-merge text,
+body[data-active-space="simulator"] .diagram-node.node-body text{fill:var(--on-bright)}
+body[data-active-space="simulator"] .diagram-node.is-visited rect,
+body[data-active-space="simulator"] .diagram-node.is-visited polygon,
+body[data-active-space="simulator"] .diagram-node.is-visited path,
+body[data-active-space="simulator"] .diagram-node.is-visited circle{stroke:var(--c-green);stroke-width:2.5}
+body[data-active-space="simulator"] .diagram-node.is-active rect,
+body[data-active-space="simulator"] .diagram-node.is-active polygon,
+body[data-active-space="simulator"] .diagram-node.is-active path,
+body[data-active-space="simulator"] .diagram-node.is-active circle{stroke:var(--c-mustard);stroke-width:3;filter:drop-shadow(0 0 5px color-mix(in srgb,var(--c-mustard) 55%,transparent))}
+body[data-active-space="simulator"] .diagram-node.node-if.is-active polygon,
+body[data-active-space="simulator"] .diagram-node.node-while.is-active polygon,
+body[data-active-space="simulator"] .diagram-node.node-doWhile.is-active polygon{stroke:var(--simulator-stroke)}
+body[data-active-space="simulator"] .diagram-edge path{stroke:var(--stroke);stroke-width:2}
+body[data-active-space="simulator"] .diagram-edge.branch-true{color:var(--c-green)}
+body[data-active-space="simulator"] .diagram-edge.branch-false{color:var(--c-brick)}
+body[data-active-space="simulator"] .diagram-edge.branch-true path{stroke:var(--c-green);stroke-width:2.5}
+body[data-active-space="simulator"] .diagram-edge.branch-false path{stroke:var(--c-brick);stroke-width:2.5}
+body[data-active-space="simulator"] .diagram-edge.is-back{color:var(--c-orange)}
+body[data-active-space="simulator"] .diagram-edge.is-back path{stroke:var(--c-orange);stroke-width:3}
+body[data-active-space="simulator"] .diagram-edge-label-wrap rect{fill:var(--simulator-paper);stroke:var(--line);stroke-width:1.5}
+body[data-active-space="simulator"] .diagram-edge.branch-true .diagram-edge-label{fill:var(--c-green)}
+body[data-active-space="simulator"] .diagram-edge.branch-false .diagram-edge-label{fill:var(--c-brick)}
+body[data-active-space="simulator"] .flow-token{fill:var(--c-mustard);stroke:var(--edge)}
+body[data-active-space="simulator"] .flow-token-ring{stroke:var(--c-mustard)}
+body[data-active-space="simulator"] .flow-trail,
+body[data-active-space="simulator"] #flow-active-trail{stroke:var(--c-mustard)}
+body[data-active-space="simulator"] .flow-token-label{fill:var(--on-bright);stroke:var(--simulator-paper)}
 body[data-active-space="simulator"] .sim-context-window{width:min(310px,calc(100vw - 24px));max-height:260px;overflow:auto}
 @media(max-width:900px){body[data-active-space="simulator"] .sim-context-window{width:min(286px,calc(100vw - 20px));max-height:220px}}
 body[data-active-space="simulator"] #PR .variable-card.is-changed{animation:variable-value-arrive 420ms cubic-bezier(.2,.8,.25,1) both}
