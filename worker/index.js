@@ -1,6 +1,6 @@
 import { authenticateAccess } from "./access.js";
 import { readPublishedState, readVersion } from "./state.js";
-import { getDraft, publishDraft, saveDraft, undoPublication } from "./write.js";
+import { getDraft, getHistory, publishDraft, saveDraft, undoPublication } from "./write.js";
 
 const json=(body,status=200,headers={})=>new Response(JSON.stringify(body),{
   status,
@@ -10,7 +10,7 @@ const json=(body,status=200,headers={})=>new Response(JSON.stringify(body),{
 function corsHeaders(request,env){
   const origin=request.headers.get("Origin");
   if(!origin||origin!==env.ALLOWED_ORIGIN)return null;
-  return {"access-control-allow-origin":origin,"access-control-allow-methods":"GET, POST, PUT, DELETE, OPTIONS","access-control-allow-headers":"Content-Type, If-Match, If-None-Match, Cf-Access-Jwt-Assertion","access-control-expose-headers":"ETag","vary":"Origin"};
+  return {"access-control-allow-origin":origin,"access-control-allow-methods":"GET, POST, PUT, DELETE, OPTIONS","access-control-allow-headers":"Content-Type, If-Match, If-None-Match, Cf-Access-Jwt-Assertion, X-Traza-Action","access-control-expose-headers":"ETag","vary":"Origin"};
 }
 function withHeaders(response,headers){
   if(!Object.keys(headers).length)return response;
@@ -34,6 +34,7 @@ export default {
     }
     if(url.pathname==="/api/v1/admin/draft"&&request.method==="GET")return withHeaders(await getDraft(request,env),headers);
     if(url.pathname==="/api/v1/admin/draft"&&request.method==="PUT")return withHeaders(await saveDraft(request,env),headers);
+    if(url.pathname==="/api/v1/admin/history"&&request.method==="GET")return withHeaders(await getHistory(request,env),headers);
     if(url.pathname==="/api/v1/admin/publish"&&request.method==="POST")return withHeaders(await publishDraft(request,env),headers);
     if(url.pathname==="/api/v1/admin/undo"&&request.method==="POST")return withHeaders(await undoPublication(request,env),headers);
     return json({error:"not_found"},404,headers);

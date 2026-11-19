@@ -20,3 +20,10 @@ test("la API rechaza fechas incoherentes y JSON mayor a 500 KiB",()=>{
   assert.ok(validateFichaPayload(invalid).some(error=>error.includes("fecha válida")));
   assert.ok(parseFichaPayload(" ".repeat(512_001)).errors.some(error=>error.includes("500 KiB")));
 });
+
+test("la API valida horario y vigencia del horario semanal",()=>{
+  const invalid=structuredClone(FICHA);invalid.horario[0]={...invalid.horario[0],inicio:"20:00",fin:"09:00",vigenteDesde:"2026-12-01",vigenteHasta:"2026-11-30"};
+  const errors=validateFichaPayload(invalid);
+  assert.ok(errors.some(error=>error.includes("fin posterior al inicio")));
+  assert.ok(errors.some(error=>error.includes("anterior a vigenteDesde")));
+});

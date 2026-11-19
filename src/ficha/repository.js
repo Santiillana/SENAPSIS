@@ -1,6 +1,7 @@
 import { FICHA } from "../content/ficha.js";
 
 const SNAPSHOT_KEY="traza:v1:ficha-publicada";
+const PREVIEW_KEY="traza:v1:admin-preview";
 const API_BASE=()=>document.querySelector('meta[name="traza-api-base"]')?.content?.replace(/\/$/,"")??"";
 const fields=["meta","competencias","instructores","horario","horarioNotas","comunicados","actividades","clases","documentos","recursos","accesos"];
 let lastRefresh=0,refreshPromise=null;
@@ -68,6 +69,9 @@ async function refreshPublishedState(){
 }
 
 export function initFichaRepository(){
+  if(new URLSearchParams(location.search).get("preview")==="admin"){
+    try{const preview=JSON.parse(localStorage.getItem(PREVIEW_KEY)??"null");if(preview&&isPublishedFicha(preview.payload)&&applyPayload(preview.payload)){showSyncStatus("Vista previa del borrador","online");return;}}catch{}
+  }
   const stored=restoreSnapshot();
   if(stored)showSyncStatus(`Sin conexión · ${updatedLabel(stored.updatedAt)}`,"offline");
   void registerOfflineShell();

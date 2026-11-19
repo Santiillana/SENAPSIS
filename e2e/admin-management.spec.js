@@ -8,6 +8,7 @@ test("Administrar crea y desactiva competencia, horario, instructor y comunicado
     savedPayload=route.request().postDataJSON();return route.fulfill({json:{saved:true,baseVersion:0,updatedAt:"2026-11-19T18:05:00Z"}});
   });
   await page.route("**/api/v1/state",route=>route.fulfill({json:{version:0,updatedAt:null,payload:null}}));
+  await page.route("**/api/v1/admin/history",route=>route.fulfill({json:{publications:[],audit:[]}}));
   await page.setViewportSize({width:390,height:844});await page.goto("/administrar.html");
   await page.locator('[data-admin-tab="management"]').click();
   await page.locator('[data-manage-form="competencia"] [name="nombre"]').fill("Laboratorio de prueba");

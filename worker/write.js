@@ -39,6 +39,17 @@ export async function getDraft(request,env){
   }catch{return json({error:"storage_unavailable"},503);}
 }
 
+export async function getHistory(request,env){
+  const {response}=await gate(request,env);if(response)return response;
+  try{
+    const [publications,audit]=await Promise.all([
+      env.DB.prepare("SELECT version,published_at,published_by,undone_at,undone_by FROM publication_history ORDER BY version DESC LIMIT 20").all(),
+      env.DB.prepare("SELECT action,version,created_at,actor,summary FROM audit_log ORDER BY id DESC LIMIT 20").all()
+    ]);
+    return json({publications:publications.results??[],audit:(audit.results??[]).map(item=>({...item,summary:JSON.parse(item.summary||"{}")}))});
+  }catch{return json({error:"storage_unavailable"},503);}
+}
+
 export async function saveDraft(request,env){
   const {identity,response}=await gate(request,env);if(response)return response;
   if(!request.headers.get("content-type")?.toLowerCase().includes("application/json"))return json({error:"content_type"},415);
@@ -55,7 +66,7 @@ export async function saveDraft(request,env){
       env.DB.prepare(`INSERT INTO draft_state(singleton,base_version,payload,updated_at,updated_by) VALUES('current',?,?,?,?)
         ON CONFLICT(singleton) DO UPDATE SET base_version=excluded.base_version,payload=excluded.payload,updated_at=excluded.updated_at,updated_by=excluded.updated_by`)
         .bind(bodyVersion,JSON.stringify(parsed.payload),now,identity.email),
-      env.DB.prepare("INSERT INTO audit_log(actor,action,version,created_at,summary) VALUES(?, 'draft_saved', ?, ?, ?)").bind(identity.email,bodyVersion,now,JSON.stringify({sections,bytes:new TextEncoder().encode(JSON.stringify(parsed.payload)).byteLength}))
+      env.DB.prepare("INSERT INTO audit_log(actor,action,version,created_at,summary) VALUES(?, ?, ?, ?, ?)").bind(identity.email,request.headers.get("x-traza-action")==="backup_imported"?"backup_imported":"draft_saved",bodyVersion,now,JSON.stringify({sections,bytes:new TextEncoder().encode(JSON.stringify(parsed.payload)).byteLength}))
     ]);
     return json({saved:true,baseVersion:bodyVersion,updatedAt:now});
   }catch{return json({error:"storage_unavailable"},503);}

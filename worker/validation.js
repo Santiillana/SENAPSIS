@@ -34,6 +34,10 @@ export function validateFichaPayload(payload){
       if(field==="competencias"&&item.tipo&&!['principal','transversal'].includes(item.tipo))errors.push(`${path}.tipo no es válido.`);
       if(field==="competencias"&&item.forma&&!['circulo','rombo','cuadrado','triangulo','hexagono'].includes(item.forma))errors.push(`${path}.forma no es válida.`);
       if(field==="comunicados"&&item.fijado!==undefined&&typeof item.fijado!=="boolean")errors.push(`${path}.fijado debe ser booleano.`);
+      if(field==="horario"){
+        if(!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(String(item.inicio??""))||!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(String(item.fin??""))||item.inicio>=item.fin)errors.push(`${path} debe tener un horario válido con fin posterior al inicio.`);
+        if(item.vigenteDesde&&item.vigenteHasta&&item.vigenteDesde>item.vigenteHasta)errors.push(`${path}.vigenteHasta no puede ser anterior a vigenteDesde.`);
+      }
       for(const [key,value] of Object.entries(item))if(typeof value==="string"&&value.length>20_000)errors.push(`${path}.${key} supera el máximo permitido.`);
     });
   }

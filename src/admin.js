@@ -1,4 +1,5 @@
 import { FICHA } from "./content/ficha.js";
+import { parseFichaPayload } from "../worker/validation.js";
 
 const $=selector=>document.querySelector(selector);
 const copy=value=>JSON.parse(JSON.stringify(value));
@@ -6,6 +7,7 @@ const today=()=>{const now=new Date();return `${now.getFullYear()}-${String(now.
 const apiBase=()=>$("meta[name='traza-api-base']")?.content?.replace(/\/$/,"")??"";
 let state=null,baseVersion=0,dirty=false,saved=false,timer=0,sessionEmail="",classIds=new Map();
 const form=$("#admin-daily-form");
+const PREVIEW_KEY="traza:v1:admin-preview";
 
 async function api(path,options={}){
   const response=await fetch(`${apiBase()}/api/v1${path}`,{credentials:"same-origin",cache:"no-store",...options});
@@ -13,7 +15,7 @@ async function api(path,options={}){
   if(!response.ok)throw new Error(body.details?.join(" ")||body.error||`Error ${response.status}`);
   return body;
 }
-function feedback(message,kind=""){$("#admin-feedback").textContent=message;$("#admin-draft-status").textContent=kind||message;}
+function feedback(message,kind=""){$("#admin-feedback").textContent=message;$("#admin-draft-status").textContent=kind||message;const managementStatus=$("#admin-management-feedback");if(managementStatus)managementStatus.textContent=message;}
 function escape(value){return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));}
 function selectOptions(select,items,placeholder){
   select.replaceChildren();const blank=document.createElement("option");blank.value="";blank.textContent=placeholder;select.append(blank);
@@ -83,12 +85,12 @@ function compileDraft(){
   else if(evidenceTitle)payload.actividades.push({id:activityId,competenciaId,titulo:evidenceTitle,descripcion:form.elements.evidenciaDescripcion.value.trim(),paraQueSirve:"",instrucciones:[],entregables:[],apertura:date,limite:form.elements.evidenciaLimite.value||null,fuente:"Registro de clase",actualizado:date,leccionIds:[],ejercicioIds:[],documentoIds});
   return payload;
 }
-async function saveDraft(payloadOverride=null){
+async function saveDraft(payloadOverride=null,auditAction="draft_saved"){
   clearTimeout(timer);let payload;
   try{payload=payloadOverride?copy(payloadOverride):compileDraft();}catch(error){feedback(error.message,"Revisa los datos");return false;}
   feedback("Guardando borrador…","Guardando");
   try{
-    const result=await api("/admin/draft",{method:"PUT",headers:{"content-type":"application/json","if-match":`"${baseVersion}"`},body:JSON.stringify(payload)});
+    const result=await api("/admin/draft",{method:"PUT",headers:{"content-type":"application/json","if-match":`"${baseVersion}"`,"x-traza-action":auditAction},body:JSON.stringify(payload)});
     state=payload;saved=true;dirty=false;$("[data-admin-publish]").disabled=false;feedback(`Borrador guardado · ${new Date(result.updatedAt).toLocaleTimeString("es-CO",{hour:"2-digit",minute:"2-digit"})}`);return true;
   }catch(error){saved=false;feedback(error.message,"No se pudo guardar");return false;}
 }
@@ -102,13 +104,45 @@ async function publish(){
   try{
     const result=await api("/admin/publish",{method:"POST"});baseVersion=result.version;saved=false;dirty=false;
     $("#admin-version").textContent=`Publicado · versión ${result.version}`;$("[data-admin-publish]").disabled=true;$("[data-admin-undo]").disabled=result.version<2;
-    feedback("Publicado. La ficha compartida ya está actualizada.");
+    feedback("Publicado. La ficha compartida ya está actualizada.");void renderHistory();
   }catch(error){feedback(error.message,"No se pudo publicar");}
 }
 async function undo(){
   if(!window.confirm("¿Deshacer la última publicación? Se creará una nueva versión con el contenido anterior."))return;
-  try{const result=await api("/admin/undo",{method:"POST"});baseVersion=result.version;$("#admin-version").textContent=`Publicación deshecha · versión ${result.version}`;$("[data-admin-undo]").disabled=true;feedback("Última publicación deshecha.");}
+  try{const result=await api("/admin/undo",{method:"POST"});baseVersion=result.version;$("#admin-version").textContent=`Publicación deshecha · versión ${result.version}`;$("[data-admin-undo]").disabled=true;feedback("Última publicación deshecha.");void renderHistory();}
   catch(error){feedback(error.message,"No se pudo deshacer");}
+}
+function closePreview(){try{localStorage.removeItem(PREVIEW_KEY);}catch{}}
+function openPreview(){
+  try{localStorage.setItem(PREVIEW_KEY,JSON.stringify({version:Math.max(1,baseVersion),updatedAt:new Date().toISOString(),payload:state}));}
+  catch{feedback("El navegador no permitió preparar la vista previa.","No se pudo abrir");return;}
+  const frame=$("#admin-preview-frame"),dialog=$("#admin-preview-dialog");frame.src=`/?preview=admin&v=${Date.now()}`;dialog.showModal();$("[data-admin-preview-close]").focus();
+}
+function exportBackup(){
+  const backup={format:"traza-ficha",schemaVersion:1,exportedAt:new Date().toISOString(),payload:state};
+  const url=URL.createObjectURL(new Blob([JSON.stringify(backup,null,2)],{type:"application/json"})),link=document.createElement("a");
+  link.href=url;link.download=`traza-ficha-${today()}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+async function importBackup(file){
+  if(!file)return;
+  if(file.size>512_000){feedback("El respaldo supera el máximo de 500 KiB.","Importación rechazada");return;}
+  let backup;try{backup=JSON.parse(await file.text());}catch{feedback("El archivo no contiene JSON válido.","Importación rechazada");return;}
+  if(backup?.format!=="traza-ficha"||backup.schemaVersion!==1){feedback("El formato o la versión del respaldo no son compatibles.","Importación rechazada");return;}
+  const parsed=parseFichaPayload(JSON.stringify(backup.payload));if(parsed.errors.length){feedback(parsed.errors.join(" "),"Respaldo inválido");return;}
+  if(!window.confirm("Importar reemplazará el borrador actual de la ficha. ¿Continuar?"))return;
+  state=parsed.payload;dirty=true;refreshDailyOptions();renderManagement();
+  await saveDraft(state,"backup_imported");
+}
+async function renderHistory(){
+  const host=$("#admin-history");if(!host)return;
+  host.textContent="Cargando historial…";
+  try{
+    const history=await api("/admin/history"),items=history.audit??[];
+    if(!items.length){host.textContent="Aún no hay cambios registrados.";return;}
+    const list=document.createElement("ol");list.className="admin-history-list";
+    for(const item of items){const row=document.createElement("li"),when=new Date(item.created_at),summary=Object.keys(item.summary??{}).join(", ");row.textContent=`${item.action.replaceAll("_"," ")} · ${Number.isInteger(item.version)?`versión ${item.version} · `:""}${Number.isNaN(when.getTime())?item.created_at:when.toLocaleString("es-CO")} · ${item.actor}${summary?` · ${summary}`:""}`;list.append(row);}
+    host.replaceChildren(list);
+  }catch{host.textContent="No se pudo cargar el historial.";}
 }
 const slug=value=>value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,70)||"nuevo-registro";
 function manageRows(type,items,secondary){
@@ -119,7 +153,8 @@ function managementSection(title,type,formMarkup,items,secondary){
 }
 function renderManagement(){
   const host=$("#admin-management");if(!host||!state)return;
-  host.innerHTML=`<header class="admin-panel-heading"><div><p class="eyebrow">GESTIÓN DE LA FICHA</p><h2>Organiza la información compartida</h2><p>Desactivar conserva la referencia; eliminar usa borrado lógico.</p></div><span class="admin-draft-status">Los cambios se guardan como borrador</span></header><div class="admin-management-grid">${managementSection("Competencias","competencia",'<label class="admin-wide">Nombre<input name="nombre" required maxlength="120"></label><label>Código<input name="codigo" maxlength="40"></label><label>Tipo<select name="tipo"><option value="principal">Principal</option><option value="transversal">Transversal</option></select></label><label>Color<input name="color" type="color" value="#5865d8"></label><label>Forma<select name="forma"><option value="circulo">Círculo</option><option value="rombo">Rombo</option><option value="cuadrado">Cuadrado</option><option value="triangulo">Triángulo</option><option value="hexagono">Hexágono</option></select></label><label>Orden<input name="orden" type="number" min="1" value="99"></label>',state.competencias,item=>`${item.codigo??"Sin código"} · ${item.tipo??"Principal"} · ${item.color??"color del tema"}`)}${managementSection("Horario semanal","horario",'<label>Día<select name="dia"><option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option><option value="4">Jueves</option><option value="5">Viernes</option><option value="6">Sábado</option></select></label><label>Competencia<select name="competenciaId" required>'+state.competencias.filter(item=>!item.deletedAt).map(item=>`<option value="${escape(item.id)}">${escape(item.nombre)}</option>`).join("")+'</select></label><label>Inicio<input name="inicio" type="time" required></label><label>Fin<input name="fin" type="time" required></label><label>Instructor<select name="instructorId"><option value="">Por confirmar</option>'+state.instructores.filter(item=>!item.deletedAt).map(item=>`<option value="${escape(item.id)}">${escape(item.nombre)}</option>`).join("")+'</select></label><label>Vigente desde<input name="vigenteDesde" type="date"></label><label>Vigente hasta<input name="vigenteHasta" type="date"></label>',state.horario,item=>`Día ${item.dia} · ${item.inicio}–${item.fin} · ${item.competenciaId}`)}${managementSection("Instructores","instructor",'<label class="admin-wide">Nombre<input name="nombre" required maxlength="120"></label><label>Correo (requiere consentimiento)<input name="correo" type="email"></label><label>Teléfono (requiere consentimiento)<input name="telefono" type="tel"></label><label class="admin-wide">Foto o perfil HTTPS<input name="foto" type="url" placeholder="https://…"></label><label class="admin-wide"><span><input name="contactoPublico" type="checkbox"> Autorizó mostrar sus datos de contacto</span></label>',state.instructores,item=>`${item.contactoPublico?"Contacto público":"Contacto privado"} · ${item.competenciaIds?.length??0} competencias`)}${managementSection("Comunicados","comunicado",'<label class="admin-wide">Título<input name="titulo" required maxlength="160"></label><label class="admin-wide">Texto<textarea name="texto" required maxlength="3000"></textarea></label><label>Fecha<input name="fecha" type="date" required></label><label>Tipo<select name="tipo"><option value="informativo">Informativo</option><option value="importante">Importante</option></select></label><label class="admin-wide"><span><input name="fijado" type="checkbox"> Fijar en el centro de control</span></label>',state.comunicados,item=>`${item.fecha??"Sin fecha"} · ${item.tipo??"Informativo"}${item.fijado?" · Fijado":""}`)}<section class="admin-manage-section"><h3>Datos de la ficha</h3><form class="admin-manage-form" data-manage-form="meta"><label>Programa<input name="programa" required maxlength="120" value="${escape(state.meta.programa)}"></label><label>Código<input name="codigo" required maxlength="50" value="${escape(state.meta.codigo)}"></label><label>Nombre de la ficha<input name="ficha" required maxlength="120" value="${escape(state.meta.ficha)}"></label><label>Actualizado<input name="actualizado" type="date" value="${escape(state.meta.actualizado||today())}"></label><label class="admin-wide">Fuente o nota<input name="fuente" maxlength="500" value="${escape(state.meta.fuente)}"></label><label class="admin-wide"><span><input name="esDemostracion" type="checkbox"${state.meta.esDemostracion?" checked":""}> Mostrar como datos de demostración</span></label><input type="hidden" name="id"><button type="submit">Guardar datos de ficha</button></form></section></div><p id="admin-management-feedback" class="admin-management-feedback" role="status" aria-live="polite"></p>`;
+  host.innerHTML=`<header class="admin-panel-heading"><div><p class="eyebrow">GESTIÓN DE LA FICHA</p><h2>Organiza la información compartida</h2><p>Desactivar conserva la referencia; eliminar usa borrado lógico.</p></div><span class="admin-draft-status">Los cambios se guardan como borrador</span></header><div class="admin-management-grid">${managementSection("Competencias","competencia",'<label class="admin-wide">Nombre<input name="nombre" required maxlength="120"></label><label>Código<input name="codigo" maxlength="40"></label><label>Tipo<select name="tipo"><option value="principal">Principal</option><option value="transversal">Transversal</option></select></label><label>Color<input name="color" type="color" value="#5865d8"></label><label>Forma<select name="forma"><option value="circulo">Círculo</option><option value="rombo">Rombo</option><option value="cuadrado">Cuadrado</option><option value="triangulo">Triángulo</option><option value="hexagono">Hexágono</option></select></label><label>Orden<input name="orden" type="number" min="1" value="99"></label>',state.competencias,item=>`${item.codigo??"Sin código"} · ${item.tipo??"Principal"} · ${item.color??"color del tema"}`)}${managementSection("Horario semanal","horario",'<label>Día<select name="dia"><option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option><option value="4">Jueves</option><option value="5">Viernes</option><option value="6">Sábado</option></select></label><label>Competencia<select name="competenciaId" required>'+state.competencias.filter(item=>!item.deletedAt).map(item=>`<option value="${escape(item.id)}">${escape(item.nombre)}</option>`).join("")+'</select></label><label>Inicio<input name="inicio" type="time" required></label><label>Fin<input name="fin" type="time" required></label><label>Instructor<select name="instructorId"><option value="">Por confirmar</option>'+state.instructores.filter(item=>!item.deletedAt).map(item=>`<option value="${escape(item.id)}">${escape(item.nombre)}</option>`).join("")+'</select></label><label>Vigente desde<input name="vigenteDesde" type="date"></label><label>Vigente hasta<input name="vigenteHasta" type="date"></label>',state.horario,item=>`Día ${item.dia} · ${item.inicio}–${item.fin} · ${item.competenciaId}`)}${managementSection("Instructores","instructor",'<label class="admin-wide">Nombre<input name="nombre" required maxlength="120"></label><label>Correo (requiere consentimiento)<input name="correo" type="email"></label><label>Teléfono (requiere consentimiento)<input name="telefono" type="tel"></label><label class="admin-wide">Foto o perfil HTTPS<input name="foto" type="url" placeholder="https://…"></label><label class="admin-wide"><span><input name="contactoPublico" type="checkbox"> Autorizó mostrar sus datos de contacto</span></label>',state.instructores,item=>`${item.contactoPublico?"Contacto público":"Contacto privado"} · ${item.competenciaIds?.length??0} competencias`)}${managementSection("Comunicados","comunicado",'<label class="admin-wide">Título<input name="titulo" required maxlength="160"></label><label class="admin-wide">Texto<textarea name="texto" required maxlength="3000"></textarea></label><label>Fecha<input name="fecha" type="date" required></label><label>Tipo<select name="tipo"><option value="informativo">Informativo</option><option value="importante">Importante</option></select></label><label class="admin-wide"><span><input name="fijado" type="checkbox"> Fijar en el centro de control</span></label>',state.comunicados,item=>`${item.fecha??"Sin fecha"} · ${item.tipo??"Informativo"}${item.fijado?" · Fijado":""}`)}<section class="admin-manage-section"><h3>Datos de la ficha</h3><form class="admin-manage-form" data-manage-form="meta"><label>Programa<input name="programa" required maxlength="120" value="${escape(state.meta.programa)}"></label><label>Código<input name="codigo" required maxlength="50" value="${escape(state.meta.codigo)}"></label><label>Nombre de la ficha<input name="ficha" required maxlength="120" value="${escape(state.meta.ficha)}"></label><label>Actualizado<input name="actualizado" type="date" value="${escape(state.meta.actualizado||today())}"></label><label class="admin-wide">Fuente o nota<input name="fuente" maxlength="500" value="${escape(state.meta.fuente)}"></label><label class="admin-wide"><span><input name="esDemostracion" type="checkbox"${state.meta.esDemostracion?" checked":""}> Mostrar como datos de demostración</span></label><input type="hidden" name="id"><button type="submit">Guardar datos de ficha</button></form></section><section class="admin-manage-section admin-tools"><h3>Vista previa y respaldo</h3><div class="admin-actions"><button type="button" class="admin-button" data-admin-preview>Vista previa como aprendiz</button><button type="button" class="admin-button" data-admin-export>Exportar JSON</button><label class="admin-button admin-import-label">Importar JSON<input type="file" data-admin-import accept="application/json,.json"></label></div><h4>Historial reciente</h4><div id="admin-history" role="status" aria-live="polite">Cargando historial…</div></section></div><p id="admin-management-feedback" class="admin-management-feedback" role="status" aria-live="polite"></p>`;
+  void renderHistory();
 }
 function manageSubmit(event){
   const form=event.target.closest("[data-manage-form]");if(!form)return;
@@ -166,6 +201,10 @@ async function initialize(){
     form.addEventListener("submit",event=>{event.preventDefault();void saveDraft();});
     $("[data-admin-publish]").addEventListener("click",()=>void publish());$("[data-admin-undo]").addEventListener("click",()=>void undo());
     $("#admin-tabs").addEventListener("click",managementClick);$("#admin-management").addEventListener("click",managementClick);$("#admin-management").addEventListener("submit",manageSubmit);
+    $("#admin-management").addEventListener("click",event=>{if(event.target.closest("[data-admin-preview]"))openPreview();if(event.target.closest("[data-admin-export]"))exportBackup();});
+    $("#admin-management").addEventListener("change",event=>{if(event.target.matches("[data-admin-import]")){void importBackup(event.target.files[0]);event.target.value="";}});
+    $("#admin-preview-dialog").addEventListener("close",closePreview);$("[data-admin-preview-close]").addEventListener("click",()=>$("#admin-preview-dialog").close());
+    void renderHistory();
     document.addEventListener("keydown",event=>{if(event.key==="Enter"&&event.ctrlKey&&event.target.closest("#admin-daily-form")){event.preventDefault();void saveDraft();}});
   }catch(error){alert.hidden=false;alert.textContent=error.message==="access_denied"?"Inicia sesión con el correo autorizado en Cloudflare Access para administrar la ficha.":`No se pudo abrir Administración: ${error.message}.`;$("#admin-session").textContent="Acceso no disponible";}
 }

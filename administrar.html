@@ -33,6 +33,10 @@
       <p id="admin-feedback" class="admin-feedback" role="status" aria-live="polite"></p>
     </form>
     <section id="admin-management" class="admin-panel" hidden aria-label="Gestión de la ficha"></section>
+    <dialog id="admin-preview-dialog" class="admin-preview-dialog" aria-labelledby="admin-preview-title">
+      <header><h2 id="admin-preview-title">Vista previa como aprendiz</h2><button type="button" class="admin-button" data-admin-preview-close>Cerrar vista previa</button></header>
+      <iframe id="admin-preview-frame" title="Vista previa de la ficha publicada" loading="lazy"></iframe>
+    </dialog>
   </main>
 </body>
 </html>
