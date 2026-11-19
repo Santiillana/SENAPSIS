@@ -9,7 +9,9 @@
 .simulator-thinking-guide{margin:var(--space-4) 0;padding:clamp(14px,2.5vw,22px);border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));border-radius:var(--radius-md);background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 8%,var(--surface-soft)),var(--surface-soft))}
 .simulator-thinking-guide h4{margin:0 0 var(--space-3);font-size:16px;line-height:1.35;color:var(--ink)}
 .simulator-thinking-guide ol{display:grid;gap:var(--space-2);margin:0;padding:0;list-style:none;counter-reset:thinking-step;color:var(--ink-soft)}
+.simulator-intro .simulator-thinking-guide ol{width:100%;grid-template-columns:repeat(2,minmax(0,1fr))}
 .simulator-thinking-guide li{display:grid;grid-template-columns:26px minmax(0,1fr);align-items:start;gap:9px;font-size:14px;line-height:1.45;counter-increment:thinking-step}
+.simulator-thinking-guide li>span{display:block;min-width:0}
 .simulator-thinking-guide li::before{content:counter(thinking-step);display:grid;place-items:center;width:24px;height:24px;border-radius:50%;font-size:12px;font-weight:800;color:var(--accent-ink);background:var(--accent)}
 .simulator-thinking-guide li strong{color:var(--ink)}
 .simulator-thinking-guide>p{margin:var(--space-3) 0 0;color:var(--muted);font-size:13px;line-height:1.45}
@@ -17,6 +19,7 @@
 .simulator-intro-skip{display:flex;align-items:flex-start;gap:var(--space-2);margin-top:var(--space-3);color:var(--muted);font-size:13px;line-height:1.45;cursor:pointer}
 .simulator-intro-skip input{width:18px;height:18px;flex:none;margin:0;accent-color:var(--accent)}
 @media(prefers-reduced-motion:reduce){.simulator-intro::backdrop{backdrop-filter:none}}
+@media(max-width:560px){.simulator-intro .simulator-thinking-guide ol{grid-template-columns:1fr}}
 .simulator-grid{grid-template-columns:minmax(245px,.78fr) minmax(390px,1.45fr) minmax(255px,.82fr);grid-template-areas:"problem diagram inspector" "trace trace trace" "dock dock dock";align-items:start}
 .problem-panel{display:flex;flex-direction:column;max-height:calc(100vh - 130px);overflow:hidden}
 .simulator-problem-body{padding:0 16px 16px;overflow:auto}
