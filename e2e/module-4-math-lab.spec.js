@@ -8,6 +8,8 @@ async function openMathLab(page,topic){
   await catalog.click();
   await page.locator('[data-topic-open="'+topic+'"]').click();
   await goToSpace(page,"lab");
+  if(await page.locator("#lab-topic-heading").isVisible())await page.locator("#lab-topic-back").click();
+  await page.locator('[data-lab-topic="'+topic+'"]').click();
   await expect(page.locator("#view-lab")).toBeVisible();
 }
 
@@ -31,6 +33,8 @@ test("un reto de enteros registra una partida y permite completar cinco rondas",
   await expect(page.locator("#lab-task-content .lab-session-finish")).toContainText("5 de 5");
   await page.locator('[data-math-lab-back]').click();
   await expect(page.locator('#lab-mode-cards [data-lab-math-mechanic="predict"]')).toContainText("★★★");
+  await page.locator("#lab-topic-back").click();
+  await expect(page.locator('[data-lab-topic="enteros"] .exercise-theme-progress')).toContainText("3 / 18 estrellas");
   await goToSpace(page,"learn");
   await page.locator("#learn-open-progress").click();
   await expect(page.locator("#learn-progress-page")).toContainText("3 estrellas del Laboratorio");
@@ -54,6 +58,8 @@ test("la recta numérica, la barra y el orden ofrecen controles accesibles",asyn
   await page.locator('[data-learn-competence="matematicas"]').click();
   await page.locator('[data-topic-open="racionales"]').click();
   await goToSpace(page,"lab");
+  await page.locator("#lab-topic-back").click();
+  await page.locator('[data-lab-topic="racionales"]').click();
   await page.locator('[data-lab-math-mechanic="fraction-bar"]').click();
   await expect(page.locator(".math-lab-fraction-bar button").first()).toHaveAttribute("aria-pressed","false");
   await page.locator(".math-lab-fraction-bar button").first().click();
@@ -72,6 +78,7 @@ test("completa un hueco con formato exacto y depura el tipo de proporción",asyn
   await goToSpace(page,"learn");await page.locator("#learn-topic-space [data-learn-back]").click();
   await page.locator('[data-learn-competence="matematicas"]').click();
   await page.locator('[data-topic-open="regla-de-tres"]').click();await goToSpace(page,"lab");
+  await page.locator("#lab-topic-back").click();await page.locator('[data-lab-topic="regla-de-tres"]').click();
   await page.locator('[data-lab-math-mechanic="error"]').click();
   await page.locator('.math-lab-option[data-correct="true"]').click();
   await expect(page.locator("#math-lab-feedback")).toContainText("¡Correcto!");

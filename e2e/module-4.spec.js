@@ -4,12 +4,26 @@ async function openLab(page){
   await page.goto("/");
   await goToSpace(page, "simulator");
   await goToSpace(page, "lab");
+  if(await page.locator("#lab-topic-home").isVisible())await page.locator('[data-lab-topic="diagramas-flujo"]').click();
 }
 async function startMechanic(page,id){
   await page.locator('#lab-mode-cards [data-lab-activity="'+id+'"]').click();
   await expect(page.locator("#lab-prepare-dialog")).toBeVisible();
   await page.locator("#lab-prepare-play").click();
 }
+
+test("Laboratorio empieza por competencias y temas sin mostrar mecánicas",async({page})=>{
+  await page.goto("/");await goToSpace(page,"lab");
+  await expect(page.locator("#lab-topic-home")).toBeVisible();
+  await expect(page.locator("#lab-topic-home [data-lab-topic]")).toHaveCount(5);
+  await expect(page.locator(".lab-catalog-filters")).toBeHidden();
+  await expect(page.locator("#lab-mode-cards")).toBeHidden();
+  await page.locator('[data-lab-topic="diagramas-flujo"]').click();
+  await expect(page.locator("#lab-topic-heading")).toBeVisible();
+  await expect(page.locator("#lab-mode-cards [data-lab-activity]")).toHaveCount(10);
+  await page.locator("#lab-topic-back").click();
+  await expect(page.locator("#lab-topic-home")).toBeVisible();
+});
 
 test("Laboratorio organiza diez mecánicas en tres familias",async({page})=>{
   await openLab(page);

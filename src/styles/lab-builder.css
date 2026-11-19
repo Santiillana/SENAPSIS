@@ -293,6 +293,25 @@
 #lab-task-content .lab-feedback.is-wrong{border-color:var(--danger)}
 #lab-task-content .lab-snippet{border-left:3px solid var(--accent);background:var(--surface-soft)}
 #lab-task-content .lab-table-wrap{box-shadow:var(--shadow-sm)}
+/* Catálogo del Laboratorio por competencia y tema. */
+#view-lab .lab-topic-home{display:grid;gap:18px}
+#view-lab .lab-topic-home[hidden],#view-lab .lab-topic-heading[hidden],#view-lab .lab-catalog-filters[hidden],#view-lab .lab-mode-cards[hidden],#view-lab .lab-mode-footnote[hidden],#view-lab #lab-filter-empty[hidden]{display:none!important}
+#view-lab .lab-competence-section>header h3{margin:0;font:650 19px/1.25 var(--font-ui)}
+#view-lab .lab-theme-card{--comp-color:var(--lab-topic-accent,var(--accent));min-height:180px}
+#view-lab .lab-topic-heading{display:flex;align-items:center;gap:18px;margin:0 0 18px}
+#view-lab .lab-topic-heading>div{min-width:0}
+#view-lab .lab-topic-heading .eyebrow{margin:0 0 3px}
+#view-lab .lab-topic-heading h3{margin:0;font:700 24px/1.2 var(--font-ui)}
+#view-lab .lab-mechanics-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:14px}
+#view-lab .lab-mode-card{height:auto;min-height:190px;padding:13px;border-color:color-mix(in srgb,var(--lab-topic-accent,var(--accent)) 24%,var(--line))}
+#view-lab .lab-mode-card>strong{font-size:17px}
+#view-lab .lab-mechanic-art{height:68px;border-color:color-mix(in srgb,var(--lab-topic-accent,var(--accent)) 30%,var(--line));color:var(--lab-topic-accent,var(--accent));background:color-mix(in srgb,var(--lab-topic-accent,var(--accent)) 8%,var(--surface))}
+#view-lab .lab-mechanic-art::before,#view-lab .lab-mechanic-art::after,#view-lab .lab-mechanic-art>i{display:none}
+#view-lab .lab-mechanic-art>b{min-width:44px;height:44px;border-color:var(--lab-topic-accent,var(--accent));color:var(--lab-topic-accent,var(--accent));background:var(--surface)}
+#view-lab .lab-mode-card:hover .lab-mechanic-art::before,#view-lab .lab-mode-card:focus-visible .lab-mechanic-art::before{transform:none}
+#view-lab .lab-theme-card .exercise-theme-progress{color:var(--comp-color,var(--accent))}
+@media(max-width:760px){#view-lab .lab-mechanics-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))}}
+@media(max-width:520px){#view-lab .lab-topic-heading{align-items:flex-start;flex-direction:column;gap:7px}#view-lab .lab-mechanics-grid{grid-template-columns:1fr}#view-lab .lab-mode-card{min-height:174px}}
 /* El constructor se presenta como un rompecabezas manipulable, conservando las flechas accesibles. */
 #lab-builder-stage .builder-node-card{position:relative;cursor:grab;transition:transform 150ms ease,border-color 150ms ease,box-shadow 150ms ease}
 #lab-builder-stage .builder-node-card[draggable="true"] .builder-node-select{cursor:grab}

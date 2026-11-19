@@ -3,14 +3,16 @@ import { executePseudocode } from "../core/interpreter.js";
 import { buildArrowChallenge, buildGapChallenge, buildMatchChallenge, mixedModeOrder } from "./lab/generators.js";
 import { conceptMedals, normalizeProgress, recordLabResult, modeStars } from "./lab/progress.js";
 import { conceptos } from "../content/conceptos.js";
-import { temas } from "../content/temas.js";
+import { competenciasAprende, temas } from "../content/temas.js";
 import { buildMathLabChallenge, mathLabCatalog, MATH_LAB } from "../math/lab-engine.js";
 import { formatDecimalOrRational, parseRationalAnswer } from "../math/exact.js";
 import { buildSourceLabChallenge, sourceLabMechanics, sourceLabMeta } from "../content/source-lab.js";
+import { competenceMarker } from "../ficha/competencias-ui.js";
 
 const $=selector=>document.querySelector(selector);
 const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const conceptLabels={entrada:"Entrada de datos",variables:"Variables",asignacion:"Asignación",operaciones:"Operaciones",comparaciones:"Comparaciones",decisiones:"Decisiones",contadores:"Contadores",acumuladores:"Acumuladores","ciclo-para":"Ciclo Para","ciclo-mientras":"Ciclo Mientras","ciclo-hacer-mientras":"Ciclo Hacer–Mientras",figuras:"Figuras",flujo:"Flujo y secuencia",salida:"Imprimir",traza:"Tabla de seguimiento",depuracion:"Depurar",programa:"Programa completo"};
+const difficultyLabels=["Básico","Intermedio","Avanzado","Reto"];
 const fmt=value=>typeof value==="number"?String(Number(value.toFixed(6))):String(value);
 const hashSeed=value=>{let hash=2166136261;for(const char of String(value))hash=Math.imul(hash^char.charCodeAt(0),16777619);return hash>>>0;};
 let trace=null;
@@ -32,6 +34,7 @@ let catalogConcept="todos",catalogDifficulties=new Set();
 let mathLabActive=false,mathLabTopic=null,mathLabMechanic=null,mathLabDifficulty=1,mathLabSeed="",mathLabRound=0,mathLabScore=0,mathLabHints=0,mathLabChallenge=null,mathLabAnswered=false;
 let sourceLabActive=false,sourceLabMechanic=null,sourceLabSeed="",sourceLabRound=0,sourceLabScore=0,sourceLabHints=0,sourceLabChallenge=null,sourceLabAnswered=false;
 let originalLabCatalogMarkup=null;
+let activeLabTopic=null;
 const activityConceptMap={
   predict:["flujo","entrada","variables","asignacion","operaciones","comparaciones","decisiones","ciclo-para","ciclo-mientras","ciclo-hacer-mientras","programa"],
   "follow-arrow":["figuras","flujo","decisiones","ciclo-para","ciclo-mientras","ciclo-hacer-mientras"],
@@ -44,6 +47,7 @@ const activityLevels={predict:[1,2,3,4],"follow-arrow":[1,2,3,4],table:[1,2,3,4]
 let labProgress=loadLabProgress();
 
 function currentTopicId(){
+  if(activeLabTopic)return activeLabTopic;
   try{return JSON.parse(localStorage.getItem("traza:v2:learn")||"{}").theme||"diagramas-flujo";}catch{return "diagramas-flujo";}
 }
 function loadLabProgress(){
@@ -75,10 +79,43 @@ function updateProgressBadges(){
     output.setAttribute("aria-label",best+" de tres estrellas logradas en este tema");
   });
 }
+function bestMechanicStars(topicId,mechanic){
+  const records=topicId==="diagramas-flujo"
+    ?Object.values(labProgress.exercises)
+    :Object.values(labProgress.topics?.[topicId]?.concepts??{});
+  return Math.min(3,Math.max(0,...records.map(item=>Number(item?.[mechanic]?.stars)||0)));
+}
+function renderLabTopicHome(){
+  const host=$("#lab-topic-home");if(!host)return;
+  host.innerHTML=competenciasAprende.map(competence=>{
+    const owned=temas.filter(theme=>theme.competenciaId===competence.id);
+    const cards=owned.map(theme=>{
+      const mechanics=theme.laboratorio?.mecanicas??[],available=mechanics.length>0;
+      const earned=mechanics.reduce((sum,id)=>sum+bestMechanicStars(theme.id,id),0),possible=mechanics.length*3;
+      return '<button type="button" class="theme-card lab-theme-card'+(available?'':' is-coming')+'" data-lab-topic="'+theme.id+'" '+(available?'':'disabled aria-disabled="true"')+' style="--comp-color:var(--competence-'+(competence.token??'1')+'-solid)" aria-label="'+esc(theme.titulo+', '+(available?mechanics.length+' retos, '+earned+' de '+possible+' estrellas':'próximamente'))+'"><span class="theme-icon" aria-hidden="true">'+esc(theme.icono)+'</span><strong>'+esc(theme.titulo)+'</strong><small>'+esc(competence.titulo)+'</small><span class="exercise-theme-count">'+(available?mechanics.length+' retos':'Próximamente')+'</span><span class="exercise-theme-progress"'+(available?' role="progressbar" aria-valuemin="0" aria-valuemax="'+possible+'" aria-valuenow="'+earned+'" aria-label="'+earned+' de '+possible+' estrellas"':'')+'>'+(available?earned+' / '+possible+' estrellas':'')+'</span></button>';
+    }).join("");
+    return '<section class="exercise-competence-section lab-competence-section" aria-labelledby="lab-competence-'+esc(competence.id)+'"><header>'+competenceMarker(competence.id)+'<h3 id="lab-competence-'+esc(competence.id)+'">'+esc(competence.titulo)+'</h3><span>'+owned.length+' temas</span></header><div class="theme-grid">'+(cards||'<p class="exercise-themes-coming">Próximamente</p>')+'</div></section>';
+  }).join("");
+}
+function setLabCatalogControls(visible){
+  const hidden=!visible;
+  const heading=$("#lab-topic-heading"),filters=$(".lab-catalog-filters"),cards=$("#lab-mode-cards"),empty=$("#lab-filter-empty"),footnote=$(".lab-mode-footnote");
+  if(heading)heading.hidden=hidden;if(filters)filters.hidden=hidden;if(cards)cards.hidden=hidden;if(empty)empty.hidden=hidden;if(footnote)footnote.hidden=hidden;
+}
+function openLabTopic(topicId){
+  const theme=temas.find(item=>item.id===topicId);if(!theme)return;
+  activeLabTopic=topicId;
+  const competence=competenciasAprende.find(item=>item.id===theme.competenciaId);
+  $("#lab-topic-home").hidden=true;$("#lab-topic-heading").hidden=false;
+  $("#lab-topic-competence").textContent=competence?.titulo??"Laboratorio";$("#lab-topic-title").textContent=theme.titulo;
+  setLabCatalogControls(true);renderCatalogFilters(topicId);
+}
 function renderCatalogFilters(){
-  let themeId="diagramas-flujo";
-  try{themeId=JSON.parse(localStorage.getItem("traza:v2:learn")||"{}").theme||themeId;}catch{}
+  let themeId=activeLabTopic??"diagramas-flujo";
+  if(!activeLabTopic)try{themeId=JSON.parse(localStorage.getItem("traza:v2:learn")||"{}").theme||themeId;}catch{}
   const theme=temas.find(item=>item.id===themeId)??temas[0];
+  const competence=competenciasAprende.find(item=>item.id===theme.competenciaId);
+  $("#lab-mode-cards")?.style.setProperty("--lab-topic-accent","var(--competence-"+(competence?.token??"evaluar-requisitos")+"-solid)");
   if(themeId==="fuentes-informacion"){renderSourceLabCatalog(themeId);return;}
   if(MATH_LAB[themeId]){renderMathLabCatalog(themeId);return;}
   $("#view-lab")?.classList.remove("lab-math-catalog");
@@ -90,8 +127,9 @@ function renderCatalogFilters(){
   $("#lab-start-mixed")?.removeAttribute("hidden");
   const footnote=$(".lab-mode-footnote");if(footnote)footnote.innerHTML='<span aria-hidden="true">⌁</span> Los retos usan la ejecución del Simulador para mantener sincronizados el diagrama, la escena y las variables.';
   const available=conceptos.filter(item=>theme?.conceptos.includes(item.id));
+  const conceptGroup=$("#lab-filter-concepts")?.closest(".lab-filter-group");if(conceptGroup)conceptGroup.hidden=false;
   $("#lab-filter-concepts").innerHTML='<button type="button" data-lab-filter-concept="todos" aria-pressed="'+String(catalogConcept==="todos")+'">Todos</button>'+available.map(item=>'<button type="button" data-lab-filter-concept="'+item.id+'" aria-pressed="'+String(catalogConcept===item.id)+'">'+esc(item.titulo)+'</button>').join("");
-  $("#lab-filter-difficulty").innerHTML=[1,2,3,4].map(level=>'<button type="button" data-lab-filter-level="'+level+'" aria-pressed="'+String(catalogDifficulties.has(level))+'" aria-label="Dificultad '+level+'">'+"▮".repeat(level)+"▯".repeat(4-level)+'</button>').join("");
+  $("#lab-filter-difficulty").innerHTML=[1,2,3,4].map(level=>'<button type="button" data-lab-filter-level="'+level+'" aria-pressed="'+String(catalogDifficulties.has(level))+'">'+difficultyLabels[level-1]+'</button>').join("");
   applyCatalogFilters();
 }
 function renderSourceLabCatalog(topic){
@@ -121,9 +159,10 @@ function renderMathLabCatalog(topic){
   const conceptChoicesByTopic={enteros:[["signos","Signos"],["jerarquia","Jerarquía"],["recta","Recta numérica"]],racionales:[["equivalencia","Equivalencia"],["operaciones","Operaciones"],["representacion","Representación"]],"regla-de-tres":[["directa","Proporción directa"],["inversa","Proporción inversa"],["verificacion","Verificación"]]};
   const conceptMechanics={signos:["order","whatif","predict"],jerarquia:["order","fill-gap","error","predict"],recta:["number-line"],equivalencia:["match","fraction-bar","predict"],operaciones:["order","fill-gap","error"],representacion:["fraction-bar","match"],directa:["match","fill-gap","predict"],inversa:["match","whatif","predict"],verificacion:["order","error","whatif"]};
   const concepts=conceptChoicesByTopic[topic]??[];
+  const conceptGroup=$("#lab-filter-concepts")?.closest(".lab-filter-group");if(conceptGroup)conceptGroup.hidden=concepts.length<4;
   if(catalogConcept!=="todos"&&!concepts.some(([id])=>id===catalogConcept))catalogConcept="todos";
   $("#lab-filter-concepts").innerHTML='<button type="button" data-lab-filter-concept="todos" aria-pressed="'+String(catalogConcept==="todos")+'">Todos</button>'+concepts.map(([id,label])=>'<button type="button" data-lab-filter-concept="'+id+'" aria-pressed="'+String(catalogConcept===id)+'">'+label+'</button>').join("");
-  $("#lab-filter-difficulty").innerHTML=[1,2,3,4].map(level=>'<button type="button" data-lab-filter-level="'+level+'" aria-pressed="'+String(catalogDifficulties.has(level))+'" aria-label="Dificultad '+level+'">'+"▮".repeat(level)+"▯".repeat(4-level)+'</button>').join("");
+  $("#lab-filter-difficulty").innerHTML=[1,2,3,4].map(level=>'<button type="button" data-lab-filter-level="'+level+'" aria-pressed="'+String(catalogDifficulties.has(level))+'">'+difficultyLabels[level-1]+'</button>').join("");
   cards.querySelectorAll("[data-lab-math-mechanic]").forEach(card=>{
     const family=card.closest(".lab-family-band");
     card.hidden=catalogConcept!=="todos"&&!(conceptMechanics[catalogConcept]??[]).includes(card.dataset.labMathMechanic);
@@ -342,6 +381,7 @@ function renderLabActivityMenu(){
   if(activityHeading)activityHeading.textContent=labMode==="read"?"Lee y comprende":labMode==="build"?"Construye paso a paso":"Revisa y corrige";
 }
 function showLabMode(mode,preferredActivity=null){
+  setLabCatalogControls(false);
   labMode=["read","build","debug"].includes(mode)?mode:"read";
   $("#lab-mode-cards")?.querySelectorAll("[data-lab-mode]").forEach(button=>{
     const active=button.dataset.labMode===labMode;
@@ -416,6 +456,7 @@ function openSelectedActivity(){
   requestAnimationFrame(()=>$(chosen==="build-diagram"?"#lab-builder-title":"#lab-task-title")?.focus());
 }
 function returnToLabModes(){
+  setLabCatalogControls(true);
   if(sourceLabActive){sourceLabActive=false;$("#view-lab")?.classList.remove("lab-source-playing");$("#lab-mode-cards")?.removeAttribute("hidden");$("#lab-practice-workspace")?.setAttribute("hidden","");$(".lab-practice-heading")?.removeAttribute("hidden");$(".lab-layout")?.removeAttribute("hidden");$("#lab-task-panel")?.setAttribute("hidden","");renderCatalogFilters();return;}
   if(mathLabActive){
     mathLabActive=false;
@@ -456,7 +497,7 @@ function nextSourceLabRound(){
     const stars=sourceLabScore===5?3:sourceLabScore>=3?2:sourceLabScore>=1?1:0,content=$("#lab-task-content");content.innerHTML='<section class="lab-session-finish"><p class="eyebrow">PARTIDA COMPLETADA</p><h4>Terminaste los cinco retos.</h4><div class="lab-finish-stars" aria-label="'+stars+' estrellas">'+[1,2,3].map((value,index)=>'<span class="'+(value<=stars?"is-earned":"")+'" style="--star-delay:'+index*120+'ms">★</span>').join("")+'</div><p>'+sourceLabScore+' de 5 retos resueltos correctamente.</p><div class="lab-task-actions"><button type="button" class="button button-primary" data-source-lab-replay>Repetir</button><button type="button" class="button button-secondary" data-source-lab-back>Volver a mecánicas</button></div></section>';content.querySelector("[data-source-lab-replay]")?.addEventListener("click",()=>startSourceLab(sourceLabMechanic));content.querySelector("[data-source-lab-back]")?.addEventListener("click",returnToLabModes);return;}
   sourceLabHints=0;sourceLabChallenge=buildSourceLabChallenge(sourceLabMechanic,sourceLabSeed,sourceLabRound);renderSourceLabRound();
 }
-function startSourceLab(mechanic){sourceLabActive=true;sourceLabMechanic=mechanic;sourceLabRound=0;sourceLabScore=0;sourceLabHints=0;sourceLabSeed=`${mechanic}:session-${labProgress.topics?.["fuentes-informacion"]?.concepts?.recoleccion?.[mechanic]?.partidas??0}`;$("#lab-mode-cards")?.setAttribute("hidden","");$("#lab-practice-workspace")?.removeAttribute("hidden");$(".lab-practice-heading")?.setAttribute("hidden","");$(".lab-layout")?.setAttribute("hidden","");$("#lab-task-panel")?.removeAttribute("hidden");$("#view-lab")?.classList.add("lab-source-playing");sourceLabChallenge=buildSourceLabChallenge(mechanic,sourceLabSeed,0);renderSourceLabRound();requestAnimationFrame(()=>$("#lab-task-title")?.focus());}
+function startSourceLab(mechanic){sourceLabActive=true;sourceLabMechanic=mechanic;sourceLabRound=0;sourceLabScore=0;sourceLabHints=0;sourceLabSeed=`${mechanic}:session-${labProgress.topics?.["fuentes-informacion"]?.concepts?.recoleccion?.[mechanic]?.partidas??0}`;setLabCatalogControls(false);$("#lab-mode-cards")?.setAttribute("hidden","");$("#lab-practice-workspace")?.removeAttribute("hidden");$(".lab-practice-heading")?.setAttribute("hidden","");$(".lab-layout")?.setAttribute("hidden","");$("#lab-task-panel")?.removeAttribute("hidden");$("#view-lab")?.classList.add("lab-source-playing");sourceLabChallenge=buildSourceLabChallenge(mechanic,sourceLabSeed,0);renderSourceLabRound();requestAnimationFrame(()=>$("#lab-task-title")?.focus());}
 function mathLabFeedback(message,correct){
   const status=$("#math-lab-feedback");if(!status)return;
   status.hidden=false;status.className="math-lab-feedback "+(correct?"is-correct":"is-incorrect");
@@ -561,7 +602,7 @@ function nextMathLabRound(){
 function startMathLab(topic,mechanic,difficulty=1){
   mathLabTopic=topic;mathLabMechanic=mechanic;mathLabDifficulty=difficulty;mathLabRound=0;mathLabScore=0;mathLabHints=0;mathLabActive=true;
   mathLabSeed=`${topic}:${mechanic}:${difficulty}:session-${labProgress.topics?.[topic]?.concepts?.[topic]?.[mechanic]?.partidas??0}`;
-  $("#lab-mode-cards")?.setAttribute("hidden","");$("#lab-practice-workspace")?.removeAttribute("hidden");$(".lab-practice-heading")?.setAttribute("hidden","");$(".lab-layout")?.setAttribute("hidden","");$("#lab-task-panel")?.removeAttribute("hidden");
+  setLabCatalogControls(false);$("#lab-mode-cards")?.setAttribute("hidden","");$("#lab-practice-workspace")?.removeAttribute("hidden");$(".lab-practice-heading")?.setAttribute("hidden","");$(".lab-layout")?.setAttribute("hidden","");$("#lab-task-panel")?.removeAttribute("hidden");
   $("#view-lab")?.classList.add("lab-math-playing");
   mathLabChallenge=buildMathLabChallenge(topic,mechanic,difficulty,mathLabSeed,0);renderMathLabRound();
   requestAnimationFrame(()=>$("#lab-task-title")?.focus());
@@ -1119,7 +1160,9 @@ function renderActivity(){
 }
 export function initLab(){
   originalLabCatalogMarkup=$("#lab-mode-cards")?.innerHTML??null;
-  renderCatalogFilters();
+  renderLabTopicHome();setLabCatalogControls(false);
+  $("#lab-topic-home")?.addEventListener("click",event=>{const card=event.target.closest("[data-lab-topic]");if(card)openLabTopic(card.dataset.labTopic);});
+  $("#lab-topic-back")?.addEventListener("click",()=>{activeLabTopic=null;$("#lab-topic-home").hidden=false;setLabCatalogControls(false);renderLabTopicHome();});
   $("#lab-filter-concepts")?.addEventListener("click",event=>{
     const button=event.target.closest("[data-lab-filter-concept]");if(!button)return;
     catalogConcept=button.dataset.labFilterConcept;renderCatalogFilters();
@@ -1167,7 +1210,7 @@ export function initLab(){
   });
   $("#lab-open-simulator")?.addEventListener("click",()=>document.querySelector('#primary-nav [data-space="simulator"]')?.click());
   document.addEventListener("traza:execution-updated",event=>publishContext(event.detail));
-  document.addEventListener("traza:space-change",event=>{if(event.detail?.space==="lab")renderCatalogFilters();});
+  document.addEventListener("traza:space-change",event=>{if(event.detail?.space==="lab"){if(activeLabTopic)renderCatalogFilters();else{renderLabTopicHome();setLabCatalogControls(false);}}});
   document.addEventListener("traza:lab-builder-result",event=>{
     if(!trace||activity!=="build-diagram")return;
     const result=event.detail??{};

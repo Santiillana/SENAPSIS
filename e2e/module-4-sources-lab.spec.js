@@ -5,6 +5,7 @@ async function openSourceLab(page){
   await page.locator('[data-learn-competence="establecer-requisitos"]').click();
   await page.locator('[data-topic-open="fuentes-informacion"]').click();
   await goToSpace(page,"lab");
+  await page.locator('[data-lab-topic="fuentes-informacion"]').click();
   await expect(page.locator("#view-lab")).toBeVisible();
 }
 
