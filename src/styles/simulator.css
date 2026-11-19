@@ -3068,6 +3068,12 @@ body[data-active-space="simulator"] #PR .variable-cards{align-content:start!impo
 body[data-active-space="simulator"] #PR .variable-card{min-width:0!important}
 body[data-active-space="simulator"] .sim-context-window{width:min(310px,calc(100vw - 24px));max-height:260px;overflow:auto}
 @media(max-width:900px){body[data-active-space="simulator"] .sim-context-window{width:min(286px,calc(100vw - 20px));max-height:220px}}
+body[data-active-space="simulator"] #PR .variable-card.is-changed{animation:variable-value-arrive 420ms cubic-bezier(.2,.8,.25,1) both}
+body[data-active-space="simulator"] #PR .variable-card.is-changed strong{display:inline-block;animation:variable-number-arrive 420ms cubic-bezier(.2,.8,.25,1) both}
+@keyframes variable-value-arrive{0%{transform:translateY(4px);box-shadow:0 0 0 transparent}55%{transform:translateY(-2px);box-shadow:0 0 18px color-mix(in srgb,var(--variable-highlight) 42%,transparent)}100%{transform:translateY(0);box-shadow:0 0 12px color-mix(in srgb,var(--variable-highlight) 25%,transparent)}}
+@keyframes variable-number-arrive{0%{transform:scale(.86);opacity:.45}65%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){body[data-active-space="simulator"] #PR .variable-card.is-changed,body[data-active-space="simulator"] #PR .variable-card.is-changed strong{animation:none!important}}
+:root[data-motion="reduced"] body[data-active-space="simulator"] #PR .variable-card.is-changed,:root[data-motion="reduced"] body[data-active-space="simulator"] #PR .variable-card.is-changed strong{animation:none!important}
 
 html[data-theme="light"] body[data-active-space="simulator"]{
   --bg:var(--traza-observatory);--grid:var(--traza-stage-grid);--card:var(--traza-glass);

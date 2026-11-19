@@ -12,6 +12,12 @@ test("el clic físico de Siguiente avanza y sincroniza el paso de entrada",async
   await expect(page.locator("#vf")).toContainText("Qué pasa");
   await expect(page.locator("#vf")).toContainText("Por qué");
   await expect(page.locator('#variables-content [data-variable-card="a"]')).toContainText("8");
+  await page.locator("#simulator-next").click();
+  await page.locator("#simulator-next").click();
+  const changedVariable=page.locator('#variables-content [data-variable-card="s"]');
+  await expect(changedVariable).toHaveClass(/is-changed/);
+  await expect(changedVariable).toHaveAttribute("aria-label","s vale 13");
+  await expect(page.locator("#variable-change")).toHaveAttribute("aria-live","polite");
   expect(errors).toEqual([]);
 });
 

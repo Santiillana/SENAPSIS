@@ -1132,7 +1132,8 @@ function render(){
   const variableMarkup=names.map(name=>{
     const changed=change?.name===name,active=activeVariableNames.includes(name),tone=variableTone(name);
     const old=changed&&change.previous!==undefined?'<span class="variable-old-value">'+esc(fmt(change.previous))+'</span><span class="variable-value-arrow">→</span>':"";
-    return '<button type="button" class="variable-card '+tone+(changed?" is-changed":"")+(active?" is-active-variable":"")+'" data-variable-card="'+esc(name)+'" data-variable-history="'+esc(name)+'" aria-pressed="'+String(selectedVariable===name)+'">'+
+    const accessible=changed&&change.previous!==undefined?name+" cambia de "+fmt(change.previous)+" a "+fmt(change.value):name+" vale "+fmt(vars[name]);
+    return '<button type="button" class="variable-card '+tone+(changed?" is-changed":"")+(active?" is-active-variable":"")+'" data-variable-card="'+esc(name)+'" data-variable-history="'+esc(name)+'" aria-label="'+esc(accessible)+'" aria-pressed="'+String(selectedVariable===name)+'">'+
       '<span class="variable-card-name">'+esc(name)+'</span><span class="variable-card-values">'+old+'<strong>'+esc(fmt(vars[name]))+'</strong></span></button>';
   }).join("");
   $("#variables-content").innerHTML=names.length?'<div class="variable-cards">'+variableMarkup+'</div>':'<p class="empty-state-copy">La memoria aún está vacía. La primera asignación mostrará aquí cada cajita.</p>';
