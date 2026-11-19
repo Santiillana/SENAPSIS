@@ -2,6 +2,9 @@
 /* Mi ficha · vistas personales y agenda académica */
 .ficha-view-content{display:grid;gap:18px;min-width:0}
 .ficha-view-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;min-width:0}
+.ficha-sync-indicator{align-self:center;max-width:min(36vw,360px);padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted-strong);font-size:11px;font-weight:750;line-height:1.2;text-align:center}
+.ficha-sync-indicator[hidden]{display:none!important}
+.ficha-sync-indicator[data-status="offline"]{border-color:var(--warning);background:var(--warning-soft);color:var(--ink-soft)}
 .ficha-view-heading>div{min-width:0;max-width:850px}
 .ficha-view-heading h2{margin:4px 0 2px;font:700 clamp(25px,2.5vw,34px)/1.16 Georgia,"Times New Roman",serif;letter-spacing:-.55px}
 .ficha-source-line{margin:7px 0 0;color:var(--muted-strong);font-size:12px}
