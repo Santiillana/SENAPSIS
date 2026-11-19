@@ -11,7 +11,7 @@ import { renderScene, createClock, lessonRecipe, recipeFrame, recipeMoment, reci
 import { parsePseudocode } from "../core/parser.js";
 import { temas, competenciasAprende, temaPorId } from "../content/temas.js";
 import { conceptos, conceptoPorEtiqueta } from "../content/conceptos.js";
-import { normalizeLearnProgress, dateInBogota, currentStreak } from "../content/learn-progress.js";
+import { normalizeLearnProgress, dateInBogota, currentStreak, calculateLessonProgress, setLessonCompleted } from "../content/learn-progress.js";
 import { adaptLegacyExercise } from "../content/exercise-adapter.js";
 import { conceptMedals } from "./lab/progress.js";
 import { competenceMarker } from "../ficha/competencias-ui.js";
@@ -43,7 +43,6 @@ let lessonPlaybackComplete = false;
 let lessonEntrySeen = new Set();
 let lessonFigureObserver = null;
 let lessonMotionObserver = null;
-let lessonTryResolved = false;
 let learnProgress = readLearnProgress();
 let selectedTheme = learnProgress.theme;
 let selectedCompetence = temas.find(item=>item.id===selectedTheme)?.competenciaId ?? null;
@@ -141,10 +140,11 @@ function saveLearnProgress(){
   try{localStorage.setItem("traza:v2:learn",JSON.stringify(learnProgress));}catch{}
 }
 function completeLesson(){
-  if(!learnProgress.completed.includes(selectedLesson))learnProgress.completed.push(selectedLesson);
-  recordLearnActivity();
+  const wasCompleted=learnProgress.completed.includes(selectedLesson);
+  learnProgress.completed=setLessonCompleted(learnProgress.completed,selectedLesson,!wasCompleted);
+  if(!wasCompleted)recordLearnActivity();
   saveLearnProgress();
-  lessonList();
+  lessonList();renderLearnCatalog();renderLearnProgress();
   renderLesson();
 }
 function recordLearnActivity(){
@@ -162,7 +162,7 @@ function showLearnPanel(panel){
   if(progress)progress.hidden=panel!=="progress";
   if(topic)topic.hidden=panel!=="topic";
 }
-function progressRing(done,total){const percent=total?Math.round(done/total*100):0;return `<span class="theme-progress-ring" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}" style="--theme-progress:${percent}%" aria-label="${done} de ${total} lecciones completadas">${total?percent:"–"}%</span>`;}
+function progressRing(progress){return `<span class="theme-progress-ring" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress.percentage}" style="--theme-progress:${progress.percentage}%" aria-label="${progress.completed} de ${progress.total} lecciones completadas">${progress.total?progress.percentage:"–"}%</span>`;}
 
 function renderLearnCatalog(){
   const host=$("#learn-catalog-bands"),competenceHost=$("#learn-competence-filters");if(!host||!competenceHost)return;
@@ -180,10 +180,10 @@ function renderLearnCatalog(){
   const items=temas.filter(theme=>theme.competenciaId===competence.id).sort((a,b)=>a.dificultad-b.dificultad);
   const tiles=items.map(theme=>{
     const available=theme.estado==="disponible";
-    const complete=theme.lecciones.filter(id=>learnProgress.completed.includes(id)).length;
+    const progress=calculateLessonProgress(theme.lecciones,learnProgress.completed);
     const include=[theme.lecciones.length,theme.ejercicios.length,theme.simulador?1:0,theme.laboratorio?.mecanicas.length||0];
     const labels=["lecciones","ejercicios","simulador","retos de laboratorio"];
-    return `<button type="button" class="theme-card${available?"":" is-coming"}" data-topic-open="${escapeHTML(theme.id)}" aria-disabled="${String(!available)}" aria-label="${escapeHTML(theme.titulo)}${available?"":"; no disponible todavía"}"><span class="theme-icon" aria-hidden="true">${escapeHTML(theme.icono)}</span>${available?progressRing(complete,theme.lecciones.length):'<span class="theme-coming-label">◷ Próximamente</span>'}<strong>${escapeHTML(theme.titulo)}</strong><span class="theme-includes">${include.map((count,index)=>`<span title="${count} ${labels[index]}" aria-label="${count} ${labels[index]}"><span aria-hidden="true">${["▤","◇","⌘","⌑"][index]}</span> ${count}</span>`).join("")}</span></button>`;
+    return `<button type="button" class="theme-card${available?"":" is-coming"}" data-topic-open="${escapeHTML(theme.id)}" aria-disabled="${String(!available)}" aria-label="${escapeHTML(theme.titulo)}${available?"":"; no disponible todavía"}"><span class="theme-icon" aria-hidden="true">${escapeHTML(theme.icono)}</span>${available?progressRing(progress):'<span class="theme-coming-label">◷ Próximamente</span>'}<strong>${escapeHTML(theme.titulo)}</strong><span class="theme-includes">${include.map((count,index)=>`<span title="${count} ${labels[index]}" aria-label="${count} ${labels[index]}"><span aria-hidden="true">${["▤","◇","⌘","⌑"][index]}</span> ${count}</span>`).join("")}</span></button>`;
   }).join("");
   host.innerHTML=`<button type="button" class="learn-catalog-back" data-competence-back>‹ Todas las competencias</button><section class="learn-competence-band" data-competence-id="${escapeHTML(competence.id)}"><header>${competenceMarker(competence.id)}<h3>${escapeHTML(competence.titulo)}</h3>${competence.tipo==="transversal"?'<span class="learn-competence-type">Transversal</span>':""}<span>${items.length} ${items.length===1?"tema":"temas"}</span></header>${tiles?`<div class="theme-grid">${tiles}</div>`:'<p class="learn-coming-empty">Próximamente</p>'}</section>`;
 }
@@ -239,17 +239,17 @@ function navigateToLesson(id){
 
 function renderLearnProgress(){
   const host=$("#learn-progress-topics");if(!host)return;
-  const done=learnProgress.completed.length;const percent=Math.round(done/lessons.length*100);
+  const overall=calculateLessonProgress(lessons.map(item=>item.id),learnProgress.completed);
   const ring=$("#learn-progress-ring"),text=$("#learn-progress-percent"),total=$("#learn-progress-total"),fill=$("#learn-progress-fill");
-  if(ring){ring.style.setProperty("--learn-progress",percent+"%");ring.setAttribute("aria-valuenow",String(done));ring.setAttribute("aria-valuemax",String(lessons.length));ring.setAttribute("aria-label","Progreso de las "+lessons.length+" lecciones");}
+  if(ring){ring.style.setProperty("--learn-progress",overall.percentage+"%");ring.setAttribute("aria-valuenow",String(overall.completed));ring.setAttribute("aria-valuemax",String(overall.total));ring.setAttribute("aria-label",overall.completed+" de "+overall.total+" lecciones completadas");}
   const lessonCount=$(".learn-progress-count");if(lessonCount)lessonCount.innerHTML=lessons.length+' <small>LECCIONES</small>';
-  if(text)text.textContent=percent+"%";if(total)total.textContent=done+" de "+lessons.length+" lecciones completadas";if(fill)fill.style.width=percent+"%";
+  if(text)text.textContent=overall.percentage+"%";if(total)total.textContent=overall.completed+" de "+overall.total+" lecciones completadas";if(fill)fill.style.width=overall.percentage+"%";
   let labData={};try{labData=JSON.parse(localStorage.getItem("traza:v2:progress")||"{}");}catch{}
   const lab=labData.exercises||{};
   host.innerHTML=competenciasAprende.map(competence=>{
     const owned=temas.filter(theme=>theme.competenciaId===competence.id);
-    const lessonIds=owned.flatMap(theme=>theme.lecciones);const completed=lessonIds.filter(id=>learnProgress.completed.includes(id)).length;
-    return `<article class="learn-progress-competence" data-competence-id="${escapeHTML(competence.id)}"><header>${competenceMarker(competence.id)}<strong>${escapeHTML(competence.titulo)}</strong>${competence.tipo==="transversal"?'<small class="learn-competence-type">Transversal</small>':""}${progressRing(completed,lessonIds.length)}</header>${owned.map(theme=>{const count=theme.lecciones.filter(id=>learnProgress.completed.includes(id)).length;const pct=theme.lecciones.length?Math.round(count/theme.lecciones.length*100):0;const stars=theme.competenciaId==="matematicas"?Object.values(labData.topics?.[theme.id]?.concepts?.[theme.id]||{}).reduce((sum,mode)=>sum+(Number(mode?.stars)||0),0):theme.ejercicios.reduce((sum,id)=>sum+Object.values(lab[String(id)]||{}).reduce((n,mode)=>n+(Number(mode?.stars)||0),0),0);const medals=conceptMedals(labData,theme.id);const medalNames=medals.map(id=>escapeHTML(conceptos.find(item=>item.id===id)?.titulo??id));return `<div class="learn-progress-topic"><span>${escapeHTML(theme.titulo)}</span><span class="learn-topic-track"><i style="width:${pct}%"></i></span><small>${count} de ${theme.lecciones.length} lecciones · ${stars} estrellas del Laboratorio · ${medals.length} medallas</small>${medalNames.length?`<small class="learn-topic-medals" aria-label="Medallas logradas">🏅 ${medalNames.join(" · ")}</small>`:""}</div>`;}).join("")||'<p>Próximamente</p>'}</article>`;
+    const lessonIds=owned.flatMap(theme=>theme.lecciones);const competenceProgress=calculateLessonProgress(lessonIds,learnProgress.completed);
+    return `<article class="learn-progress-competence" data-competence-id="${escapeHTML(competence.id)}"><header>${competenceMarker(competence.id)}<strong>${escapeHTML(competence.titulo)}</strong>${competence.tipo==="transversal"?'<small class="learn-competence-type">Transversal</small>':""}${progressRing(competenceProgress)}</header>${owned.map(theme=>{const progress=calculateLessonProgress(theme.lecciones,learnProgress.completed);const stars=theme.competenciaId==="matematicas"?Object.values(labData.topics?.[theme.id]?.concepts?.[theme.id]||{}).reduce((sum,mode)=>sum+(Number(mode?.stars)||0),0):theme.ejercicios.reduce((sum,id)=>sum+Object.values(lab[String(id)]||{}).reduce((n,mode)=>n+(Number(mode?.stars)||0),0),0);const medals=conceptMedals(labData,theme.id);const medalNames=medals.map(id=>escapeHTML(conceptos.find(item=>item.id===id)?.titulo??id));return `<div class="learn-progress-topic"><span>${escapeHTML(theme.titulo)}</span><span class="learn-topic-track" role="progressbar" aria-valuemin="0" aria-valuemax="${progress.total}" aria-valuenow="${progress.completed}" aria-label="${progress.completed} de ${progress.total} lecciones de ${escapeHTML(theme.titulo)} completadas"><i style="width:${progress.percentage}%"></i></span><small>${progress.completed} de ${progress.total} lecciones · ${stars} estrellas del Laboratorio · ${medals.length} medallas</small>${medalNames.length?`<small class="learn-topic-medals" aria-label="Medallas logradas">🏅 ${medalNames.join(" · ")}</small>`:""}</div>`;}).join("")||'<p>Próximamente</p>'}</article>`;
   }).join("");
 }
 function lessonDifficulty(lesson,theme=temaPorId(selectedTheme)){
@@ -267,8 +267,8 @@ function lessonList(){
     })
     .sort((a,b)=>a.difficulty-b.difficulty||a.index-b.index)
     .map(item=>({...item.lesson,difficulty:item.difficulty}));
-  const current=Math.max(0,topicLessons.findIndex(item=>item.id===selectedLesson))+1;
-  if(routeCount)routeCount.textContent=current+" de "+topicLessons.length;
+  const progress=calculateLessonProgress(topicLessons.map(item=>item.id),learnProgress.completed);
+  if(routeCount)routeCount.textContent=progress.completed+" de "+progress.total+" completadas";
   const items=topicLessons.map((lesson,index)=>{
     const completed=learnProgress.completed.includes(lesson.id);
     const status=completed?"Completada":lesson.id===selectedLesson?"En curso":"Pendiente";
@@ -478,7 +478,7 @@ function renderLesson(){
   const sceneLesson=Boolean(mathLesson||sourceLesson);
   const topicLessonCount=temaPorId(selectedTheme)?.lecciones.length??flowLessons.length;
   const host=$("#lesson-detail");if(!host)return;
-  const completed=learnProgress.completed.includes(lesson.id);
+  const completed=calculateLessonProgress([lesson.id],learnProgress.completed).completed===1;
   const recipe=lessonRecipe(lesson.id);
   const execution=runLesson(lesson),events=execution.ok?relevantLessonEvents(lesson,execution):[];
   if(reducedLessonMotion())lessonVisualStep=Math.max(0,events.length-1);
@@ -492,7 +492,7 @@ function renderLesson(){
   const term='<section class="lesson-reading-section" id="lesson-term"><p class="eyebrow">03 · PALABRA TÉCNICA</p><h4 class="lesson-term-title">'+escapeHTML(recipe?.term??LESSON_TERMS[lesson.id]??lesson.title)+'</h4><p class="lesson-term-definition">'+escapeHTML(lesson.technical)+'</p><p class="lesson-key-idea"><b>En pocas palabras</b> '+escapeHTML(lesson.summary??lesson.objective)+'</p>'+(mathLesson?'<details class="lesson-technical"><summary>Glosario del tema</summary><p>Entero, racional, numerador, denominador, mcm, razón, proporción, directa e inversa.</p></details>':sourceLesson?'<details class="lesson-technical"><summary>Nota de clasificación</summary><p>Según el autor, las fronteras entre fuentes primarias, secundarias y terciarias pueden cambiar. Revisa siempre de dónde viene el dato y cómo se obtuvo.</p></details>':'<details class="lesson-technical"><summary>Cómo se escribe o se representa</summary><p>'+escapeHTML(lesson.example.code.split("|").join(" · "))+'</p></details>')+'</section>';
   const example='<section class="lesson-reading-section" id="lesson-example"><p class="eyebrow">04 · EJEMPLO PASO A PASO</p><h4>'+escapeHTML(sceneLesson?lesson.title:lesson.miniProgram.title)+'</h4><div class="lesson-worked-layout"><ol class="lesson-code-lines" aria-label="'+(sceneLesson?"Momentos de la escena":"Pseudocódigo con la línea activa")+'">'+codeLines+'</ol><ol class="lesson-worked-steps">'+steps+'</ol></div><p class="lesson-example-note">'+escapeHTML(lesson.example.explanation)+'</p>'+(sceneLesson?"":'<details class="lesson-interactive-test"><summary>Probar con otros datos</summary><label class="lesson-data-control"><span>Datos de entrada</span><input id="lesson-data-input" type="text" value="'+escapeHTML(lesson.miniProgram.sample.join(", "))+'" aria-label="Datos de entrada separados por coma"></label><div class="lesson-example-output" id="lesson-data-result" role="status"></div><button type="button" class="button button-primary" data-run-mini-program>Ejecutar prueba</button></details>')+'</section>';
   const practice='<section class="lesson-reading-section" id="lesson-practice"><p class="eyebrow">05 · INTÉNTALO</p><h4>'+escapeHTML(lesson.tryIt?.prompt??"Predice antes de ver la respuesta.")+'</h4><p class="lesson-common-error"><b>Error común:</b> '+escapeHTML(lesson.commonError??"Revisa el orden de las instrucciones.")+'</p><p>'+escapeHTML(lesson.check.question)+'</p><div class="lesson-options">'+options+'</div><p class="lesson-feedback" id="lesson-feedback" role="status"></p><button type="button" class="text-link" data-skip-practice>Saltar la práctica</button></section>';
-  const summary='<section class="lesson-reading-section lesson-summary-section" id="lesson-summary"><p class="eyebrow">06 · RESUMEN</p><h4>'+escapeHTML(lesson.title)+'</h4><div class="lesson-summary-points"><p><span aria-hidden="true">◇</span>'+escapeHTML(lesson.intuitive.split(/[.!?]/)[0])+'.</p><p><span aria-hidden="true">⌘</span>'+escapeHTML(lesson.summary??lesson.objective)+'</p><p><span aria-hidden="true">✓</span>'+escapeHTML(lesson.objective)+'</p></div><button type="button" class="button button-primary" data-lesson-complete '+(!lessonTryResolved&&!completed?"disabled":"")+'>'+(completed?"Lección completada":"Entendido")+'</button>'+(completed?(lesson.order<topicLessonCount?'<button type="button" class="button button-secondary" data-lesson-next>Siguiente lección</button>':"")+(temaPorId(selectedTheme)?.laboratorio?'<button type="button" class="button button-secondary" data-go="lab">Practicar en el Laboratorio</button>':""):"")+'</section>';
+  const summary='<section class="lesson-reading-section lesson-summary-section" id="lesson-summary"><p class="eyebrow">06 · RESUMEN</p><h4>'+escapeHTML(lesson.title)+'</h4><div class="lesson-summary-points"><p><span aria-hidden="true">◇</span>'+escapeHTML(lesson.intuitive.split(/[.!?]/)[0])+'.</p><p><span aria-hidden="true">⌘</span>'+escapeHTML(lesson.summary??lesson.objective)+'</p><p><span aria-hidden="true">✓</span>'+escapeHTML(lesson.objective)+'</p></div><button type="button" class="text-link lesson-complete-toggle" data-lesson-complete aria-pressed="'+String(completed)+'">'+(completed?"✓ Lección completada · Desmarcar":"Marcar como completada")+'</button>'+(completed&&lesson.order<topicLessonCount?'<button type="button" class="button button-secondary" data-lesson-next>Siguiente lección</button>':"")+'</section>';
   const currentLesson=$("#learn-current-lesson"),currentLessonWrap=$("#learn-current-lesson-wrap");
   if(currentLesson)currentLesson.textContent=lesson.title;
   if(currentLessonWrap)currentLessonWrap.hidden=false;
@@ -666,7 +666,7 @@ function selectSourceExercise(id){
 
 function selectLesson(id){
   if(!lessons.some(lesson=>lesson.id===id))return;
-  stopLessonPlayback();lessonAutoplayStarted=false;lessonPlaybackComplete=false;lessonEntrySeen.clear();selectedLesson=id;lessonVisualStep=0;lessonScreenStep=0;lessonTryResolved=false;
+  stopLessonPlayback();lessonAutoplayStarted=false;lessonPlaybackComplete=false;lessonEntrySeen.clear();selectedLesson=id;lessonVisualStep=0;lessonScreenStep=0;
   saveLearnProgress();lessonList();renderLesson();
   renderTopicSpace();
   $("#learn-topic-space")?.classList.remove("is-list-open");
@@ -714,10 +714,10 @@ function bindContentEvents(){
   });
   $("#lesson-detail")?.addEventListener("click",event=>{
     if(event.target.closest("[data-learn-list]")){$("#learn-topic-space")?.classList.add("is-list-open");return;}
-    if(event.target.closest("[data-skip-practice]")){lessonTryResolved=true;const feedback=$("#lesson-feedback");if(feedback)feedback.textContent="Práctica saltada. Puedes seguir al resumen.";const done=$("[data-lesson-complete]");if(done)done.disabled=false;return;}
+    if(event.target.closest("[data-skip-practice]")){const feedback=$("#lesson-feedback");if(feedback)feedback.textContent="Práctica saltada. Puedes seguir al resumen.";return;}
     if(event.target.closest("[data-prerequisite]")){const name=event.target.closest("[data-prerequisite]").dataset.prerequisite;const match=lessons.find(item=>item.title.toLocaleLowerCase("es").includes(name.toLocaleLowerCase("es")));if(match)selectLesson(match.id);return;}
     if(event.target.closest("[data-lesson-next]")){const ids=temaPorId(selectedTheme)?.lecciones??flowLessons.map(item=>item.id);const index=ids.indexOf(selectedLesson);if(index>=0&&index<ids.length-1)selectLesson(ids[index+1]);return;}
-    if(event.target.closest("[data-lesson-complete]")){if(lessonTryResolved||learnProgress.completed.includes(selectedLesson))completeLesson();return;}
+    if(event.target.closest("[data-lesson-complete]")){completeLesson();return;}
   });
   $("#lesson-detail")?.addEventListener("input",event=>{
     if(event.target.id==="lesson-data-input")updateLessonData();
@@ -754,8 +754,6 @@ function bindContentEvents(){
       feedback.textContent=chosen===lesson.check.answer?"Correcto. "+lesson.check.why:"Revisa la pista. "+lesson.check.why;
       feedback.classList.toggle("is-correct",chosen===lesson.check.answer);
       feedback.classList.toggle("is-wrong",chosen!==lesson.check.answer);
-      lessonTryResolved=true;
-      const done=$("[data-lesson-complete]");if(done)done.disabled=false;
     }
   });
   $("#lesson-detail")?.addEventListener("change",event=>{

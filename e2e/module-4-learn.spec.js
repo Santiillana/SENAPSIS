@@ -5,7 +5,7 @@ test("Aprende organiza las 17 lecciones en una lista ligera y una ruta lateral",
   await openDiagramLessons(page);
   await expect(page.locator("#lesson-catalog [data-lesson-id]")).toHaveCount(17);
   await expect(page.locator(".lesson-catalog-group-title")).toHaveCount(0);
-  await expect(page.locator("#lesson-route-count")).toHaveText("1 de 17");
+  await expect(page.locator("#lesson-route-count")).toHaveText("0 de 17 completadas");
   await expect(page.locator("#lesson-catalog .lesson-list-difficulty i")).toHaveCount(51);
   await expect(page.locator('#lesson-catalog [data-lesson-id="algorithm"]')).toHaveAttribute("aria-label",/dificultad 1 de 3/i);
   await expect(page.locator(".lesson-glossary summary")).toHaveText("Glosario del tema");
@@ -13,7 +13,7 @@ test("Aprende organiza las 17 lecciones en una lista ligera y una ruta lateral",
   await expect(page.locator(".lesson-completion")).toHaveCount(0);
 });
 
-test("el progreso de lectura es continuo y completa solo tras practicar o saltar",async({page})=>{
+test("el progreso de lectura permite marcar y desmarcar una lección manualmente",async({page})=>{
   await page.goto("/");
   await openDiagramLessons(page);
   await page.locator('#lesson-catalog [data-lesson-id="algorithm"]').click();
@@ -24,12 +24,15 @@ test("el progreso de lectura es continuo y completa solo tras practicar o saltar
   await expect(page.locator("#lesson-example")).toBeVisible();
   await expect(page.locator("#lesson-practice")).toBeVisible();
   const done=page.locator("[data-lesson-complete]");
-  await expect(done).toBeDisabled();
-  await page.locator("[data-skip-practice]").click();
-  await expect(done).toBeEnabled();
+  await expect(done).toHaveText("Marcar como completada");
   await done.click();
-  await expect(page.locator("[data-lesson-complete]")).toHaveText("Lección completada");
+  await expect(page.locator("[data-lesson-complete]")).toHaveText("✓ Lección completada · Desmarcar");
   await expect(page.locator("[data-lesson-next]")).toBeVisible();
+  await expect(page.locator("#lesson-route-count")).toHaveText("1 de 17 completadas");
+  await page.locator("[data-lesson-complete]").click();
+  await expect(page.locator("[data-lesson-complete]")).toHaveText("Marcar como completada");
+  await expect(page.locator("[data-lesson-next]")).toHaveCount(0);
+  await expect(page.locator("#lesson-route-count")).toHaveText("0 de 17 completadas");
 });
 
 test("cada lección conserva escena, ejemplo ejecutable y comprobación inmediata",async({page})=>{

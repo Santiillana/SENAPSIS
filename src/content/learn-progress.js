@@ -14,6 +14,24 @@ export function normalizeLearnProgress(value, validLessonIds = [], validTopicIds
   };
 }
 
+/** Calcula el avance solo a partir de lecciones completadas y lecciones del tema. */
+export function calculateLessonProgress(lessonIds = [], completedIds = []) {
+  const lessonSet = new Set(lessonIds);
+  const completedSet = new Set(completedIds);
+  const total = lessonSet.size;
+  const completed = [...lessonSet].filter(id => completedSet.has(id)).length;
+  return { completed, total, percentage: total ? Math.round(completed / total * 100) : 0 };
+}
+
+/** Devuelve un estado de finalización nuevo sin mutar el progreso persistido. */
+export function setLessonCompleted(completedIds = [], lessonId, isComplete = true) {
+  const completed = [...new Set(completedIds)];
+  const index = completed.indexOf(lessonId);
+  if (isComplete && index < 0) completed.push(lessonId);
+  if (!isComplete && index >= 0) completed.splice(index, 1);
+  return completed;
+}
+
 export function dateInBogota(date = new Date()) {
   const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bogota", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(date);
   const value = Object.fromEntries(parts.map(part => [part.type, part.value]));

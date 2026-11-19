@@ -5,7 +5,7 @@ import { rutas } from "../src/content/rutas.js";
 import { exercises, validateCatalog } from "../src/content/exercises.js";
 import { temas, competenciasAprende } from "../src/content/temas.js";
 import { conceptos, conceptoPorEtiqueta, etiquetasConcepto } from "../src/content/conceptos.js";
-import { normalizeLearnProgress, currentStreak } from "../src/content/learn-progress.js";
+import { normalizeLearnProgress, currentStreak, calculateLessonProgress, setLessonCompleted } from "../src/content/learn-progress.js";
 import { exerciseConceptLabels } from "../src/ui/content-view.js";
 import { FICHA } from "../src/content/ficha.js";
 
@@ -148,4 +148,19 @@ test("la migración aditiva de traza:v2:learn conserva el progreso previo",()=>{
 test("la racha cuenta días consecutivos y mantiene el día anterior",()=>{
   assert.equal(currentStreak(["2026-11-15","2026-11-16"],"2026-11-17"),2);
   assert.equal(currentStreak(["2026-11-14","2026-11-15"],"2026-11-17"),0);
+});
+
+test("el progreso de Aprende se calcula con lecciones completas, sin duplicados",()=>{
+  assert.deepEqual(calculateLessonProgress(["a","b"],["a"]),{completed:1,total:2,percentage:50});
+  assert.deepEqual(calculateLessonProgress(["a","b"],["a","a","fuera"]),{completed:1,total:2,percentage:50});
+  assert.deepEqual(calculateLessonProgress([],[]),{completed:0,total:0,percentage:0});
+  assert.deepEqual(calculateLessonProgress(["a","b"],["a","b"]),{completed:2,total:2,percentage:100});
+});
+
+test("el marcado manual de lecciones agrega y quita IDs sin mutar el estado anterior",()=>{
+  const before=["a"];
+  const completed=setLessonCompleted(before,"b",true);
+  assert.deepEqual(completed,["a","b"]);
+  assert.deepEqual(setLessonCompleted(completed,"b",false),["a"]);
+  assert.deepEqual(before,["a"]);
 });
