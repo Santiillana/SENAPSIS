@@ -17,6 +17,23 @@ test("el simulador ofrece los 45 ejercicios y filtra por texto y nivel",async({p
   await expect(page.locator("#simulator-exercise-nav [data-exercise-shortcut]")).toHaveCount(5);
 });
 
+test("Aprende y Mi ficha mantienen sus pestañas separadas al volver al simulador",async({page})=>{
+  await page.goto("/");
+  await goToSpace(page,"simulator");
+  await page.locator('#simulator-exercise-nav [data-exercise-shortcut="22"]').click();
+  await page.locator('[data-section-switch="ficha"]').click();
+  await expect(page.locator("html")).toHaveAttribute("data-section","ficha");
+  await expect(page.locator('[data-subnav-section="ficha"]')).toBeVisible();
+  await expect(page.locator('[data-subnav-section="aprende"]')).toBeHidden();
+  await expect(page.locator("#simulator-exercise-nav")).toBeHidden();
+  await page.locator('[data-section-switch="aprende"]').click();
+  await expect(page.locator("html")).toHaveAttribute("data-section","aprende");
+  await expect(page.locator('[data-subnav-section="aprende"] [data-space="simulator"]')).toHaveAttribute("aria-current","page");
+  await expect(page.locator('[data-subnav-section="ficha"]')).toBeHidden();
+  await expect(page.locator("#simulator-exercise-title")).toContainText("Potencia");
+  await expect(page.locator("#simulator-exercise-nav [aria-pressed='true']")).toHaveAttribute("data-exercise-shortcut","22");
+});
+
 test("los métodos se presentan como opciones y cambian el pseudocódigo del motor",async({page})=>{
   await page.goto("/");
   await goToSpace(page, "simulator");

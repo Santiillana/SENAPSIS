@@ -3323,6 +3323,7 @@ body[data-active-space="simulator"] .topbar#hd .primary-nav{
   margin:0!important;padding:0 clamp(12px,2vw,28px)!important;border-top:0!important;overflow:visible!important
 }
 body[data-active-space="simulator"] .topbar#hd .subnav-group{display:flex!important;width:auto!important;max-width:100%!important;justify-content:center!important;gap:clamp(2px,.5vw,9px)!important}
+body[data-active-space="simulator"] .topbar#hd .subnav-group[hidden]{display:none!important}
 body[data-active-space="simulator"] .topbar#hd .primary-nav .nav-button{
   display:inline-flex!important;flex:0 0 auto!important;min-width:0!important;min-height:44px!important;max-width:none!important;
   padding:0 14px!important;border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;
