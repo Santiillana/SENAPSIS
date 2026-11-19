@@ -18,6 +18,7 @@ import { competenceMarker } from "../ficha/competencias-ui.js";
 import { mathExercises, mathExerciseById } from "../math/exercises.js";
 import { generateMathExercise } from "../math/generators.js";
 import { compare, formatRational, parseRationalAnswer } from "../math/exact.js";
+import { initSheetThemes } from "./sheet-theme.js";
 
 const $ = (selector, root=document) => root.querySelector(selector);
 const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
@@ -443,7 +444,7 @@ function renderLesson(){
   const currentLesson=$("#learn-current-lesson"),currentLessonWrap=$("#learn-current-lesson-wrap");
   if(currentLesson)currentLesson.textContent=lesson.title;
   if(currentLessonWrap)currentLessonWrap.hidden=false;
-  host.innerHTML='<div class="lesson-reader">'+
+  host.innerHTML='<button type="button" class="lesson-sheet-theme-toggle" data-sheet-theme-toggle aria-pressed="false"><span data-sheet-theme-icon aria-hidden="true">◐</span></button><div class="lesson-reader lesson-sheet-reader">'+
     '<header class="lesson-detail-heading"><div><p class="eyebrow">LECCIÓN '+String(lesson.order).padStart(2,"0")+' / '+topicLessonCount+' · '+escapeHTML(lesson.duration.toUpperCase())+' · DIFICULTAD '+lessonDifficulty(lesson)+'/3</p><h3>'+escapeHTML(lesson.title)+'</h3><p>'+escapeHTML(lesson.objective)+'</p><button type="button" class="lesson-list-toggle" data-learn-list>‹ Lista de lecciones</button></div></header>'+
     '<div class="lesson-reading-progress" role="progressbar" aria-label="Progreso de lectura" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>'+idea+concept+term+example+practice+summary+'</div>';
   if($("#lesson-data-input"))updateLessonData();
@@ -769,4 +770,5 @@ export function initContentViews(){
   if(selectedTheme){showLearnPanel("topic");renderTopicSpace();}else showLearnPanel("catalog");
   renderConceptFilters();renderExerciseCards();renderExerciseDetail();
   bindContentEvents();
+  initSheetThemes();
 }

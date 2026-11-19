@@ -71,6 +71,22 @@ test("el movimiento reducido abre la secuencia estática y evita reproducir",asy
   await expect(page.locator("[data-visual-play]")).toHaveAttribute("aria-pressed","false");
 });
 
+test("la cuadrícula de la lección sigue el tema y recuerda su elección",async({page})=>{
+  await page.goto("/");
+  await openDiagramLessons(page);
+  const sheet=page.locator("#lesson-detail");
+  const pageTheme=await page.locator("html").getAttribute("data-theme");
+  await expect(sheet).toHaveAttribute("data-sheet-theme",pageTheme);
+  await page.locator('[data-action="toggle-theme"]').click();
+  await expect(sheet).toHaveAttribute("data-sheet-theme",await page.locator("html").getAttribute("data-theme"));
+  await page.locator("[data-sheet-theme-toggle]").click();
+  const chosen=await sheet.getAttribute("data-sheet-theme");
+  expect(chosen).not.toBe(await page.locator("html").getAttribute("data-theme"));
+  await page.reload();
+  await openDiagramLessons(page);
+  await expect(page.locator("#lesson-detail")).toHaveAttribute("data-sheet-theme",chosen);
+});
+
 test("las lecciones se mantienen dentro del ancho en móvil",async({page})=>{
   await page.setViewportSize({width:375,height:812});
   await page.goto("/");

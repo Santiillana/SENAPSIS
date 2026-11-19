@@ -91,6 +91,8 @@ a{color:inherit}
   --text-muted:var(--muted);
   --on-accent:#1A1400;
   --accent-text:var(--accent-strong);
+  --sheet-light-bg:#FFFDF7;--sheet-light-ink:#1B2A3A;--sheet-light-muted:#53687A;--sheet-light-line:#D8D8CC;--sheet-light-grid:rgba(69,91,108,.14);
+  --sheet-dark-bg:#0F1A24;--sheet-dark-ink:#EDF2F7;--sheet-dark-muted:#BFCBD5;--sheet-dark-line:#2B4051;--sheet-dark-grid:rgba(154,186,215,.16);
   --dur-1:120ms;
   --dur-2:220ms;
   --dur-3:360ms;
