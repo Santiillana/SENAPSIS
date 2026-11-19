@@ -45,6 +45,27 @@ test("la cámara fija conserva encuadre al avanzar y el zoom respeta sus límite
   expect(zoom).toBeGreaterThanOrEqual(.4);
 });
 
+test("la cámara automática mantiene el paso activo en una zona segura y conserva contexto",async({page})=>{
+  await page.setViewportSize({width:1366,height:768});
+  await page.goto("/");
+  await goToSpace(page,"simulator");
+  await page.locator("#simulator-controls-toggle").click();
+  await page.locator("#sim-exercise-select").selectOption("20");
+  for(let step=0;step<9;step++)await page.locator("#simulator-next").click();
+  await expect.poll(()=>page.locator("#flow-svg .diagram-node.is-active").count()).toBe(1);
+  const report=await page.evaluate(()=>{
+    const stage=document.querySelector("#diagram-stage").getBoundingClientRect();
+    const active=document.querySelector("#flow-svg .diagram-node.is-active").getBoundingClientRect();
+    const visible=[...document.querySelectorAll("#flow-svg .diagram-node")].filter(node=>{
+      const box=node.getBoundingClientRect();
+      return box.right>stage.left&&box.left<stage.right&&box.bottom>stage.top&&box.top<stage.bottom;
+    }).length;
+    return {activeInside:active.left>=stage.left&&active.right<=stage.right&&active.top>=stage.top&&active.bottom<=stage.bottom,visible};
+  });
+  expect(report.activeInside,JSON.stringify(report)).toBe(true);
+  expect(report.visible).toBeGreaterThan(1);
+});
+
 test("la reproducción avanza por pasos y se puede pausar",async({page})=>{
   await page.goto("/");
   await goToSpace(page,"simulator");

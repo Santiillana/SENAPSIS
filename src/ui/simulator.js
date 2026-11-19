@@ -692,10 +692,21 @@ function centerActiveNode(event,behavior){
   const stageRect=stage.getBoundingClientRect();
   if(stageRect.width<120||stageRect.height<120)return;
   const free=freeCanvasRect(),target=node.getBoundingClientRect();
-  const goal={
-    x:panOffset.x+(free.left+free.width/2-(target.left+target.width/2)),
-    y:panOffset.y+(free.top+free.height/2-(target.top+target.height/2))
-  };
+  /* Sigue el paso dentro de una zona segura; solo recentra en primer encuadre.
+     Así la cámara conserva figuras vecinas y no salta en cada instrucción. */
+  const safe={left:free.left+free.width*.16,right:free.right-free.width*.16,top:free.top+free.height*.2,bottom:free.bottom-free.height*.2};
+  let shiftX=0,shiftY=0;
+  if(behavior==="auto"){
+    shiftX=free.left+free.width/2-(target.left+target.width/2);
+    shiftY=free.top+free.height/2-(target.top+target.height/2);
+  }else{
+    if(target.left<safe.left)shiftX=safe.left-target.left;
+    else if(target.right>safe.right)shiftX=safe.right-target.right;
+    if(target.top<safe.top)shiftY=safe.top-target.top;
+    else if(target.bottom>safe.bottom)shiftY=safe.bottom-target.bottom;
+  }
+  if(Math.abs(shiftX)<1&&Math.abs(shiftY)<1){stage.dataset.cameraTarget=String(model.id);return;}
+  const goal={x:panOffset.x+shiftX,y:panOffset.y+shiftY};
   if(cameraRaf)cancelAnimationFrame(cameraRaf);
   const finish=()=>{
     panOffset=goal;cameraRaf=0;applyCanvasTransform();
