@@ -81,6 +81,14 @@ test("las lecciones se mantienen dentro del ancho en móvil",async({page})=>{
   await expect(page.locator(".lesson-catalog-panel")).toBeVisible();
 });
 
+test("Aprende ordena competencias principales antes que transversales y las identifica",async({page})=>{
+  await page.goto("/");
+  await goToSpace(page,"learn");
+  const titles=await page.locator("#learn-catalog-bands .learn-competence-band h3").allTextContents();
+  expect(titles).toEqual(["Establecer requisitos","Evaluación de requisitos","TICs","Comunicación","Matemáticas"]);
+  await expect(page.locator("#learn-catalog-bands .learn-competence-band .learn-competence-type")).toHaveText(["Transversal","Transversal","Transversal"]);
+});
+
 test("los tres temas de matemáticas abren sus cinco lecciones con escenas recorribles",async({page})=>{
   await page.goto("/");
   await goToSpace(page,"learn");
