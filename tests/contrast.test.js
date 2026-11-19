@@ -58,16 +58,16 @@ test("las cuatro combinaciones de sección y tema mantienen contraste WCAG AA", 
   }
 });
 
-test("los seis colores de competencia son distintos entre sí y de los estados", () => {
+test("los cinco colores de competencia son distintos entre sí y de los estados", () => {
   for (const [section, theme] of combinations) {
     const values = blockFor(section, theme);
-    const competencies = Array.from({ length: 6 }, (_, index) => values["--comp-" + (index + 1)]);
+    const competencies = Array.from({ length: 5 }, (_, index) => values["--comp-" + (index + 1)]);
     const statuses = [
       "--status-pending", "--status-progress", "--status-submitted",
       "--status-correction", "--status-approved", "--status-overdue"
     ].map(token => values[token]);
-    assert.ok(competencies.every(Boolean), section + "/" + theme + " debe definir seis competencias");
-    assert.equal(new Set(competencies).size, 6, section + "/" + theme + " repite colores de competencia");
+    assert.ok(competencies.every(Boolean), section + "/" + theme + " debe definir cinco competencias");
+    assert.equal(new Set(competencies).size, 5, section + "/" + theme + " repite colores de competencia");
     for (const color of competencies) {
       assert.ok(!statuses.includes(color), section + "/" + theme + " reutiliza un color de estado");
     }

@@ -108,7 +108,6 @@ a{color:inherit}
   --comp-3:#8A5C08;
   --comp-4:#087C70;
   --comp-5:#AC3F59;
-  --comp-6:#58741E;
 }
 
 /*
@@ -161,7 +160,6 @@ a{color:inherit}
   --comp-3:#F4C66A;
   --comp-4:#69CFC1;
   --comp-5:#F09BA8;
-  --comp-6:#B7C977;
 }
 :root[data-section="aprende"][data-theme="light"]{
   color-scheme:light;
@@ -210,7 +208,6 @@ a{color:inherit}
   --comp-3:#8A5C08;
   --comp-4:#087C70;
   --comp-5:#AC3F59;
-  --comp-6:#58741E;
 }
 
 /* Mi ficha: verde bosque y marfil, independiente de la identidad de Aprende. */
@@ -260,7 +257,6 @@ a{color:inherit}
   --comp-3:#F4C66A;
   --comp-4:#69CFC1;
   --comp-5:#F09BA8;
-  --comp-6:#B7C977;
 }
 :root[data-section="ficha"][data-theme="light"]{
   color-scheme:light;
@@ -308,7 +304,6 @@ a{color:inherit}
   --comp-3:#8A5C08;
   --comp-4:#087C70;
   --comp-5:#AC3F59;
-  --comp-6:#58741E;
 }
 
 /* Portada: fondo Aprende y superficies de acceso con la identidad de cada sección. */
@@ -423,21 +418,54 @@ body{background-size:24px 24px}
 
 :root{
   --competence-logica:#4B7A65;
-  --competence-establecer:#806BAE;
-  --competence-evaluar:#397F76;
-  --competence-tics:#4B78AE;
-  --competence-comunicacion:#A95F51;
-  --competence-matematicas:#6D842D;
+  --competence-establecer:var(--comp-1);
+  --competence-evaluar:var(--comp-2);
+  --competence-tics:var(--comp-3);
+  --competence-comunicacion:var(--comp-4);
+  --competence-matematicas:var(--comp-5);
   --competence-pendiente:#65736A;
 }
 :root[data-theme="dark"]{
   --competence-logica:#8CC3A2;
-  --competence-establecer:#B4A1E3;
-  --competence-evaluar:#83CBBE;
-  --competence-tics:#91B6EA;
-  --competence-comunicacion:#E6A092;
-  --competence-matematicas:#B2CC75;
+  --competence-establecer:var(--comp-1);
+  --competence-evaluar:var(--comp-2);
+  --competence-tics:var(--comp-3);
+  --competence-comunicacion:var(--comp-4);
+  --competence-matematicas:var(--comp-5);
   --competence-pendiente:#ADB8B1;
+}
+
+/* Competencia: azul (requisitos), violeta (evaluación), ámbar (TICs),
+   verde azulado (comunicación), rosado (matemáticas). */
+:root{
+  --competence-establecer-requisitos-solid:var(--competence-establecer);
+  --competence-establecer-requisitos-tint:color-mix(in srgb,var(--competence-establecer-requisitos-solid) 12%,var(--card));
+  --competence-establecer-requisitos-border:color-mix(in srgb,var(--competence-establecer-requisitos-solid) 38%,var(--line));
+  --competence-establecer-requisitos-text:var(--competence-establecer-requisitos-solid);
+  --competence-evaluar-requisitos-solid:var(--competence-evaluar);
+  --competence-evaluar-requisitos-tint:color-mix(in srgb,var(--competence-evaluar-requisitos-solid) 12%,var(--card));
+  --competence-evaluar-requisitos-border:color-mix(in srgb,var(--competence-evaluar-requisitos-solid) 38%,var(--line));
+  --competence-evaluar-requisitos-text:var(--competence-evaluar-requisitos-solid);
+  --competence-tics-solid:var(--competence-tics);
+  --competence-tics-tint:color-mix(in srgb,var(--competence-tics-solid) 12%,var(--card));
+  --competence-tics-border:color-mix(in srgb,var(--competence-tics-solid) 38%,var(--line));
+  --competence-tics-text:var(--competence-tics-solid);
+  --competence-comunicacion-solid:var(--competence-comunicacion);
+  --competence-comunicacion-tint:color-mix(in srgb,var(--competence-comunicacion-solid) 12%,var(--card));
+  --competence-comunicacion-border:color-mix(in srgb,var(--competence-comunicacion-solid) 38%,var(--line));
+  --competence-comunicacion-text:var(--competence-comunicacion-solid);
+  --competence-matematicas-solid:var(--competence-matematicas);
+  --competence-matematicas-tint:color-mix(in srgb,var(--competence-matematicas-solid) 12%,var(--card));
+  --competence-matematicas-border:color-mix(in srgb,var(--competence-matematicas-solid) 38%,var(--line));
+  --competence-matematicas-text:var(--competence-matematicas-solid);
+  --competence-logica-programacion-solid:var(--competence-logica);
+  --competence-logica-programacion-tint:color-mix(in srgb,var(--competence-logica-programacion-solid) 12%,var(--card));
+  --competence-logica-programacion-border:color-mix(in srgb,var(--competence-logica-programacion-solid) 38%,var(--line));
+  --competence-logica-programacion-text:var(--competence-logica-programacion-solid);
+  --competence-pendiente-solid:var(--competence-pendiente);
+  --competence-pendiente-tint:color-mix(in srgb,var(--competence-pendiente-solid) 12%,var(--card));
+  --competence-pendiente-border:color-mix(in srgb,var(--competence-pendiente-solid) 38%,var(--line));
+  --competence-pendiente-text:var(--competence-pendiente-solid);
 }
 
 /* Paleta aprobada para la interfaz y las explicaciones. */

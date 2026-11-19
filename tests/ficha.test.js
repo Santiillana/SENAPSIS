@@ -7,8 +7,8 @@ import {
   parsearFechaLocal, hoy, fechaISO, diferenciaDias, inicioSemana, finSemana, diaSemana, textoRelativo
 } from "../src/ficha/fechas.js";
 import {
-  ESTADO, ESTADOS, ESTADOS_MANUALES, ESTADOS_PERSISTIBLES, COLORES_COMPETENCIA,
-  colorCompetencia, checklistVacio, checklistCompleto, cambiarEstadoManual,
+  ESTADO, ESTADOS, ESTADOS_MANUALES, ESTADOS_PERSISTIBLES,
+  checklistVacio, checklistCompleto, cambiarEstadoManual,
   registrarResultadoInstructor, actualizarChecklist
 } from "../src/ficha/estados.js";
 import {
@@ -276,11 +276,7 @@ test("confirmar entrega mueve a Entregada y la actividad aprobada no se puede re
   assert.throws(() => actualizarChecklist(ESTADO.EN_CURSO, checklistVacio(), "desconocido", true), RangeError);
 });
 
-test("las competencias tienen seis tonos propios y exponen el código para la interfaz", () => {
-  assert.equal(COLORES_COMPETENCIA.length, 6);
-  assert.equal(new Set(COLORES_COMPETENCIA.map(item => item.oscuro)).size, 6);
-  assert.equal(colorCompetencia(1, "claro"), "#526A26");
-  assert.equal(colorCompetencia(7), null);
+test("los estados siguen etiquetados independientemente del color de competencia", () => {
   assert.equal(ESTADOS[ESTADO.PENDIENTE].etiqueta, "Pendiente");
   assert.equal(ESTADOS[ESTADO.ATRASADA].derivado, true);
 });

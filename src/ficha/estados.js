@@ -50,21 +50,6 @@ export const ESTADOS_PERSISTIBLES = Object.freeze([
   ESTADO.POR_CORREGIR, ESTADO.APROBADA
 ]);
 
-// Colores de competencia independientes de la semántica de estados.
-export const COLORES_COMPETENCIA = Object.freeze([
-  Object.freeze({ comp: 1, oscuro: "#7C9448", claro: "#526A26" }),
-  Object.freeze({ comp: 2, oscuro: "#6578C6", claro: "#40549C" }),
-  Object.freeze({ comp: 3, oscuro: "#C28A45", claro: "#80551F" }),
-  Object.freeze({ comp: 4, oscuro: "#27998D", claro: "#176D65" }),
-  Object.freeze({ comp: 5, oscuro: "#A36D9A", claro: "#74496E" }),
-  Object.freeze({ comp: 6, oscuro: "#5598B1", claro: "#326B82" })
-]);
-
-export function colorCompetencia(indice, tema = "oscuro") {
-  const registro = COLORES_COMPETENCIA.find(item => item.comp === Number(indice));
-  return registro ? registro[tema] ?? registro.oscuro : null;
-}
-
 export function checklistVacio() {
   return { subida: false, enviada: false, confirmada: false };
 }
