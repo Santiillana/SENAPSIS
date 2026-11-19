@@ -118,25 +118,30 @@ function rectIntersects(a,b,gap=0){
 }
 function contextWindowMarkup(event){
   const name=event.change?.name??"Variable";
-  if(event.type==="input")return {
-    title:"Entra un dato",
-    body:'<div class="sim-vf-flow"><span class="sim-vf-chip">'+esc(fmt(event.value??event.change?.value))+'</span><span>↓</span><b>'+esc(name)+'</b></div><p>El siguiente valor de entrada se guarda en la variable '+esc(name)+'.</p>'
-  };
+  const coach=(what,why,visual="")=>({
+    title:"Guía del paso",
+    body:visual+'<div class="sim-vf-coach"><p><b>Qué pasa</b><span>'+esc(what)+'</span></p><p><b>Por qué</b><span>'+esc(why)+'</span></p></div>'
+  });
+  if(event.type==="input")return coach(
+    "El valor "+fmt(event.value??event.change?.value)+" se guarda en "+name+".",
+    "El programa lo necesita para los cálculos que siguen.",
+    '<div class="sim-vf-flow"><span class="sim-vf-chip">'+esc(fmt(event.value??event.change?.value))+'</span><span>↓</span><b>'+esc(name)+'</b></div>'
+  );
   if(["assignment","loop-init","loop-update"].includes(event.type)&&event.change){
-    return {
-      title:"La variable cambia",
-      body:'<div class="sim-vf-flow">'+(event.change.previous===undefined?"":'<s>'+esc(fmt(event.change.previous))+'</s><span>→</span>')+'<b>'+esc(name)+'</b><strong>'+esc(fmt(event.change.value))+'</strong></div><p>'+esc(brief(event))+'</p>'
-    };
+    const why=event.type==="loop-init"?"Deja listo el contador para empezar las vueltas.":event.type==="loop-update"?"Acerca el contador al final del ciclo.":"El nuevo valor permite continuar el algoritmo.";
+    return coach(brief(event),why,'<div class="sim-vf-flow">'+(event.change.previous===undefined?"":'<s>'+esc(fmt(event.change.previous))+'</s><span>→</span>')+'<b>'+esc(name)+'</b><strong>'+esc(fmt(event.change.value))+'</strong></div>');
   }
   if(event.type==="decision"||event.type==="loop-condition"||event.type==="branch"){
-    return {
-      title:event.type==="decision"?"Decisión":"Condición del ciclo",
-      body:'<p class="sim-vf-condition">'+esc(substituteValues(event.condition??event.sourceText,event.variables))+'</p><strong class="sim-vf-result '+(event.result?"is-true":"is-false")+'">'+(event.result?"V · VERDADERA":"F · FALSA")+'</strong><p>'+(event.result?"Se sigue la rama verdadera.":"Se sigue la rama falsa.")+'</p>'
-    };
+    return coach(
+      "Se compara "+substituteValues(event.condition??event.sourceText,event.variables)+"; la respuesta es "+(event.result?"verdadera.":"falsa."),
+      event.type==="loop-condition"?"La respuesta indica si el ciclo da otra vuelta o termina.":"La respuesta elige qué camino sigue el programa.",
+      '<p class="sim-vf-condition">'+esc(substituteValues(event.condition??event.sourceText,event.variables))+'</p><strong class="sim-vf-result '+(event.result?"is-true":"is-false")+'">'+(event.result?"V · VERDADERA":"F · FALSA")+'</strong>'
+    );
   }
-  if(event.type==="output")return {title:"Sale en pantalla",body:'<div class="sim-vf-output">'+esc(fmt(event.value))+'</div><p>El resultado aparece en Pantalla.</p>'};
-  if(event.type==="program-end")return {title:"Algoritmo finalizado",body:'<p>El recorrido terminó. Las variables y la pantalla conservan el estado final.</p>'};
-  return {title:"Paso activo",body:'<p>'+esc(brief(event))+'</p>'};
+  if(event.type==="output")return coach("El valor "+fmt(event.value)+" aparece en pantalla.","Así puedes ver el resultado que calculó el algoritmo.",'<div class="sim-vf-output">'+esc(fmt(event.value))+'</div>');
+  if(event.type==="program-end")return coach("El recorrido terminó.","Ahora puedes revisar los valores finales y el resultado mostrado.");
+  if(event.type==="program-start")return coach("El programa empieza en la primera figura.","Seguimos las flechas para saber qué instrucción ocurre después.");
+  return coach(brief(event),"Este paso prepara o explica lo que viene después.");
 }
 function diagramNodeForEvent(event){
   if(!diagram||!event)return null;

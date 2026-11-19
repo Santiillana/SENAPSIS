@@ -9,6 +9,8 @@ test("el clic físico de Siguiente avanza y sincroniza el paso de entrada",async
   await page.locator("#simulator-next").click();
   await expect(page.locator("body")).toHaveAttribute("data-simulator-step","1");
   await expect(page.locator("#scene-content")).toHaveAttribute("data-event-type","input");
+  await expect(page.locator("#vf")).toContainText("Qué pasa");
+  await expect(page.locator("#vf")).toContainText("Por qué");
   await expect(page.locator('#variables-content [data-variable-card="a"]')).toContainText("8");
   expect(errors).toEqual([]);
 });

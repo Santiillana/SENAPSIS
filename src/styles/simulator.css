@@ -833,6 +833,10 @@ body[data-active-space="simulator"] .sim-vf-result{display:inline-block;padding:
 body[data-active-space="simulator"] .sim-vf-result.is-true{color:#073c27;background:#b9efd3}
 body[data-active-space="simulator"] .sim-vf-result.is-false{color:#702233;background:#ffc6d1}
 body[data-active-space="simulator"] .sim-vf-condition{font:700 13px ui-monospace,monospace;color:var(--ink)}
+body[data-active-space="simulator"] .sim-vf-coach{display:grid;gap:7px;margin-top:10px;padding-top:8px;border-top:1px solid var(--line)}
+body[data-active-space="simulator"] .sim-vf-coach p{display:grid;gap:2px;margin:0!important}
+body[data-active-space="simulator"] .sim-vf-coach b{font-size:11px;letter-spacing:.035em;color:var(--traza-amber)}
+body[data-active-space="simulator"] .sim-vf-coach span{font-size:13px;line-height:1.4;color:var(--traza-text)}
 body[data-active-space="simulator"] .sim-context-cable{
  position:absolute;left:-10px;top:50%;width:10px;border-top:1px dashed #9a78ed
 }
@@ -3062,6 +3066,8 @@ body[data-active-space="simulator"] #PR #variables-content{
 }
 body[data-active-space="simulator"] #PR .variable-cards{align-content:start!important}
 body[data-active-space="simulator"] #PR .variable-card{min-width:0!important}
+body[data-active-space="simulator"] .sim-context-window{width:min(310px,calc(100vw - 24px));max-height:260px;overflow:auto}
+@media(max-width:900px){body[data-active-space="simulator"] .sim-context-window{width:min(286px,calc(100vw - 20px));max-height:220px}}
 
 html[data-theme="light"] body[data-active-space="simulator"]{
   --bg:var(--traza-observatory);--grid:var(--traza-stage-grid);--card:var(--traza-glass);
