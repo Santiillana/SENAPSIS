@@ -13,6 +13,10 @@
   <main id="admin-main" class="admin-shell">
     <header class="admin-header"><a href="/" class="admin-brand">traza<span>.</span></a><div><p class="eyebrow">MODERACIÓN</p><h1>Administrar la ficha</h1><p id="admin-session" role="status">Comprobando acceso…</p></div><span id="admin-version" class="admin-version">Sin publicar</span></header>
     <div id="admin-access-error" class="admin-alert" role="alert" hidden></div>
+    <nav id="admin-tabs" class="admin-tabs" aria-label="Herramientas de administración" hidden>
+      <button type="button" data-admin-tab="daily" aria-pressed="true">Registro diario</button>
+      <button type="button" data-admin-tab="management" aria-pressed="false">Gestión</button>
+    </nav>
     <form id="admin-daily-form" class="admin-panel" hidden>
       <header class="admin-panel-heading"><div><p class="eyebrow">REGISTRO RÁPIDO DEL DÍA</p><h2>Clase y evidencias</h2><p>El borrador se guarda mientras editas. Solo «Publicar» lo comparte con los aprendices.</p></div><span id="admin-draft-status" class="admin-draft-status" role="status">Borrador sincronizado</span></header>
       <div class="admin-form-grid">
@@ -28,6 +32,7 @@
       <div class="admin-actions"><button class="admin-button admin-button-primary" type="submit">Guardar borrador</button><button class="admin-button" type="button" data-admin-publish disabled>Publicar</button><button class="admin-button admin-button-quiet" type="button" data-admin-undo disabled>Deshacer última publicación</button></div>
       <p id="admin-feedback" class="admin-feedback" role="status" aria-live="polite"></p>
     </form>
+    <section id="admin-management" class="admin-panel" hidden aria-label="Gestión de la ficha"></section>
   </main>
 </body>
 </html>

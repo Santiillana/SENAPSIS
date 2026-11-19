@@ -13,10 +13,12 @@ export function competenceMarker(id, className = "") {
   const competencia = competenciaPorId(id);
   const forma = competencia?.forma ?? "circulo";
   const key = competenceKey(id);
-  return `<span class="competence-marker competence-marker--${key} ${className}" data-forma="${forma}" data-competence="${key}" aria-hidden="true"></span>`;
+  const color=/^#[0-9a-f]{6}$/i.test(competencia?.color??"")?` style="background:${competencia.color}"`:"";
+  return `<span class="competence-marker competence-marker--${key} ${className}" data-forma="${forma}" data-competence="${key}"${color} aria-hidden="true"></span>`;
 }
 
 export function competenceLogo(id) {
   const key = competenceKey(id);
-  return `<span class="competence-emblem competence-emblem--${key}" aria-hidden="true">${competenceMarker(id)}</span>`;
+  const competence=competenciaPorId(id),color=/^#[0-9a-f]{6}$/i.test(competence?.color??"")?` style="--competence-color:${competence.color};--competence-tint:color-mix(in srgb,${competence.color} 13%,var(--card))"`:"";
+  return `<span class="competence-emblem competence-emblem--${key}"${color} aria-hidden="true">${competenceMarker(id)}</span>`;
 }

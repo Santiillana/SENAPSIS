@@ -23,7 +23,7 @@ export function isPublishedFicha(value){
 function applyPayload(payload){
   if(!isPublishedFicha(payload))return false;
   for(const key of Object.keys(FICHA))delete FICHA[key];
-  for(const field of fields)FICHA[field]=field==="meta"?payload[field]:payload[field].filter(item=>!item.deletedAt);
+  for(const field of fields)FICHA[field]=field==="meta"?payload[field]:payload[field].filter(item=>!item.deletedAt&&(field!=="competencias"||item.activa!==false));
   if(!FICHA.meta.version)FICHA.meta.version="publicada";
   FICHA.meta.esDemostracion=payload.meta.esDemostracion===true;
   return true;

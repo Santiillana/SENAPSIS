@@ -6,53 +6,35 @@ Actualizado: 19 de noviembre de 2026
 
 | Fase | Estado | Último commit |
 | --- | --- | --- |
-| 0 | completa | feat(step-7): añadir helper checkView |
-| 1 | completa | docs(step-18): cerrar tanda de mejoras del simulador |
-| 2 | completa | `ba0ac0f` |
-| 3 | auditoría completa; 3b espera aprobación explícita | `c7cf5f0` |
-| 4 | completa | `14e86de` |
-| 5 | en curso, step 7 | en curso |
-| 6 | pendiente; multi-ficha excluida | |
-| 7 | en curso, step 4 | registro rápido diario listo; gestión pendiente |
-| 8 | step 1 auditado | migración en espera de fase 7 |
+| 0–4 | completas | commits previos de la rama |
+| 5 | completa, pasos 1–7 | `007d18d` (paso 7) |
+| 6 | excluida temporalmente; no implementar multi-ficha | — |
+| 7 | pasos 1–5 completos; step 6 pendiente | `dcb0970` (paso 4) |
+| 8 | step 1 auditado; migraciones pendientes | `3623e52` |
 
-## Rutas y decisiones verificadas
+## Arquitectura y decisiones
 
-- `src/content/ficha.js` y `src/content/temas.js` son fuentes de verdad de competencias y temas; `src/content/exercises.js`, `source-exercises.js` y `src/math/exercises.js` contienen los 108 ejercicios actuales.
-- `src/content/exercise-adapter.js` adapta los tres bancos al esquema común y valida estructura; no modifica datos fuente.
-- `scripts/auditar-ejercicios.mjs` genera `docs/auditoria-ejercicios.csv`; el análisis y la recomendación están en `docs/auditoria-ejercicios.md`.
-- `src/content/exercise-solution.js` normaliza la presentación de los apartados disponibles y omite los vacíos.
-- Ejercicios inicia en competencias y temas; el banco y sus controles técnicos solo aparecen al abrir un tema. Las tarjetas ya muestran cantidad y avance local.
-- En un tema, Ejercicios usa lista lateral ordenada por dificultad, estado pendiente/visto/resuelto, filtros textuales y búsqueda solo en catálogos grandes; en móvil la lista se colapsa sobre la hoja.
-- La hoja de ejercicios de flujo usa cuadrícula compartida claro/oscuro, presenta únicamente apartados disponibles, enlaza conceptos, conserva el pseudocódigo de referencia y permite abrir el Simulador o marcar/desmarcar como resuelto. El scroll se conserva por ejercicio durante la navegación de la sesión; el progreso resuelto y la preferencia de tema se guardan localmente.
-- El Laboratorio muestra competencias y temas antes de sus mecánicas. `temas.js` asigna 10 mecánicas a Diagramas de flujo, 6 a Fuentes y las referencias de `MATH_LAB` asignan 6 a cada uno de Enteros, Racionales y Regla de tres (34 mecánicas tema–catálogo). Sin catálogo disponible, el tema queda atenuado como «Próximamente».
-- Las mecánicas compartidas por identificador son `match`, `order`, `fill-gap`, `error` y `whatif`; cada tema las usa mediante su generador ya existente. Matemáticas y Fuentes agrupan explícitamente en Observa, Construye e Investiga; Flujo conserva las familias de lectura, construcción y depuración. Los filtros de concepto muestran únicamente opciones del tema y se ocultan cuando hay menos de cuatro; dificultad usa Básico, Intermedio, Avanzado y Reto.
-- Estrellas y medallas mantienen `traza:v2:progress`: las estrellas por reto conservan su máximo histórico; la medalla se calcula al alcanzar tres mecánicas con tres estrellas para un concepto del tema. La portada del Laboratorio suma los mejores resultados de cada mecánica, de `0` a `3 × mecánicas`.
-- Según `docs/auditoria-ejercicios.csv`, faltan apartados en 108 ejercicios: flujo (45) carece de «Cuándo se usa»; Matemáticas (39) carece de «Para qué sirve», «Solución paso a paso» normalizada y «Cuándo se usa»; Fuentes (23) carece de «Por qué se resuelve así», «Para qué sirve» y «Cuándo se usa»; un ejercicio de Fuentes carece de los cinco apartados. Se omiten al renderizar. Completar contenido sigue sujeto a aprobación expresa de la fase 3b.
-- El selector actual del Simulador carga 45 ejercicios de flujo; la referencia HTML contiene 30. El valor 44 del plan está desactualizado.
-- La entrada del Simulador organiza los 108 ejercicios por competencia, tema y ejercicio, y deriva cada selección al reproductor dedicado de Flujo, Fuentes o Matemáticas. Abrirlo desde Aprende conserva el acceso directo al ejercicio seleccionado.
-- Fase 8, step 1: Fuentes usa `source-simulator.js` con fuente activa, pasos de escenario y cobertura de requisitos/áreas; sus carriles P/S/T, ruta y hoja ya expresan la plantilla `clasificacion`. Matemáticas usa `math-player.js`: pasos `table`, `area`, `cross`, `result`, `check`, `fraction` y `tree`, con operación exacta y resultado parcial. Ambos poseen controles y animación propios; no consumen aún `createSimulatorShell`.
-- Brecha fase 8: el contrato compartido exige `id`, `foco`, `globo`, `escena.tipo/datos`, `estado`, `salida` y `frase`. Las plantillas nuevas deben adaptar cada paso existente a esos campos y usar `createSimulatorShell`; `renderScene` solo contiene escenas de Flujo, por lo que clasificación y cálculo necesitan renderers de dominio con secuencia estática/reducida y sin alterar los bancos fuente.
-- Fase 7 step 1: el repo no incluye Worker, `wrangler` ni migraciones; se preparó un Worker API aislado, validación RS256 de Cloudflare Access con audiencia/emisor/lista de moderadores y D1 singleton de contenido/auditoría. Sin datos `ficha_id` ni estado personal. Configuración y despliegue quedan pendientes de la cuenta.
-- Fase 7 step 2: API pública `version`/`state` con caché de 60 s y ETag; repositorio del cliente valida y restaura última publicación local antes de consultar red, refresca al volver el foco y registra service worker con fallback offline. Indicadores «Nuevo», «Actualizado hoy» y «Sin conexión». Falta conectar el Worker a la ruta del hosting.
-- Fase 7 step 3: borradores con If-Match, validación estricta del manifiesto, URLs HTTPS y fechas, Access firmado por solicitud, límite 30 escrituras/min/moderador, auditoría de secciones, publicación versionada e inversión como nueva versión. D1 sigue siendo una sola ficha.
-- Fase 7 step 4: `/administrar.html` comprueba sesión Access y registra clase/no-clase, temas, enlaces con tipo detectado y evidencia con fecha límite; precarga horario e información de la clase anterior, guarda borrador tras cambios y permite publicar/deshacer. Formularios nativos de teclado, metas de 44 px y diseño móvil.
-- La multi-ficha queda fuera. No se deben añadir `ficha_id` ni selección de varias fichas.
-- La Fase 3b requiere aprobación del informe y solicitud expresa; no redactar ejercicios nuevos ni reescritos antes de eso.
-- `reference/` permanece protegida. Los archivos del usuario no relacionados se mantienen sin cambios ni se incluyen en commits.
+- `src/content/` y `src/math/` son fuente de verdad. Los bancos actuales contienen 108 ejercicios; `exercise-adapter.js` adapta y valida sin mutar los catálogos.
+- Fase 3b espera aprobación expresa del informe antes de redactar o reescribir contenido. `MAT-ENT-15` requiere confirmar transcripción. `reference/` está protegida.
+- Aprende ofrece competencias → temas → ejercicios, lista ordenada, filtros, estado local y hoja de lectura con apartados disponibles, tema compartido, enlaces, pseudocódigo opcional, simulador, resolución y scroll restaurado.
+- Laboratorio agrupa 34 mecánicas por competencia/tema, conserva estrellas y medallas; el Simulador permite competencia → tema → ejercicio y mantiene accesos directos desde Aprende.
+- Fuentes y Matemáticas aún usan reproductores propios. La fase 8 migrará ambos a `createSimulatorShell`, sin cambiar los catálogos; el inventario de brechas está en el historial del step 1.
+- Fase 7 implementa Worker, D1 singleton, Access JWT, lectura con caché y respaldo offline, escritura versionada con auditoría y el panel `/administrar.html`. Multi-ficha y estado personal sincronizado quedan fuera.
+- El panel incluye registro diario y, al completar step 5, gestión de competencias, horarios, instructores, comunicados y metadatos; contactos públicos requieren consentimiento y los borrados son lógicos.
+- No desplegar ni cambiar la cuenta de Cloudflare. Antes de eso, el usuario debe crear D1, configurar Access/rutas y aprobar; entregar instrucciones exactas.
+- Cambios ajenos ya presentes en el árbol: README, mapa, progreso, simulador, prueba de contrato de teclado y archivos de `mejoras imp/`. Mantenerlos fuera de commits salvo necesidad clara y origen identificable.
 
-## Validación registrada
+## Próximos pasos
+- Fase 7 step 6: vista previa, historial, deshacer y exportar/importar JSON.
+- Documentar pasos Cloudflare y detenerse antes de cualquier despliegue o cambio de cuenta.
+- Fase 8 steps 2–4: migrar Fuentes y Matemáticas, retirar código viejo solo sin usos; step 5: barrido responsive en 390/768/1366, tema claro, README y mapa.
+- Ejecutar validaciones focalizadas y la suite Node/E2E al cierre; separar cada step en su propio commit.
 
-- Fase 2: contraste AA en ambos temas; suite Node 356/356; Aprende E2E 8/8.
-- Fase 4: panel Mi progreso accesible; pruebas de esquema/contenido 3/3; Mi progreso E2E 2/2; retención de estrellas del Laboratorio 1/1.
-- Fase 3: los bancos validan el esquema; no se detectan duplicados exactos ni descensos de nivel por orden; `MAT-ENT-15` está pendiente de confirmar transcripción.
-- Fase 5 step 3: flujo de lista lateral y hoja verificado en móvil, portátil y monitor; suite E2E de módulos 2 y 4, Fuentes y Constructor: 26/26 pruebas aprobadas en la última corrida completa previa al ajuste de scroll; prueba responsive focalizada: 1/1.
-- Fase 5 step 4: hoja de flujo implementada; la cobertura verifica apartados opcionales, tema compartido al navegar y tras recarga, scroll por ejercicio, persistencia de resuelto y foco al marcar. `node --test tests/exercise-solution.test.js`: 1/1; `npx playwright test e2e/module-4-exercises.spec.js --workers=1`: 11/11; `git diff --check`: limpio.
-- Fase 5 step 5: figuras y listas de solución se activan al entrar en la zona visible; movimiento reducido deja la secuencia completa estática y, sin `IntersectionObserver`, la escena se muestra completa desde el inicio. `npx playwright test e2e/module-4-exercises.spec.js --workers=1`: 11/11; `git diff --check`: limpio.
-- Fase 5 step 6: catálogo por competencia y tema, familias compactas, filtros con etiquetas textuales y resumen de estrellas implementados. Pruebas de lógica del Laboratorio: 4/4; E2E de Flujo, Matemáticas y Fuentes: 17/17; `node --check src/ui/lab.js` y `git diff --check`: limpios.
-- Fase 5 step 7: selector de competencia → tema → ejercicio para los tres reproductores; acceso directo desde Aprende preservado. `e2e/simulator-entry.spec.js`: 2/2; `e2e/module-4-exercises.spec.js`: 11/11, incluido el acceso directo a Flujo y Matemáticas.
-- Auditoría de fase 8: Fuentes produce secuencia de fuentes con aportes, requisitos y cobertura; Matemáticas produce secuencia exacta a partir de solución/reglas. El foco actual es exclusivamente vista; los reproductores conservan estado y controles dentro de sus módulos dedicados.
-- Fase 7 step 1: `node --test tests/access.test.js`: 1/1 archivo; validación SQL de migración con SQLite en memoria: 5 tablas; `node --check` y `git diff --check` limpios. Migración remota sin ejecutar hasta crear D1 en la cuenta.
-- Fase 7 step 2: `node --test tests/state-api.test.js`: 4/4; `e2e/ficha-sync.spec.js`: 2/2, incluida vista móvil sin overflow; `e2e/simulator-entry.spec.js` + `e2e/module-4-exercises.spec.js`: 13/13 tras el arranque del repositorio; sintaxis y `git diff --check` limpios.
-- Fase 7 step 3: `node --test` en validación, Access firmado, CORS y endpoints sin sesión: 5/5 archivos; ambas migraciones SQL ejecutan en SQLite; sintaxis y `git diff --check` limpios.
-- Fase 7 step 4: `e2e/admin-daily.spec.js`: 1/1 a 390 px; valida borrador, clase/temas, documento HTTPS, evidencia, publicación y deshacer; `node --check` y `git diff --check` limpios.
+## Validación reciente
+
+- Fase 5 step 4: hoja y persistencia; ejercicio-solution 1/1, módulos 4 E2E 11/11.
+- Fase 5 step 5: animación accesible y movimiento reducido; módulos 4 E2E 11/11.
+- Fase 5 step 6: Laboratorio 4/4 y E2E 17/17; step 7: entrada Simulador 2/2 y módulos 4 11/11.
+- Fase 7 steps 1–3: validación API/Access, migraciones SQLite y pruebas de servidor completas; steps 2 E2E 2/2.
+- Fase 7 step 4: registro diario E2E 1/1 en 390 px; valida borrador, publicación y deshacer.
+- Fase 7 step 5: competencias, horario, instructores, comunicados y metadatos; E2E `admin-management`/`admin-daily` 2/2, validación del Worker 2/2.

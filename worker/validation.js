@@ -29,6 +29,11 @@ export function validateFichaPayload(payload){
       if(Object.hasOwn(item,"url")&&item.url!=null&&item.url!==""){
         try{if(new URL(item.url).protocol!=="https:")errors.push(`${path}.url debe usar HTTPS.`);}catch{errors.push(`${path}.url no es un enlace válido.`);}
       }
+      if(Object.hasOwn(item,"foto")&&item.foto){try{if(new URL(item.foto).protocol!=="https:")errors.push(`${path}.foto debe usar HTTPS.`);}catch{errors.push(`${path}.foto no es un enlace válido.`);}}
+      if(Object.hasOwn(item,"color")&&!/^#[0-9a-f]{6}$/i.test(String(item.color)))errors.push(`${path}.color debe ser hexadecimal #RRGGBB.`);
+      if(field==="competencias"&&item.tipo&&!['principal','transversal'].includes(item.tipo))errors.push(`${path}.tipo no es válido.`);
+      if(field==="competencias"&&item.forma&&!['circulo','rombo','cuadrado','triangulo','hexagono'].includes(item.forma))errors.push(`${path}.forma no es válida.`);
+      if(field==="comunicados"&&item.fijado!==undefined&&typeof item.fijado!=="boolean")errors.push(`${path}.fijado debe ser booleano.`);
       for(const [key,value] of Object.entries(item))if(typeof value==="string"&&value.length>20_000)errors.push(`${path}.${key} supera el máximo permitido.`);
     });
   }

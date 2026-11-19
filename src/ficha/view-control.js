@@ -23,7 +23,8 @@ function renderHorario(fecha) {
     const interior = clases.length ? clases.map((clase, classIndex) => {
       const competencia = FICHA.competencias.find(item => item.id === clase.competenciaId);
       const competenciaId = competencia?.id ?? "clase-sabado-por-confirmar";
-      return `<article class="control-class" data-competence="${competenceKey(competenciaId)}" style="--class-order:${classIndex}">
+      const color=/^#[0-9a-f]{6}$/i.test(competencia?.color??"")?`;--competence-color:${competencia.color};--competence-tint:color-mix(in srgb,${competencia.color} 13%,var(--card))`:"";
+      return `<article class="control-class" data-competence="${competenceKey(competenciaId)}" style="--class-order:${classIndex}${color}">
         <div class="control-class-heading">${competenceLogo(competenciaId)}<span><strong>${escaparHTML(competencia?.nombre ?? clase.titulo ?? "Por confirmar")}</strong><small>${escaparHTML(clase.instructor?.nombre ?? "Instructor por confirmar")}</small></span></div>
         <time>${escaparHTML(clase.inicio)} – ${escaparHTML(clase.fin)}</time>
       </article>`;
