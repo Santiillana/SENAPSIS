@@ -3092,6 +3092,13 @@ body[data-active-space="simulator"] #PV .scene-process-result strong{font-size:c
 body[data-active-space="simulator"] #PV .scene-output-paper{min-height:74px!important;min-width:min(190px,100%)!important;align-content:center!important;padding:12px!important}
 body[data-active-space="simulator"] #PV .scene-output-paper>strong{font:800 24px/1.15 ui-monospace,monospace!important;color:var(--traza-green)!important}
 
+/* Paso 26: la tarjeta acompaña el recorrido con una aparición suave y breve. */
+body[data-active-space="simulator"] .sim-context-window.is-arriving .sim-vf-coach p{animation:coach-line-arrive 260ms ease-out both}
+body[data-active-space="simulator"] .sim-context-window.is-arriving .sim-vf-coach p:nth-child(2){animation-delay:55ms}
+@keyframes coach-line-arrive{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){body[data-active-space="simulator"] .sim-context-window.is-arriving .sim-vf-coach p{animation:none!important}}
+:root[data-motion="reduced"] body[data-active-space="simulator"] .sim-context-window.is-arriving .sim-vf-coach p{animation:none!important}
+
 /* Paso 25: identidad y tipografía compartidas entre escena y memoria. */
 body[data-active-space="simulator"] #PV.scene-panel{--window-identity:var(--traza-blue)}
 body[data-active-space="simulator"] #PR.variables-panel{--window-identity:var(--traza-green)}

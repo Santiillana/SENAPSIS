@@ -59,6 +59,9 @@ test("el movimiento reducido conserva el resaltado e impide vuelos secundarios",
   await page.locator("#simulator-next").click();
   await expect(page.locator("#PR.variables-panel.is-pulsing")).toBeVisible();
   await expect(page.locator("#simulator-flight-layer .sim-flight-chip")).toHaveCount(0);
+  await expect(page.locator("#vf .sim-vf-coach")).toBeVisible();
+  const motion=await page.locator("#vf .sim-vf-coach p").first().evaluate(node=>getComputedStyle(node).animationName);
+  expect(motion).toBe("none");
 });
 
 test("En escena muestra una ilustración y una explicación concreta sin repetir paneles",async({page})=>{
