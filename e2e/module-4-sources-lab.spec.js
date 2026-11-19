@@ -4,7 +4,7 @@ async function openSourceLab(page){
   await page.goto("/");await page.evaluate(()=>localStorage.removeItem("traza:v2:learn"));await page.reload();await goToSpace(page,"learn");
   await page.locator('[data-learn-competence="establecer-requisitos"]').click();
   await page.locator('[data-topic-open="fuentes-informacion"]').click();
-  await page.locator('[data-topic-tab="laboratorio"]').click();
+  await goToSpace(page,"lab");
   await expect(page.locator("#view-lab")).toBeVisible();
 }
 

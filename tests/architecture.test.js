@@ -34,12 +34,13 @@ test("Aprende separa catálogo, tema y progreso y guarda sus vistas en el progre
   const html = await read("../index.html");
   const content = await read("../src/ui/content-view.js");
   const progress = await read("../src/content/learn-progress.js");
-  for (const id of ["learn-catalog-home", "learn-topic-space", "learn-topic-tabs", "learn-progress-page", "learn-progress-topics"]) {
+  for (const id of ["learn-catalog-home", "learn-competence-filters", "learn-catalog-bands", "learn-topic-space", "learn-progress-page", "learn-progress-topics"]) {
     assert.match(html, new RegExp('id="' + id + '"'));
   }
+  assert.doesNotMatch(html, /learn-topic-tabs|learn-topic-select|learn-difficulty/);
   assert.match(content, /localStorage\.getItem\("traza:v2:learn"\)/);
   assert.match(content, /learnProgress\.theme=selectedTheme/);
-  assert.match(content, /learnProgress\.tab=topicTab/);
+  assert.doesNotMatch(content, /learnProgress\.tab|data-topic-tab|learnDifficulty/);
   assert.match(progress, /activityDays/);
 });
 

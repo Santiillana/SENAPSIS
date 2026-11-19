@@ -141,7 +141,7 @@ test("la migración aditiva de traza:v2:learn conserva el progreso previo",()=>{
   assert.equal(migrated.screen,3);
   const next=normalizeLearnProgress({...migrated,theme:"diagramas-flujo",tab:"ejercicios",activityDays:["2026-11-16"]},lessons.map(item=>item.id),temas.map(item=>item.id));
   assert.equal(next.theme,"diagramas-flujo");
-  assert.equal(next.tab,"ejercicios");
+  assert.equal(next.tab,undefined);
   assert.deepEqual(next.activityDays,["2026-11-16"]);
 });
 

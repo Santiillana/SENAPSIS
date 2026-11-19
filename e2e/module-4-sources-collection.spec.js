@@ -5,7 +5,7 @@ async function openSourceExercises(page){
   await goToSpace(page,"learn");
   await page.locator('[data-learn-competence="establecer-requisitos"]').click();
   await page.locator('[data-topic-open="fuentes-informacion"]').click();
-  await page.locator('[data-topic-tab="ejercicios"]').click();
+  await goToSpace(page,"exercises");
   await expect(page.locator("#view-exercises")).toBeVisible();
 }
 
@@ -63,7 +63,7 @@ test("la Mesa ofrece controles de paso y se adapta a móvil",async({page})=>{
   await goToSpace(page,"learn");
   await page.locator('[data-learn-competence="establecer-requisitos"]').click();
   await page.locator('[data-topic-open="fuentes-informacion"]').click();
-  await page.locator('[data-topic-tab="simulador"]').click();
+  await goToSpace(page,"simulator");
   await expect(page.locator("#source-simulator")).toBeVisible();
   await expect(page.locator("[data-source-sim-next]")).toBeEnabled();
   await page.locator("[data-source-sim-next]").click();
@@ -76,5 +76,5 @@ test("la Mesa ofrece controles de paso y se adapta a móvil",async({page})=>{
   await page.locator("[data-source-sim-exit]").click();
   await expect(page.locator("#view-learn")).toBeVisible();
   await goToSpace(page,"simulator");
-  await expect(page.locator(".simulator-grid")).toBeVisible();
+  await expect(page.locator("#source-simulator")).toBeVisible();
 });

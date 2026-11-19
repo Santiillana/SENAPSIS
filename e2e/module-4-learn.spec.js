@@ -81,12 +81,22 @@ test("las lecciones se mantienen dentro del ancho en móvil",async({page})=>{
   await expect(page.locator(".lesson-catalog-panel")).toBeVisible();
 });
 
-test("Aprende ordena competencias principales antes que transversales y las identifica",async({page})=>{
+test("Aprende navega competencia, tema y lección sin pestañas internas",async({page})=>{
   await page.goto("/");
   await goToSpace(page,"learn");
-  const titles=await page.locator("#learn-catalog-bands .learn-competence-band h3").allTextContents();
+  const titles=await page.locator("#learn-competence-filters .learn-competence-card strong").allTextContents();
   expect(titles).toEqual(["Establecer requisitos","Evaluación de requisitos","TICs","Comunicación","Matemáticas"]);
-  await expect(page.locator("#learn-catalog-bands .learn-competence-band .learn-competence-type")).toHaveText(["Transversal","Transversal","Transversal"]);
+  await expect(page.locator("#learn-competence-filters .learn-competence-card").nth(0)).not.toContainText("Transversal");
+  await expect(page.locator("#learn-competence-filters .learn-competence-card").nth(2)).toContainText("Transversal");
+  await page.locator('[data-learn-competence="evaluar-requisitos"]').click();
+  await expect(page.locator("#learn-catalog-bands [data-topic-open]")).toHaveCount(1);
+  await page.locator('[data-topic-open="diagramas-flujo"]').click();
+  await expect(page.locator("#learn-topic-space")).toBeVisible();
+  await expect(page.locator("#learn-topic-title")).toHaveText("Diagramas de flujo");
+  await expect(page.locator("#learn-current-lesson")).toHaveText("Algoritmos y diagramas de flujo");
+  await expect(page.locator(".learn-topic-crumb")).toHaveCount(1);
+  await expect(page.locator(".lesson-breadcrumb")).toHaveCount(0);
+  await expect(page.locator("#learn-topic-tabs, #learn-topic-select, #learn-difficulty")).toHaveCount(0);
 });
 
 test("los tres temas de matemáticas abren sus cinco lecciones con escenas recorribles",async({page})=>{

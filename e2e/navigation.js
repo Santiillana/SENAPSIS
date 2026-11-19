@@ -52,6 +52,8 @@ export async function dismissSimulatorIntro(page) {
 
 export async function openDiagramLessons(page) {
   await goToSpace(page, "learn");
+  const competence = page.locator('[data-learn-competence="evaluar-requisitos"]');
+  if (await competence.isVisible()) await competence.click();
   const card = page.locator('[data-topic-open="diagramas-flujo"]');
   if (await card.isVisible()) await card.click();
 }

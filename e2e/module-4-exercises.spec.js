@@ -95,11 +95,11 @@ test("la fracción equivalente se acepta y el ejercicio pendiente permanece sin 
   await expect(page.locator("#exercise-detail [data-start-math-exercise]")).toHaveCount(0);
 });
 
-test("las pestañas de cada tema abren directamente su banco de matemáticas",async({page})=>{
+test("la ruta de tres niveles abre directamente el banco de matemáticas del tema",async({page})=>{
   await page.goto("/");await goToSpace(page,"learn");
   await page.locator('[data-learn-competence="matematicas"]').click();
   await page.locator('[data-topic-open="racionales"]').click();
-  await page.locator('[data-topic-tab="ejercicios"]').click();
+  await goToSpace(page,"exercises");
   await expect(page.locator('[data-view="exercises"]')).toBeVisible();
   await expect(page.locator("#exercise-bank")).toHaveValue("matematicas");
   await expect(page.locator("#exercise-math-topic")).toHaveValue("racionales");

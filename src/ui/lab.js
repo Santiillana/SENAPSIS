@@ -792,7 +792,7 @@ function renderSymbol(){
       recordResult("symbol",false);symbolErrors++;
       if(symbolErrors===1){
         $("#lab-symbol-feedback").innerHTML="<strong>Casi.</strong> Revisa qué acción describe la instrucción. <a href=\"#\" class=\"text-link\" data-symbol-hint>Ver lección sobre símbolos</a>";
-        $("[data-symbol-hint]")?.addEventListener("click",event=>{event.preventDefault();document.querySelector('#primary-nav [data-space="learn"]')?.click();document.querySelector('[data-topic-tab="lecciones"]')?.click();});
+        $("[data-symbol-hint]")?.addEventListener("click",event=>{event.preventDefault();document.dispatchEvent(new CustomEvent("traza:abrir-leccion",{detail:{id:"terminals"}}));});
         $("#lab-symbol-feedback").classList.add("is-wrong");return;
       }
     }
@@ -847,7 +847,7 @@ function renderMatch(){
         const id=selected,errors=(pairErrors.get(id)||0)+1;pairErrors.set(id,errors);
         const left=$("#lab-task-content").querySelector('[data-match-left="'+CSS.escape(id)+'"]');
         if(errors===1){feedback.innerHTML="<strong>Casi.</strong> Revisa la forma que representa esta acción. <a href=\"#\" class=\"text-link\" data-match-hint>Ver lección sobre los símbolos</a>";
-          $("[data-match-hint]")?.addEventListener("click",event=>{event.preventDefault();document.querySelector('#primary-nav [data-space="learn"]')?.click();document.querySelector('[data-topic-tab="lecciones"]')?.click();});
+          $("[data-match-hint]")?.addEventListener("click",event=>{event.preventDefault();document.dispatchEvent(new CustomEvent("traza:abrir-leccion",{detail:{id:"terminals"}}));});
         }else{
           feedback.textContent="Esta pareja es "+left.textContent+" con "+matchChallenge.right.find(item=>item.id===id).label+". Puedes continuar.";
           completePair(id,{revealed:true});
@@ -1080,7 +1080,7 @@ function renderFollowArrow(){
       arrowErrors++;
       if(arrowErrors===1){
         recordResult("follow-arrow",false);
-        feedback.innerHTML='<strong>Casi.</strong> Sigue la línea que sale de la figura actual. <a href="#" class="text-link" data-arrow-hint>Ver lección sobre flujo</a>';feedback.classList.add("is-wrong");$("[data-arrow-hint]")?.addEventListener("click",event=>{event.preventDefault();document.querySelector('#primary-nav [data-space="learn"]')?.click();document.querySelector('[data-topic-tab="lecciones"]')?.click();});return;
+        feedback.innerHTML='<strong>Casi.</strong> Sigue la línea que sale de la figura actual. <a href="#" class="text-link" data-arrow-hint>Ver lección sobre flujo</a>';feedback.classList.add("is-wrong");$("[data-arrow-hint]")?.addEventListener("click",event=>{event.preventDefault();document.dispatchEvent(new CustomEvent("traza:abrir-leccion",{detail:{id:"algorithm"}}));});return;
       }
     }
     recordResult("follow-arrow",true,correct?(arrowErrors?1:0):2);answered=true;
