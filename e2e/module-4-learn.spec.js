@@ -100,6 +100,42 @@ test("la escena se reproduce al entrar en pantalla y se pausa al salir",async({p
   await expect(play).toHaveAttribute("aria-pressed","false");
 });
 
+test("Mi progreso abre un panel accesible y guía a la primera lección",async({page})=>{
+  await page.goto("/");
+  await goToSpace(page,"learn");
+  const trigger=page.locator("#learn-open-progress");
+  const drawer=page.locator("#learn-progress-page");
+  await trigger.click();
+  await expect(drawer).toBeVisible();
+  await expect(drawer).toHaveAttribute("aria-modal","true");
+  await expect(page.locator("[data-progress-close]")).toBeFocused();
+  await expect(page.locator("#learn-progress-empty")).toBeVisible();
+  await expect(page.locator("#learn-progress-topics")).toBeHidden();
+  await page.keyboard.press("Escape");
+  await expect(drawer).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await page.locator("[data-progress-start]").click();
+  await expect(drawer).toBeHidden();
+  await expect(page.locator("#learn-topic-space")).toBeVisible();
+  await expect(page.locator("#learn-current-lesson")).toHaveText("Algoritmos y diagramas de flujo");
+});
+
+test("Mi progreso refleja el marcado y abre el siguiente tema pendiente",async({page})=>{
+  await page.goto("/");
+  await openDiagramLessons(page);
+  await page.locator("[data-lesson-complete]").click();
+  await page.locator("#learn-open-progress").click();
+  await expect(page.locator("#learn-progress-total")).toHaveText("1 de 40 lecciones completadas");
+  const competence=page.locator('.learn-progress-competence[data-competence-id="evaluar-requisitos"]');
+  await competence.locator("summary").click();
+  const topic=competence.locator('[data-progress-open-theme="diagramas-flujo"]');
+  await expect(topic).toContainText("1/17 lecciones");
+  await topic.click();
+  await expect(page.locator("#learn-progress-page")).toBeHidden();
+  await expect(page.locator("#learn-current-lesson")).toHaveText("Leer flechas y seguir el flujo");
+});
+
 test("las lecciones se mantienen dentro del ancho en móvil",async({page})=>{
   await page.setViewportSize({width:375,height:812});
   await page.goto("/");

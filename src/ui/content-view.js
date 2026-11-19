@@ -54,6 +54,7 @@ let exerciseClassOnly = false;
 let selectedConcepts = new Set();
 let conceptSearch = "";
 let exerciseListView = false;
+let progressReturnFocus = null;
 let exerciseBank = "diagramas";
 let mathTopicFilter = "todos";
 let selectedMathExercise = null;
@@ -157,9 +158,8 @@ function recordLearnActivity(){
 }
 
 function showLearnPanel(panel){
-  const catalog=$("#learn-catalog-home"),progress=$("#learn-progress-page"),topic=$("#learn-topic-space");
+  const catalog=$("#learn-catalog-home"),topic=$("#learn-topic-space");
   if(catalog)catalog.hidden=panel!=="catalog";
-  if(progress)progress.hidden=panel!=="progress";
   if(topic)topic.hidden=panel!=="topic";
 }
 function progressRing(progress){return `<span class="theme-progress-ring" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress.percentage}" style="--theme-progress:${progress.percentage}%" aria-label="${progress.completed} de ${progress.total} lecciones completadas">${progress.total?progress.percentage:"–"}%</span>`;}
@@ -240,17 +240,55 @@ function navigateToLesson(id){
 function renderLearnProgress(){
   const host=$("#learn-progress-topics");if(!host)return;
   const overall=calculateLessonProgress(lessons.map(item=>item.id),learnProgress.completed);
-  const ring=$("#learn-progress-ring"),text=$("#learn-progress-percent"),total=$("#learn-progress-total"),fill=$("#learn-progress-fill");
-  if(ring){ring.style.setProperty("--learn-progress",overall.percentage+"%");ring.setAttribute("aria-valuenow",String(overall.completed));ring.setAttribute("aria-valuemax",String(overall.total));ring.setAttribute("aria-label",overall.completed+" de "+overall.total+" lecciones completadas");}
-  const lessonCount=$(".learn-progress-count");if(lessonCount)lessonCount.innerHTML=lessons.length+' <small>LECCIONES</small>';
-  if(text)text.textContent=overall.percentage+"%";if(total)total.textContent=overall.completed+" de "+overall.total+" lecciones completadas";if(fill)fill.style.width=overall.percentage+"%";
-  let labData={};try{labData=JSON.parse(localStorage.getItem("traza:v2:progress")||"{}");}catch{}
+  const ring=$("#learn-progress-ring"),text=$("#learn-progress-percent"),total=$("#learn-progress-total");
+  if(ring){
+    ring.style.setProperty("--learn-progress",overall.percentage+"%");
+    ring.setAttribute("aria-valuenow",String(overall.completed));
+    ring.setAttribute("aria-valuemax",String(overall.total));
+    ring.setAttribute("aria-label",overall.completed+" de "+overall.total+" lecciones completadas");
+  }
+  if(text)text.textContent=overall.percentage+"%";
+  if(total)total.textContent=overall.completed+" de "+overall.total+" lecciones completadas";
+  const next=lessons.find(item=>!learnProgress.completed.includes(item.id));
+  const nextLabel=$("#learn-progress-next");
+  if(nextLabel)nextLabel.textContent=next?"Sigue con "+next.title+".":"Has completado todas las lecciones.";
+  const streak=$("#learn-streak-drawer");
+  if(streak)streak.textContent="Racha: "+currentStreak(learnProgress.activityDays||[])+" días";
+
+  let labData={};
+  try{labData=JSON.parse(localStorage.getItem("traza:v2:progress")||"{}");}catch{}
   const lab=labData.exercises||{};
+  let starsTotal=0;
+  const medalsTotal=new Set();
   host.innerHTML=competenciasAprende.map(competence=>{
     const owned=temas.filter(theme=>theme.competenciaId===competence.id);
-    const lessonIds=owned.flatMap(theme=>theme.lecciones);const competenceProgress=calculateLessonProgress(lessonIds,learnProgress.completed);
-    return `<article class="learn-progress-competence" data-competence-id="${escapeHTML(competence.id)}"><header>${competenceMarker(competence.id)}<strong>${escapeHTML(competence.titulo)}</strong>${competence.tipo==="transversal"?'<small class="learn-competence-type">Transversal</small>':""}${progressRing(competenceProgress)}</header>${owned.map(theme=>{const progress=calculateLessonProgress(theme.lecciones,learnProgress.completed);const stars=theme.competenciaId==="matematicas"?Object.values(labData.topics?.[theme.id]?.concepts?.[theme.id]||{}).reduce((sum,mode)=>sum+(Number(mode?.stars)||0),0):theme.ejercicios.reduce((sum,id)=>sum+Object.values(lab[String(id)]||{}).reduce((n,mode)=>n+(Number(mode?.stars)||0),0),0);const medals=conceptMedals(labData,theme.id);const medalNames=medals.map(id=>escapeHTML(conceptos.find(item=>item.id===id)?.titulo??id));return `<div class="learn-progress-topic"><span>${escapeHTML(theme.titulo)}</span><span class="learn-topic-track" role="progressbar" aria-valuemin="0" aria-valuemax="${progress.total}" aria-valuenow="${progress.completed}" aria-label="${progress.completed} de ${progress.total} lecciones de ${escapeHTML(theme.titulo)} completadas"><i style="width:${progress.percentage}%"></i></span><small>${progress.completed} de ${progress.total} lecciones · ${stars} estrellas del Laboratorio · ${medals.length} medallas</small>${medalNames.length?`<small class="learn-topic-medals" aria-label="Medallas logradas">🏅 ${medalNames.join(" · ")}</small>`:""}</div>`;}).join("")||'<p>Próximamente</p>'}</article>`;
+    const lessonIds=owned.flatMap(theme=>theme.lecciones);
+    const competenceProgress=calculateLessonProgress(lessonIds,learnProgress.completed);
+    const topicMarkup=owned.map(theme=>{
+      const progress=calculateLessonProgress(theme.lecciones,learnProgress.completed);
+      const stars=theme.competenciaId==="matematicas"
+        ?Object.values(labData.topics?.[theme.id]?.concepts?.[theme.id]||{}).reduce((sum,mode)=>sum+(Number(mode?.stars)||0),0)
+        :theme.ejercicios.reduce((sum,id)=>sum+Object.values(lab[String(id)]||{}).reduce((n,mode)=>n+(Number(mode?.stars)||0),0),0);
+      starsTotal+=stars;
+      for(const medal of conceptMedals(labData,theme.id))medalsTotal.add(medal);
+      if(!theme.lecciones.length)return '<div class="learn-progress-topic is-coming"><strong>'+escapeHTML(theme.titulo)+'</strong><span>Próximamente</span></div>';
+      return '<button type="button" class="learn-progress-topic" data-progress-open-theme="'+escapeHTML(theme.id)+'" aria-label="Abrir '+escapeHTML(theme.titulo)+', '+progress.completed+' de '+progress.total+' lecciones completadas">'+
+        '<strong>'+escapeHTML(theme.titulo)+'</strong><span>'+progress.completed+'/'+progress.total+' lecciones</span>'+
+        '<span class="learn-topic-track" role="progressbar" aria-valuemin="0" aria-valuemax="'+Math.max(1,progress.total)+'" aria-valuenow="'+progress.completed+'" aria-label="'+progress.completed+' de '+progress.total+' lecciones de '+escapeHTML(theme.titulo)+' completadas"><i style="width:'+progress.percentage+'%"></i></span></button>';
+    }).join("");
+    const future=lessonIds.length===0;
+    return '<details class="learn-progress-competence" data-competence-id="'+escapeHTML(competence.id)+'" style="--comp-color:var(--competence-'+escapeHTML(competence.token)+'-solid)">'+
+      '<summary>'+competenceMarker(competence.id)+'<strong>'+escapeHTML(competence.titulo)+'</strong>'+
+      (competence.tipo==="transversal"?'<small class="learn-competence-type">Transversal</small>':"")+
+      (future?'<span class="learn-progress-coming">Próximamente</span>':progressRing(competenceProgress))+
+      '</summary><div class="learn-progress-topic-list">'+(topicMarkup||'<p class="learn-coming-empty">Próximamente</p>')+'</div></details>';
   }).join("");
+  const stars=$("#learn-progress-stars"),medals=$("#learn-progress-medals");
+  if(stars)stars.textContent="☆ "+starsTotal+" estrellas del Laboratorio";
+  if(medals)medals.textContent="🏅 "+medalsTotal.size+" medallas";
+  const empty=$("#learn-progress-empty");
+  if(empty)empty.hidden=overall.completed>0;
+  host.hidden=overall.completed===0;
 }
 function lessonDifficulty(lesson,theme=temaPorId(selectedTheme)){
   if(theme?.id==="diagramas-flujo")return Math.min(3,Math.max(1,rutas.findIndex(group=>group.ids.includes(lesson.id))+1));
@@ -685,8 +723,29 @@ function bindContentEvents(){
     const item=generateMathExercise(topic,difficulty,`${topic}-${difficulty}-${generatedMathExercises.length+1}`);
     generatedMathExercises.unshift(item);selectMathExercise(item.id);
   });
-  $("#learn-open-progress")?.addEventListener("click",()=>{renderLearnProgress();showLearnPanel("progress");});
-  $("#learn-progress-page")?.addEventListener("click",event=>{if(event.target.closest("[data-learn-back]"))backToCompetences();});
+  const progressDrawer=$("#learn-progress-page");
+  $("#learn-open-progress")?.addEventListener("click",event=>{
+    if(!progressDrawer)return;
+    progressReturnFocus=event.currentTarget;renderLearnProgress();progressDrawer.showModal();
+    progressDrawer.querySelector("[data-progress-close]")?.focus({preventScroll:true});
+  });
+  progressDrawer?.addEventListener("click",event=>{
+    if(event.target===progressDrawer||event.target.closest("[data-progress-close]")){progressDrawer.close();return;}
+    if(event.target.closest("[data-progress-start]")){
+      const first=lessons.find(item=>!learnProgress.completed.includes(item.id))??lessons[0];
+      progressDrawer.close();navigateToLesson(first.id);return;
+    }
+    const topicButton=event.target.closest("[data-progress-open-theme]");
+    if(topicButton){
+      const theme=temaPorId(topicButton.dataset.progressOpenTheme);
+      if(!theme)return;
+      selectedLesson=theme.lecciones.find(id=>!learnProgress.completed.includes(id))??theme.lecciones[0];
+      progressDrawer.close();openTheme(theme.id);
+    }
+  });
+  progressDrawer?.addEventListener("close",()=>{
+    progressReturnFocus?.focus({preventScroll:true});progressReturnFocus=null;
+  });
   $("#learn-topic-space")?.addEventListener("click",event=>{if(event.target.closest("[data-learn-back]"))backToCompetences();});
   $("#learn-catalog-bands")?.addEventListener("click",event=>{
     if(event.target.closest("[data-competence-back]")){selectedCompetence=null;renderLearnCatalog();return;}
@@ -697,6 +756,7 @@ function bindContentEvents(){
   document.addEventListener("traza:abrir-leccion",event=>{const id=event.detail?.id;if(typeof id==="string")navigateToLesson(id);});
   document.addEventListener("traza:space-change",event=>{
     const space=event.detail?.space;
+    if(space!=="learn"&&progressDrawer?.open)progressDrawer.close();
     if(space==="learn"){
       if(selectedTheme){showLearnPanel("topic");renderTopicSpace();lessonList();renderLesson();}
       else {showLearnPanel("catalog");renderLearnCatalog();}
