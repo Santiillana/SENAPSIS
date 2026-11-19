@@ -70,3 +70,28 @@ test("las ventanas del simulador ocupan zonas separadas en alturas de portátil 
     }
   }
 });
+
+test("la escena conserva completa su ilustración y Variables muestra las cajitas en portátil",async({page})=>{
+  await page.setViewportSize({width:1366,height:768});
+  await page.goto("/");
+  await goToSpace(page,"simulator");
+  for(let step=0;step<3;step++)await page.locator("#simulator-next").click();
+  const report=await page.evaluate(()=>{
+    const host=document.querySelector("#scene-content .scene-figure-host");
+    const figure=host?.firstElementChild;
+    const hostBox=host?.getBoundingClientRect(),figureBox=figure?.getBoundingClientRect();
+    const variables=document.querySelector("#variables-content"),cards=variables?.querySelector(".variable-cards");
+    return {
+      event:document.querySelector("#scene-content")?.dataset.eventType,
+      host:hostBox&&{x:hostBox.x,y:hostBox.y,w:hostBox.width,h:hostBox.height},
+      figure:figureBox&&{x:figureBox.x,y:figureBox.y,w:figureBox.width,h:figureBox.height,tag:figure.tagName,scrollH:figure.scrollHeight,clientH:figure.clientHeight},
+      figureInside:!!hostBox&&!!figureBox&&figureBox.left>=hostBox.left-1&&figureBox.right<=hostBox.right+1&&figureBox.top>=hostBox.top-1&&figureBox.bottom<=hostBox.bottom+1,
+      variablesFit:!!variables&&!!cards&&cards.getBoundingClientRect().bottom<=variables.getBoundingClientRect().bottom+1,
+      cardCount:cards?.children.length??0
+    };
+  });
+  expect(report.event).toBe("assignment");
+  expect(report.figureInside,JSON.stringify(report)).toBe(true);
+  expect(report.variablesFit,JSON.stringify(report)).toBe(true);
+  expect(report.cardCount).toBe(3);
+});

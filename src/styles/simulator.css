@@ -3037,6 +3037,26 @@ body[data-active-space="simulator"] #PV .scene-process-result strong{
  }
 }
 
+/* Paso 19: las ilustraciones y las cajitas visibles no se recortan en portátil. */
+@media(min-width:901px){
+ body[data-active-space="simulator"] #RC.simulator-inspector{
+  grid-template-rows:minmax(0,1.12fr) minmax(0,.88fr)!important
+ }
+}
+body[data-active-space="simulator"] #PV .scene-figure-host{
+ min-height:140px!important;max-height:none!important;overflow:visible!important;
+ padding:12px!important
+}
+body[data-active-space="simulator"] #PV .scene-figure-host>.scene-figure{
+ width:100%!important;max-width:100%!important;min-height:110px!important
+}
+body[data-active-space="simulator"] #PR.variables-panel{overflow-y:auto!important;overscroll-behavior:contain}
+body[data-active-space="simulator"] #PR #variables-content{
+ flex:0 0 auto!important;min-height:104px!important;overflow:visible!important
+}
+body[data-active-space="simulator"] #PR .variable-cards{align-content:start!important}
+body[data-active-space="simulator"] #PR .variable-card{min-width:0!important}
+
 html[data-theme="light"] body[data-active-space="simulator"]{
   --bg:var(--traza-observatory);--grid:var(--traza-stage-grid);--card:var(--traza-glass);
   --ink:var(--traza-text);--pen:var(--traza-muted);
@@ -3341,3 +3361,12 @@ body[data-active-space="simulator"] #PV .scene-input .scene-transfer-lane{animat
   min-height:0!important;max-height:100%!important
  }
 }
+
+/* Presentación legible en portátiles: completa la ilustración y prioriza la memoria. */
+@media(min-width:901px){body[data-active-space="simulator"] #RC.simulator-inspector{grid-template-rows:minmax(0,1.12fr) minmax(0,.88fr)!important}}
+body[data-active-space="simulator"] #PV .scene-figure-host{min-height:170px!important;height:auto!important;max-height:none!important;overflow:visible!important;padding:12px!important}
+body[data-active-space="simulator"] #PV .scene-figure-host>.scene-figure{width:100%!important;max-width:100%!important;min-height:140px!important}
+body[data-active-space="simulator"] #PR.variables-panel{overflow-y:auto!important;overscroll-behavior:contain}
+body[data-active-space="simulator"] #PR #variables-content{flex:0 0 auto!important;min-height:104px!important;overflow:visible!important}
+body[data-active-space="simulator"] #PR .variable-cards{align-content:start!important}
+body[data-active-space="simulator"] #PR .variable-card{min-width:0!important}
