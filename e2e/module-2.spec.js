@@ -41,19 +41,17 @@ test("las 17 lecciones presentan fases visuales y una escena vinculada a eventos
   }
 });
  
-test("el catálogo filtra ejercicios por dificultad y conceptos combinados",async({page})=>{
+test("el catálogo filtra ejercicios por dificultad y búsqueda",async({page})=>{
   await page.goto("/");
   await goToSpace(page, "exercises");
   await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(45);
   await page.locator('[data-exercise-difficulty="4"]').click();
   await expect(page.locator("[data-select-exercise]")).toHaveCount(5);
   await page.locator('[data-exercise-difficulty="4"]').click();
-  await page.locator("#exercise-concept-details > summary").click();
-  await page.locator('[data-concept-filter="Ciclo Para"]').click();
+  await expect(page.locator("#exercise-concept-details")).toHaveCount(0);
+  await page.locator("#exercise-search").fill("ciclo");
   await expect(page.locator("[data-select-exercise]")).not.toHaveCount(0);
-  await page.locator('[data-concept-filter="Decisiones"]').click();
-  await expect(page.locator("#exercise-filter-summary")).toContainText("concepto(s)");
-  await page.locator("#exercise-filters-clear").click();
+  await page.locator("#exercise-search").fill("");
   await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(45);
 });
 

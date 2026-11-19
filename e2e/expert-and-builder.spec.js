@@ -12,14 +12,11 @@ test("el catálogo muestra los cinco ejercicios expertos sin revelar soluciones"
   await expect(page.locator("#exercise-detail [data-start-exercise]")).toBeVisible();
 });
 
-test("el filtro por clase se combina con conceptos y niveles",async({page})=>{
+test("el filtro por clase se combina con niveles",async({page})=>{
   await goToSpace(page, "exercises");
-  await page.locator('label.catalog-class-filter').click();
+  await page.locator("#exercise-class-only").click();
   await expect(page.locator("[data-select-exercise]")).toHaveCount(4);
-  await page.locator('label.catalog-class-filter').click();
-  await page.locator("#exercise-concept-details > summary").click();
-  await page.locator('[data-concept-filter="Ciclo Mientras"]').click();
-  await expect(page.locator("[data-select-exercise]")).not.toHaveCount(0);
+  await page.locator("#exercise-class-only").click();
   await page.locator('[data-exercise-difficulty="3"]').click();
   await expect(page.locator("[data-select-exercise]")).not.toHaveCount(0);
 });

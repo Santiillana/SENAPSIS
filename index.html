@@ -110,55 +110,20 @@
 
       <section id="exercise-topic-workspace" class="exercise-topic-workspace" aria-labelledby="exercise-topic-title" hidden>
         <header class="exercise-topic-header"><button type="button" class="learn-catalog-back" id="exercise-topic-back">‹ Competencias y temas</button><div><p id="exercise-topic-competence" class="eyebrow"></p><h3 id="exercise-topic-title"></h3></div></header>
-
-      <section class="catalog-filter-panel exercise-filter-panel" aria-label="Buscar y filtrar ejercicios">
-        <div class="exercise-filter-main">
-          <select id="exercise-bank" hidden aria-hidden="true" tabindex="-1"><option value="diagramas">Diagramas de flujo</option><option value="matematicas">Matemáticas</option><option value="fuentes">Fuentes de información</option></select>
-          <label class="catalog-search">
-            <span>Buscar</span>
-            <input id="exercise-search" type="search" placeholder="Título, número o concepto…" autocomplete="off">
-          </label>
-          <label class="catalog-search" id="exercise-math-topic-wrap" hidden><span>Tema matemático</span><select id="exercise-math-topic"><option value="todos">Todos</option><option value="enteros">Enteros</option><option value="racionales">Racionales</option><option value="regla-de-tres">Regla de tres</option></select></label>
-          <div class="exercise-difficulty-filter"><span>Dificultad</span><div id="exercise-difficulty-options" role="group" aria-label="Filtrar por dificultad"></div></div>
-          <label class="catalog-class-filter">
-            <input id="exercise-class-only" type="checkbox">
-            <span>Ejercicios de clase</span>
-          </label>
-        </div>
-
-        <details class="catalog-concept-filter exercise-concept-disclosure" id="exercise-concept-details">
-          <summary>
-            <span class="concept-summary-copy"><strong>Conceptos</strong><small>Se muestran ejercicios que incluyen todos los elegidos</small></span>
-            <span class="concept-summary-state" id="exercise-concepts-summary">Todos los conceptos</span>
-          </summary>
-          <div class="catalog-concept-content">
-            <label class="exercise-concept-search">Buscar concepto<input id="exercise-concept-search" type="search" placeholder="Escribe para filtrar conceptos"></label>
-            <div class="catalog-concept-options" id="exercise-concepts" aria-label="Elegir conceptos"></div>
-          </div>
-        </details>
-
-        <div class="catalog-filter-actions exercise-filter-actions">
-          <div class="exercise-filter-feedback">
-            <span id="exercise-filter-summary" aria-live="polite">Todos los conceptos</span>
-            <div id="exercise-active-filters" class="exercise-active-filters" aria-label="Filtros activos"></div>
-          </div>
-          <button type="button" id="exercise-filters-clear" class="text-link">Limpiar filtros <span aria-hidden="true">↺</span></button>
-        </div>
-      </section>
-
-      <div class="exercise-catalog-heading">
-        <div>
-          <p class="eyebrow">BANCO DE PRÁCTICA</p>
-          <h3>Elige tu siguiente reto</h3>
-        </div>
-        <button type="button" id="exercise-generate-math" class="button button-secondary" hidden>Generar reto con semilla</button>
-          <div class="exercise-view-toggle" role="group" aria-label="Vista del catálogo"><button type="button" data-exercise-view="grid" aria-pressed="true" aria-label="Vista de tarjetas">▦</button><button type="button" data-exercise-view="list" aria-pressed="false" aria-label="Vista de lista">☰</button></div>
-      </div>
-
       <div class="exercise-workspace exercise-workspace-catalog">
-        <section class="exercise-list-panel" aria-label="Lista de ejercicios">
+        <details class="panel exercise-list-panel" id="exercise-list-disclosure" open>
+          <summary class="exercise-list-heading"><div><p class="eyebrow">EJERCICIOS</p><strong id="exercise-topic-count"></strong></div><span aria-hidden="true">⌄</span></summary>
+          <button type="button" id="exercise-generate-math" class="button button-secondary" hidden>Generar reto</button>
+          <select id="exercise-bank" hidden aria-hidden="true" tabindex="-1"><option value="diagramas">Diagramas de flujo</option><option value="matematicas">Matemáticas</option><option value="fuentes">Fuentes de información</option></select>
+          <select id="exercise-math-topic" hidden aria-hidden="true" tabindex="-1"><option value="todos">Todos</option><option value="enteros">Enteros</option><option value="racionales">Racionales</option><option value="regla-de-tres">Regla de tres</option></select>
+          <div class="exercise-list-controls">
+            <label class="catalog-search" id="exercise-search-wrap"><span>Buscar</span><input id="exercise-search" type="search" placeholder="Título o número…" autocomplete="off"></label>
+            <div class="exercise-difficulty-filter"><span>Dificultad</span><div id="exercise-difficulty-options" role="group" aria-label="Filtrar por dificultad"></div></div>
+            <button type="button" id="exercise-class-only" class="exercise-class-filter" aria-pressed="false" hidden>De clase</button>
+          </div>
+          <p id="exercise-filter-summary" class="exercise-filter-summary" aria-live="polite"></p>
           <div class="exercise-grid exercise-list" id="exercise-grid"></div>
-        </section>
+        </details>
         <aside class="panel exercise-detail-panel" id="exercise-detail" aria-live="polite" aria-label="Información del ejercicio">
           <div class="detail-empty">
             <span class="detail-empty-mark">↖</span>

@@ -34,21 +34,21 @@ test("el catálogo es compacto y ordena las tarjetas por dificultad y número",a
   await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(45);
   const ids=await page.locator("#exercise-grid [data-select-exercise]").evaluateAll(cards=>cards.map(card=>Number(card.dataset.selectExercise)));
   expect(ids).toHaveLength(45);expect(new Set(ids).size).toBe(45);
-  await expect(page.locator("#exercise-grid .exercise-card-concepts i").first()).toBeVisible();
-  await expect(page.locator("[data-exercise-view=grid]")).toHaveAttribute("aria-pressed","true");
+  await expect(page.locator("#exercise-grid .exercise-row-status").first()).toContainText("Visto");
+  await expect(page.locator("#exercise-grid .exercise-number").first()).toHaveText("01");
+  await expect(page.locator("#exercise-grid [data-select-exercise=\"2\"] .exercise-row-status")).toContainText("Pendiente");
+  await page.locator('#exercise-grid [data-select-exercise="2"]').click();
+  await expect(page.locator('#exercise-grid [data-select-exercise="2"] .exercise-row-status')).toContainText("Visto");
 });
 
-test("dificultad, conceptos, clase y búsqueda se combinan y se limpian",async({page})=>{
+test("dificultad, clase y búsqueda se combinan y se limpian",async({page})=>{
   await openExercises(page);
   await page.locator('[data-exercise-difficulty="2"]').click();
   await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(10);
   await page.locator('[data-exercise-difficulty="2"]').click();
-  await page.locator("#exercise-class-only").check();
+  await page.locator("#exercise-class-only").click();
   const ids=await page.locator("#exercise-grid [data-select-exercise]").evaluateAll(cards=>cards.map(card=>Number(card.dataset.selectExercise)).sort((a,b)=>a-b));
   expect(ids).toEqual([22,23,24,28]);
-  await page.locator("#exercise-concept-details > summary").click();
-  await page.locator('[data-concept-filter="Ciclo Para"]').click();
-  await expect(page.locator("#exercise-active-filters")).toContainText("Ciclo Para");
   await page.locator("#exercise-search").fill("no existe");
   await expect(page.getByText("Ningún ejercicio coincide")).toBeVisible();
   await page.locator("#exercise-empty-clear").click();
@@ -73,12 +73,24 @@ test("el detalle guía el intento y revela el pseudocódigo solo al pedirlo",asy
 
 test("la vista de lista y los filtros se adaptan a móvil sin desbordar",async({page})=>{
   await page.setViewportSize({width:390,height:844});await openExercises(page);
-  await page.locator('[data-exercise-view="list"]').click();
-  await expect(page.locator("#exercise-grid")).toHaveClass(/is-list/);
+  const disclosure=page.locator("#exercise-list-disclosure");
+  await expect(disclosure).not.toHaveAttribute("open","");
+  await disclosure.locator("summary").click();
+  await expect(page.locator("#exercise-grid")).toBeVisible();
   await page.locator('[data-select-exercise="1"]').click();
+  await expect(disclosure).not.toHaveAttribute("open","");
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
   await expect(page.locator("#exercise-detail")).toContainText("ANTES DE EMPEZAR");
+});
+
+test("la lista compacta y la hoja caben en móvil, portátil y monitor",async({page})=>{
+  for(const size of [{width:390,height:844},{width:1366,height:768},{width:1920,height:1080}]){
+    await page.setViewportSize(size);await page.goto("/");
+    await page.evaluate(()=>{document.documentElement.dataset.theme="dark";});
+    await goToSpace(page,"exercises",{exerciseTheme:false});await openExerciseTheme(page,"diagramas-flujo");
+    await checkView(page,"Ejercicio de flujo "+size.width+"×"+size.height,{noSolapar:[["#hd","#main-content"]],sinCorte:["#hd"]});
+  }
 });
 
 test("el banco matemático verifica respuestas exactas y abre el reproductor dedicado",async({page})=>{
