@@ -69,7 +69,7 @@ export async function authenticateAccess(request,env){
   let key;
   try{
     const item=(await publicKeys(teamDomain)).find(candidate=>candidate.kid===header.kid);
-    if(item?.kty)key=await crypto.subtle.importKey("jwk",item,"RSASSA-PKCS1-v1_5",false,["verify"]);
+    if(item?.kty)key=await crypto.subtle.importKey("jwk",item,{name:"RSASSA-PKCS1-v1_5",hash:"SHA-256"},false,["verify"]);
     else if(item?.cert){const spki=certificateSubjectPublicKeyInfo(item.cert);if(spki)key=await crypto.subtle.importKey("spki",spki,{name:"RSASSA-PKCS1-v1_5",hash:"SHA-256"},false,["verify"]);}
   }catch{return {valid:false,status:503,reason:"access-keys-unavailable"};}
   if(!key)return {valid:false,status:401,reason:"unknown-key"};
