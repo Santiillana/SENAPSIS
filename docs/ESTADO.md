@@ -1,6 +1,6 @@
 # ESTADO · Traza
 
-Actualizado: 18 de noviembre de 2026
+Actualizado: 19 de noviembre de 2026
 
 ## Avance
 
@@ -8,42 +8,26 @@ Actualizado: 18 de noviembre de 2026
 | --- | --- | --- |
 | 0 | completa | feat(step-7): añadir helper checkView |
 | 1 | completa | docs(step-18): cerrar tanda de mejoras del simulador |
-| 2 | pendiente | |
-| 3 | pendiente | |
+| 2 | completa | `2b98fc8`–`c9b6cf6` |
+| 3 | omitida por instrucción del usuario | — |
 | 4 | pendiente | |
 | 5 | pendiente | |
-| 6 | pendiente | |
-| 7 | pendiente | |
+| 6 | pendiente, excluida la multi-ficha | |
+| 7 | pendiente, depende de infraestructura y ficha_id | |
 | 8 | pendiente | |
 
-## Rutas verificadas
+## Rutas y decisiones verificadas
 
-- `src/ui/simulator-shell.js`, `src/ui/flow-step-contract.js`: shell genérico, contrato, validador y navegación determinista.
-- `src/ui/simulator.js`, `src/ui/scenes/`, `src/ui/simulator-intro.js`: render de flujo, escenas reversibles, seguimiento, paneles, modos y pantalla previa con preferencia persistente.
-- `src/diagram/`, `src/core/`: layout SVG e intérprete sin cambios de semántica. Tipos de escena sin renderer propio usan `process.render` como respaldo genérico.
-- `docs/referencia-simulador/diagramas_de_flujo_original.html`: referencia original preservada sin cambios.
-- `docs/contrato-paso.md`, `docs/como-agregar-tema.md`: contrato y guía de extensión.
-- `e2e/simulator-keyboard-contract.spec.js`, `e2e/simulator-intro.spec.js`, `e2e/simulator-choreography.spec.js`, `e2e/simulator-windows.spec.js`, `e2e/module-3-simulator-experience.spec.js`: teclado, centrado inicial, selector, escenas, variables, paneles y movimiento reducido.
+- `src/content/ficha.js` es el catálogo único de competencias: id, nombre, tipo, orden, estado, forma y token; `src/content/temas.js` deriva de él las competencias de Aprende.
+- `src/styles/tokens.css` conserva los tonos existentes de Aprende y define solid, tint, border y text por id; Mi ficha, actividades y Biblioteca reutilizan esas variables.
+- `src/ficha/competencias-ui.js` genera el marcador común con forma y nombre asociado; Aprende, Actividades, Biblioteca, horario y evidencias derivan su identidad del id.
+- `src/ficha/competencias-ui.js` conserva los emblemas existentes; el horario colorea por competencia. No hay campo ni regla de color por género del instructor.
+- `logica-programacion` y `competencia-por-configurar` son entradas históricas sin equivalencia confirmada en Aprende; conservan su color anterior.
+- El informe de la Fase 3 no se crea. Las fases posteriores usarán los catálogos actuales sin cambiar ejercicios.
+- La multi-ficha queda fuera; la Fase 7 no debe asumir ni introducir `ficha_id` hasta que se defina ese modelo.
 
-## Cierre de la tanda de mejoras del simulador
+## Validación de Fase 2
 
-- Pasos 1–2: inventario, separación de carcasa/contrato y navegación determinista ya estaban implementados.
-- Pasos 3–5: se corrigió el encuadre inicial, se dejó visible el selector de ejercicios y se conservó el seguimiento de la figura activa con su ficha anclada.
-- Pasos 6–8: se ajustó la geometría de las ventanas y el dock; las escenas resumen cada operación con ilustración, dato y cambio de variable sin duplicar texto innecesario.
-- Paso 9: se revisaron teclado, movimiento reducido, tamaños 390/1366/1920, tema claro/oscuro y cambio de pestañas móviles.
-- Paso 10: pruebas y documentación actualizadas. Los commits de implementación son `770379c`, `cc85f3a`, `010e76c`, `a7578f0` y `7c38a9a`.
-
-## Validación y riesgos
-
-- `npm test`: 351/351 pruebas.
-- Pruebas Playwright enfocadas en teclado, pantalla previa, escenas, navegación, ventanas y responsive: 14/14 casos.
-- Pruebas Playwright de escenas de ciclo, historial, movimiento reducido y pestañas móviles: 17/17 casos.
-- La comprobación específica de geometría de ventanas pasa en 1366×768 y 1920×1080.
-- `src/ui/simulator.js` conserva integrados el render SVG y la cámara de flujo; el shell ya acepta plantillas ficticias sin lógica de flujo.
-- No se reescribieron parser, intérprete ni compilador. `reference/` quedó intacto.
-- Se preservaron cambios locales previos en `docs/PROGRESO.md`, `docs/informes/fase-1/INVENTARIO.md` y `mejoras imp/`.
-
-## Revisión manual
-
-- El simulador queda listo para revisión visual local con `npm run dev` y `http://localhost:8000`.
-- La preferencia estética final (ritmo de animación, densidad visual y microtextos) queda abierta a los comentarios del usuario durante esa revisión.
+- Contraste de los cinco marcadores sobre página y tarjeta en tema claro y oscuro: AA.
+- Pruebas Node completas: 356/356 correctas.
+- Playwright `e2e/module-4-learn.spec.js`: 8/8 correctas; Mi ficha conserva sus pruebas de horario y evidencias.
