@@ -57,6 +57,7 @@ let exerciseBank = "diagramas";
 let mathTopicFilter = "todos";
 let selectedExerciseTheme = null;
 const exerciseDetailScroll = new Map();
+let exerciseFigureObserver = null;
 let lastContentSpace = null;
 let selectedMathExercise = null;
 let selectedSourceExercise = null;
@@ -676,6 +677,20 @@ function renderMathExerciseDetail(host){
   const answer=verified?'<p class="math-answer-feedback '+(verified.correct?"is-correct":"is-wrong")+'" id="math-answer-feedback" role="status">'+escapeHTML(verified.message)+'</p>':'<p class="math-answer-feedback" id="math-answer-feedback" role="status"></p>';
   host.innerHTML='<div class="exercise-detail-scroll math-exercise-detail"><nav class="exercise-detail-nav"><span>'+escapeHTML(item.id)+'</span><span>'+escapeHTML(item.source)+'</span></nav><header class="exercise-detail-heading"><span class="exercise-class-tag">'+(item.classExercise?"De clase":"Generado · semilla reproducible")+'</span><h3>'+escapeHTML(item.title)+'</h3><div class="concept-tags"><span>'+escapeHTML(item.topic.replaceAll("-"," "))+'</span><span>Nivel '+item.difficulty+'</span>'+(item.type?'<span>Proporción '+escapeHTML(item.type)+'</span>':"")+'</div></header><section class="exercise-prompt"><p class="eyebrow">EL RETO</p><p>'+escapeHTML(item.statement)+'</p>'+(item.expression?'<p class="math-exercise-expression">'+escapeHTML(item.expression)+'</p>':"")+'</section><form class="math-answer-form" data-math-answer-form><label for="math-answer">Tu respuesta</label><div><input id="math-answer" name="answer" inputmode="decimal" autocomplete="off" placeholder="Ejemplo: −3/7" aria-describedby="math-answer-feedback"><button type="submit" class="button button-primary">Comprobar</button></div>'+answer+'</form>'+(revealed?'<section class="exercise-solution math-exercise-solution"><p class="eyebrow">SOLUCIÓN PASO A PASO</p>'+solution+'<strong>Resultado: '+escapeHTML(item.expectedText)+'</strong></section>':'<button type="button" class="text-link" data-reveal-math-solution>Ver solución paso a paso</button>')+'<button type="button" class="button button-secondary exercise-open-simulator" data-start-math-exercise>Abrir en el Simulador</button></div>';
 }
+function observeExerciseFigures(root){
+  exerciseFigureObserver?.disconnect();
+  const figures=$$(".exercise-static-preview,.exercise-solution-section",root);
+  if(!figures.length)return;
+  const reduced=document.documentElement.dataset.motion==="reduced"||window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduced||!("IntersectionObserver" in window)){figures.forEach(figure=>figure.classList.add("is-in-view"));return;}
+  const scroller=root.querySelector(".exercise-detail-scroll");
+  const rootIsScroller=scroller&&scroller.scrollHeight>scroller.clientHeight+1;
+  exerciseFigureObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+    if(!entry.isIntersecting)return;
+    entry.target.classList.add("is-in-view");exerciseFigureObserver.unobserve(entry.target);
+  }),{root:rootIsScroller?scroller:null,threshold:.18});
+  figures.forEach(figure=>exerciseFigureObserver.observe(figure));
+}
 function renderExerciseDetail(){
   const host=$("#exercise-detail");if(!host)return;
   if(exerciseBank==="fuentes"){renderSourceExerciseDetail(host);return;}
@@ -705,14 +720,14 @@ function renderExerciseDetail(){
     (concepts.length?'<section class="exercise-concepts"><h4>Conceptos que se usan</h4><div class="concept-tags">'+concepts.map(tag=>'<button type="button" class="text-link" data-open-exercise-lesson="'+escapeHTML(({"Ciclo Para":"for","Ciclo Mientras":"while","Ciclo Hacer–Mientras":"do-while","Entrada de datos":"input","Asignación":"variables","Imprimir":"output","Decisiones":"decisions","Operaciones aritméticas":"arithmetic","Comparaciones":"comparisons"})[tag]??"algorithm")+'">'+escapeHTML(tag)+' · ver lección</button>').join("")+'</div></section>':"")+
     (item.inputs.length?'<section class="exercise-sample"><p class="eyebrow">DATOS DE EJEMPLO</p><ul>'+item.inputs.map(value=>'<li>'+escapeHTML(value)+'</li>').join("")+'</ul></section>':"")+
     '<section class="exercise-guide"><h4>Antes de empezar</h4><ol>'+adapted.preguntasGuia.map(question=>'<li>'+escapeHTML(question)+'</li>').join("")+'</ol></section>'+
-    sections.map(section=>'<section class="exercise-solution-section" data-solution-section="'+section.key+'"><h4>'+escapeHTML(section.title)+'</h4>'+(Array.isArray(section.content)?'<ol>'+section.content.map(value=>'<li>'+escapeHTML(value)+'</li>').join("")+'</ol>':'<p>'+escapeHTML(section.content)+'</p>')+'</section>').join("")+
+    sections.map(section=>'<section class="exercise-solution-section" data-solution-section="'+section.key+'"><h4>'+escapeHTML(section.title)+'</h4>'+(Array.isArray(section.content)?'<ol class="exercise-solution-steps">'+section.content.map(value=>'<li>'+escapeHTML(value)+'</li>').join("")+'</ol>':'<p>'+escapeHTML(section.content)+'</p>')+'</section>').join("")+
     '<details class="exercise-source-solution"><summary>Ver pseudocódigo de referencia</summary><pre>'+escapeHTML(item.methods[0]?.pseudocode??"")+'</pre><p>Comprueba el resultado con los datos del ejercicio.</p></details>'+
     '<button type="button" class="button button-primary exercise-open-simulator" data-start-exercise>Ver en el Simulador</button>'+
     '<button type="button" class="text-link exercise-resolved-toggle" data-exercise-resolved aria-pressed="'+String(completedExerciseKeys().has(selectedExerciseTheme+":"+item.id))+'">'+(completedExerciseKeys().has(selectedExerciseTheme+":"+item.id)?"✓ Resuelto · Marcar como pendiente":"Marcar como resuelto")+'</button>'+
     (lessonLink?'<button type="button" class="text-link" data-open-exercise-lesson="'+lessonLink.id+'">Ver lección: '+escapeHTML(lessonLink.title)+'</button>':"")+
     '</div>';
   const detail=host.querySelector(".exercise-detail-scroll");if(detail)detail.scrollTop=exerciseDetailScroll.get(scrollKey)??0;
-  if(detail?.classList.contains("sheet-theme-surface"))syncSheetThemes(host);
+  if(detail?.classList.contains("sheet-theme-surface")){syncSheetThemes(host);observeExerciseFigures(host);}
 }
 function confirmExerciseInSimulator(){
   if(selectedSourceExercise){openSourceSimulator(selectedSourceExercise.scenario);return;}

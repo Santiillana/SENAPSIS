@@ -62,6 +62,7 @@ test("la hoja de ejercicio reúne sus apartados y conserva el pseudocódigo de r
   await expect(page.locator("#exercise-detail .exercise-sample")).toHaveCount(0);
   await expect(page.locator("#exercise-detail .exercise-guide li")).toHaveCount(3);
   await expect(page.locator("#exercise-detail svg")).toBeVisible();
+  await expect(page.locator("#exercise-detail .exercise-static-preview")).toHaveClass(/is-in-view/);
   await expect(page.locator("#exercise-detail .exercise-source-solution pre")).toBeHidden();
   await page.locator("#exercise-detail .exercise-source-solution summary").click();
   await expect(page.locator("#exercise-detail .exercise-source-solution pre")).toBeVisible();
@@ -69,6 +70,7 @@ test("la hoja de ejercicio reúne sus apartados y conserva el pseudocódigo de r
   await expect(page.locator("#exercise-detail .sheet-theme-surface")).toHaveAttribute("data-sheet-theme", "dark");
   await expect(page.locator("#exercise-detail [data-sheet-theme-toggle]")).toHaveAttribute("aria-pressed", "true");
   await page.locator("#exercise-detail .exercise-detail-scroll").evaluate(element=>{element.scrollTop=240;});
+  await expect(page.locator('#exercise-detail [data-solution-section="pasos"]')).toHaveClass(/is-in-view/);
   await page.locator('[data-select-exercise="24"]').click();
   await page.locator('[data-select-exercise="23"]').click();
   await expect.poll(()=>page.locator("#exercise-detail .exercise-detail-scroll").evaluate(element=>element.scrollTop)).toBe(240);

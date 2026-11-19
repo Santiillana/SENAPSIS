@@ -11,7 +11,7 @@ Actualizado: 19 de noviembre de 2026
 | 2 | completa | `ba0ac0f` |
 | 3 | auditoría completa; 3b espera aprobación explícita | `c7cf5f0` |
 | 4 | completa | `14e86de` |
-| 5 | en curso, step 4 | en curso |
+| 5 | en curso, step 5 | en curso |
 | 6 | pendiente; multi-ficha excluida | |
 | 7 | pendiente; configurar Cloudflare requiere al usuario | |
 | 8 | pendiente | |
@@ -38,3 +38,4 @@ Actualizado: 19 de noviembre de 2026
 - Fase 3: los bancos validan el esquema; no se detectan duplicados exactos ni descensos de nivel por orden; `MAT-ENT-15` está pendiente de confirmar transcripción.
 - Fase 5 step 3: flujo de lista lateral y hoja verificado en móvil, portátil y monitor; suite E2E de módulos 2 y 4, Fuentes y Constructor: 26/26 pruebas aprobadas en la última corrida completa previa al ajuste de scroll; prueba responsive focalizada: 1/1.
 - Fase 5 step 4: hoja de flujo implementada; la cobertura verifica apartados opcionales, tema compartido al navegar y tras recarga, scroll por ejercicio, persistencia de resuelto y foco al marcar. `node --test tests/exercise-solution.test.js`: 1/1; `npx playwright test e2e/module-4-exercises.spec.js --workers=1`: 11/11; `git diff --check`: limpio.
+- Fase 5 step 5: figuras y listas de solución se activan al entrar en la zona visible; movimiento reducido deja la secuencia completa estática y, sin `IntersectionObserver`, la escena se muestra completa desde el inicio. `npx playwright test e2e/module-4-exercises.spec.js --workers=1`: 11/11; `git diff --check`: limpio.
