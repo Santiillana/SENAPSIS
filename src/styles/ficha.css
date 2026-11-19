@@ -198,15 +198,17 @@
 .control-announcement{display:grid;grid-template-columns:1fr auto;gap:7px 10px;padding:12px 0;border-bottom:1px solid var(--line)}.control-announce-type{justify-self:start;padding:3px 8px;border-radius:999px;font-size:12px}.control-announce-type[data-type="importante"]{color:var(--on-struct);background:var(--struct)}.control-announce-type[data-type="informativo"]{border:1px solid var(--line);color:var(--text-2)}.control-announcement time{color:var(--text-2);font-size:13px}.control-announcement strong{grid-column:1/-1;font-size:16px}.control-announcement p{grid-column:1/-1;display:-webkit-box;overflow:hidden;margin:0;color:var(--text-2);font-size:15px;line-height:1.5;-webkit-box-orient:vertical;-webkit-line-clamp:2}.control-announcement.is-expanded p{-webkit-line-clamp:unset}
 .control-read-more{justify-self:start;min-height:36px;padding:0;border:0;color:var(--accent-text);background:transparent;font:600 14px var(--font-ui);cursor:pointer}
 .control-panel h3{font-size:24px}
-.competence-emblem{--competence-color:var(--competence-pendiente);display:grid;place-items:center;flex:none;width:42px;height:42px;border-radius:13px;color:var(--competence-color);background:color-mix(in srgb,var(--competence-color) 13%,var(--card))}
+.competence-emblem{--competence-color:var(--competence-pendiente);--competence-tint:color-mix(in srgb,var(--competence-color) 13%,var(--card));display:grid;place-items:center;flex:none;width:42px;height:42px;border-radius:13px;color:var(--competence-color);background:var(--competence-tint)}
+.competence-emblem .competence-marker{width:22px;height:22px}
 .competence-emblem svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.competence-emblem--logica{--competence-color:var(--competence-logica)}
-.competence-emblem--establecer{--competence-color:var(--competence-establecer)}
-.competence-emblem--evaluar{--competence-color:var(--competence-evaluar)}
-.competence-emblem--tics{--competence-color:var(--competence-tics)}
-.competence-emblem--comunicacion{--competence-color:var(--competence-comunicacion)}
-.competence-emblem--matematicas{--competence-color:var(--competence-matematicas)}
+.competence-emblem--logica-programacion{--competence-color:var(--competence-logica-programacion-text);--competence-tint:var(--competence-logica-programacion-tint)}
+.competence-emblem--establecer-requisitos{--competence-color:var(--competence-establecer-requisitos-text);--competence-tint:var(--competence-establecer-requisitos-tint)}
+.competence-emblem--evaluar-requisitos{--competence-color:var(--competence-evaluar-requisitos-text);--competence-tint:var(--competence-evaluar-requisitos-tint)}
+.competence-emblem--tics{--competence-color:var(--competence-tics-text);--competence-tint:var(--competence-tics-tint)}
+.competence-emblem--comunicacion{--competence-color:var(--competence-comunicacion-text);--competence-tint:var(--competence-comunicacion-tint)}
+.competence-emblem--matematicas{--competence-color:var(--competence-matematicas-text);--competence-tint:var(--competence-matematicas-tint)}
 .competence-emblem--pendiente{--competence-color:var(--competence-pendiente)}
+.competence-emblem--competencia-por-configurar,.competence-emblem--clase-sabado-por-confirmar{--competence-color:var(--competence-pendiente-text);--competence-tint:var(--competence-pendiente-tint)}
 .control-days{gap:12px}
 .control-day{display:grid;align-content:start;gap:8px;min-height:216px;padding:14px;border-radius:14px;animation:control-card-in 320ms cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--day-order,0)*45ms)}
 .control-day.is-today{border-width:2px}
@@ -216,28 +218,31 @@
 .control-today{grid-column:1;grid-row:2;justify-self:start;padding:2px 7px;border-radius:999px;color:var(--struct);background:color-mix(in srgb,var(--struct) 11%,var(--card));font-size:13px}
 .control-day-classes{display:grid;align-content:start;gap:8px}
 .control-class{gap:10px;padding:12px 0 2px;border-color:color-mix(in srgb,var(--competence-color,var(--line)) 35%,var(--line))}
-.control-class[data-competence="logica"]{--competence-color:var(--competence-logica)}
-.control-class[data-competence="establecer"]{--competence-color:var(--competence-establecer)}
-.control-class[data-competence="evaluar"]{--competence-color:var(--competence-evaluar)}
-.control-class[data-competence="tics"]{--competence-color:var(--competence-tics)}
-.control-class[data-competence="comunicacion"]{--competence-color:var(--competence-comunicacion)}
-.control-class[data-competence="matematicas"]{--competence-color:var(--competence-matematicas)}
+.control-class[data-competence="logica-programacion"]{--competence-color:var(--competence-logica-programacion-text);--competence-tint:var(--competence-logica-programacion-tint);--competence-border:var(--competence-logica-programacion-border)}
+.control-class[data-competence="competencia-por-configurar"],.control-class[data-competence="clase-sabado-por-confirmar"]{--competence-color:var(--competence-pendiente-text);--competence-tint:var(--competence-pendiente-tint);--competence-border:var(--competence-pendiente-border)}
+.control-class[data-competence="establecer-requisitos"]{--competence-color:var(--competence-establecer-requisitos-text);--competence-tint:var(--competence-establecer-requisitos-tint);--competence-border:var(--competence-establecer-requisitos-border)}
+.control-class[data-competence="evaluar-requisitos"]{--competence-color:var(--competence-evaluar-requisitos-text);--competence-tint:var(--competence-evaluar-requisitos-tint);--competence-border:var(--competence-evaluar-requisitos-border)}
+.control-class[data-competence="tics"]{--competence-color:var(--competence-tics-text);--competence-tint:var(--competence-tics-tint);--competence-border:var(--competence-tics-border)}
+.control-class[data-competence="comunicacion"]{--competence-color:var(--competence-comunicacion-text);--competence-tint:var(--competence-comunicacion-tint);--competence-border:var(--competence-comunicacion-border)}
+.control-class[data-competence="matematicas"]{--competence-color:var(--competence-matematicas-text);--competence-tint:var(--competence-matematicas-tint);--competence-border:var(--competence-matematicas-border)}
 .control-class-heading{display:flex;align-items:center;gap:10px;min-width:0}
 .control-class-heading .competence-emblem{width:38px;height:38px;border-radius:12px}
 .control-class-heading>span:last-child{display:grid;gap:2px;min-width:0}
 .control-class-heading strong{font-size:18px;line-height:1.25}
 .control-class-heading small{color:var(--text-2);font-size:15px}
-.control-class>time{justify-self:start;margin-left:48px;padding:4px 9px;border-radius:8px;color:var(--competence-color,var(--text));background:color-mix(in srgb,var(--competence-color,var(--line)) 12%,var(--card));font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.control-class>time{justify-self:start;margin-left:48px;padding:4px 9px;border-radius:8px;color:var(--competence-color,var(--text));background:var(--competence-tint,color-mix(in srgb,var(--competence-color,var(--line)) 12%,var(--card)));font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
 .control-confirm{font-size:16px}
 .control-evidences{display:grid;align-content:start;gap:11px}
 .control-evidences h3{margin-bottom:2px}
-.control-evidence-card{--competence-color:var(--competence-logica);overflow:hidden;border:1px solid color-mix(in srgb,var(--competence-color) 32%,var(--line));border-left:4px solid var(--competence-color);border-radius:14px;background:color-mix(in srgb,var(--competence-color) 4%,var(--card));box-shadow:var(--shadow-sm);animation:control-card-in 300ms cubic-bezier(.22,1,.36,1) both;transition:transform 180ms ease,box-shadow 180ms ease,border-color 180ms ease}
+.control-evidence-card{--competence-color:var(--competence-logica);--competence-tint:color-mix(in srgb,var(--competence-color) 4%,var(--card));--competence-border:color-mix(in srgb,var(--competence-color) 32%,var(--line));overflow:hidden;border:1px solid var(--competence-border);border-left:4px solid var(--competence-color);border-radius:14px;background:var(--competence-tint);box-shadow:var(--shadow-sm);animation:control-card-in 300ms cubic-bezier(.22,1,.36,1) both;transition:transform 180ms ease,box-shadow 180ms ease,border-color 180ms ease}
 .control-evidence-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
-.control-evidence-card[data-competence="establecer"]{--competence-color:var(--competence-establecer)}
-.control-evidence-card[data-competence="evaluar"]{--competence-color:var(--competence-evaluar)}
-.control-evidence-card[data-competence="tics"]{--competence-color:var(--competence-tics)}
-.control-evidence-card[data-competence="comunicacion"]{--competence-color:var(--competence-comunicacion)}
-.control-evidence-card[data-competence="matematicas"]{--competence-color:var(--competence-matematicas)}
+.control-evidence-card[data-competence="logica-programacion"]{--competence-color:var(--competence-logica-programacion-text);--competence-tint:var(--competence-logica-programacion-tint);--competence-border:var(--competence-logica-programacion-border)}
+.control-evidence-card[data-competence="competencia-por-configurar"],.control-evidence-card[data-competence="clase-sabado-por-confirmar"]{--competence-color:var(--competence-pendiente-text);--competence-tint:var(--competence-pendiente-tint);--competence-border:var(--competence-pendiente-border)}
+.control-evidence-card[data-competence="establecer-requisitos"]{--competence-color:var(--competence-establecer-requisitos-text);--competence-tint:var(--competence-establecer-requisitos-tint);--competence-border:var(--competence-establecer-requisitos-border)}
+.control-evidence-card[data-competence="evaluar-requisitos"]{--competence-color:var(--competence-evaluar-requisitos-text);--competence-tint:var(--competence-evaluar-requisitos-tint);--competence-border:var(--competence-evaluar-requisitos-border)}
+.control-evidence-card[data-competence="tics"]{--competence-color:var(--competence-tics-text);--competence-tint:var(--competence-tics-tint);--competence-border:var(--competence-tics-border)}
+.control-evidence-card[data-competence="comunicacion"]{--competence-color:var(--competence-comunicacion-text);--competence-tint:var(--competence-comunicacion-tint);--competence-border:var(--competence-comunicacion-border)}
+.control-evidence-card[data-competence="matematicas"]{--competence-color:var(--competence-matematicas-text);--competence-tint:var(--competence-matematicas-tint);--competence-border:var(--competence-matematicas-border)}
 .control-evidence-open{display:grid;gap:12px;width:100%;padding:15px 16px 11px;border:0;color:var(--text);background:transparent;text-align:left;cursor:pointer}
 .control-evidence-open:focus-visible,.control-dialog-close:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .control-evidence-heading{display:flex;align-items:center;gap:12px;min-width:0}

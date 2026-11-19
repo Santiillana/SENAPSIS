@@ -1,6 +1,7 @@
 import { FICHA } from "../content/ficha.js";
 import { documentosPublicados } from "./documentos.js";
 import { formatearFecha, escaparHTML } from "./view-utils.js";
+import { competenceMarker } from "./competencias-ui.js";
 
 let consulta = "";
 let filtros = { competencia: "todas", tema: "todos", instructor: "todos", tipo: "todos", desde: "", hasta: "" };
@@ -45,11 +46,17 @@ function listaDocumentos() {
 
 function opciones(campo, titulo, items) {
   const current = filtros[campo];
-  return `<label>${titulo}<select data-library-filter="${campo}"><option value="${campo === "competencia" ? "todas" : "todos"}">Todas</option>${items.map(([id, label]) => `<option value="${escaparHTML(id)}"${current === id ? " selected" : ""}>${escaparHTML(label)}</option>`).join("")}</select></label>`;
+  const option = ([id, label]) => `<option value="${escaparHTML(id)}"${current === id ? " selected" : ""}>${escaparHTML(label)}</option>`;
+  const contents = campo === "competencia" ? ["principal", "transversal"].map(tipo => {
+    const group = items.filter(([, , category]) => category === tipo);
+    return group.length ? `<optgroup label="${tipo === "principal" ? "Principales" : "Transversales"}">${group.map(option).join("")}</optgroup>` : "";
+  }).join("") + items.filter(([, , category]) => !category).map(option).join("") : items.map(option).join("");
+  return `<label>${titulo}<select data-library-filter="${campo}"><option value="${campo === "competencia" ? "todas" : "todos"}">Todas</option>${contents}</select></label>`;
 }
 function renderFiltros() {
   const docs = documentosPublicados("biblioteca");
-  const competencias = [...new Set(docs.map(d => d.competenciaId).filter(Boolean))].map(id => [id, nombreCompetencia(id)]);
+  const documentCompetences = new Set(docs.map(d => d.competenciaId).filter(Boolean));
+  const competencias = FICHA.competencias.filter(item => documentCompetences.has(item.id)).sort((a,b)=>(a.tipo==="principal"?0:1)-(b.tipo==="principal"?0:1)||a.orden-b.orden).map(item => [item.id, item.nombre, item.tipo]);
   const temas = [...new Set(docs.map(d => d.tema).filter(Boolean))].map(id => [id, id]);
   const instructores = [...new Set(docs.map(d => d.instructorId).filter(Boolean))].map(id => [id, nombreInstructor(id)]);
   const tipos = [["pdf", "PDF"], ["enlace", "Enlace"], ["presentacion", "Presentación"], ["hoja", "Hoja de cálculo"], ["imagen", "Imagen"], ["video", "Video"]];
@@ -65,7 +72,7 @@ function renderCard(documento) {
   const clase = documento.claseId ? FICHA.clases.find(item => item.id === documento.claseId) : null;
   const claseFecha = documento.claseFecha || clase?.fecha;
   const mark = documento.id === destacado ? " is-highlighted" : "";
-  return `<article class="library-card${mark}" id="library-doc-${escaparHTML(documento.id)}"><div class="library-card-heading"><span class="library-file-icon" data-type="${tipo}" aria-hidden="true">${({ pdf: "PDF", enlace: "↗", presentacion: "▧", hoja: "▦", imagen: "▧", video: "▷" })[tipo]}</span><time>${escaparHTML(formatearFecha(fecha, { day: "numeric", month: "short", year: "numeric" }))}</time></div><h3>${escaparHTML(documento.titulo)}</h3><p class="library-competence"><i aria-hidden="true"></i>${escaparHTML(nombreCompetencia(documento.competenciaId))}</p><p>${escaparHTML(documento.tema || "Tema por confirmar")}</p><p class="library-instructor">${escaparHTML(nombreInstructor(documento.instructorId))}</p><div class="library-card-actions"><a class="button button-primary" href="${escaparHTML(documento.url)}" target="_blank" rel="noopener">Abrir ↗</a>${claseFecha ? `<button type="button" class="button button-secondary" data-library-class="${escaparHTML(claseFecha)}" data-go="clases">Ver clase del ${escaparHTML(formatearFecha(claseFecha, { day: "numeric", month: "short" }))}</button>` : ""}</div></article>`;
+  return `<article class="library-card${mark}" id="library-doc-${escaparHTML(documento.id)}"><div class="library-card-heading"><span class="library-file-icon" data-type="${tipo}" aria-hidden="true">${({ pdf: "PDF", enlace: "↗", presentacion: "▧", hoja: "▦", imagen: "▧", video: "▷" })[tipo]}</span><time>${escaparHTML(formatearFecha(fecha, { day: "numeric", month: "short", year: "numeric" }))}</time></div><h3>${escaparHTML(documento.titulo)}</h3><p class="library-competence">${competenceMarker(documento.competenciaId)}${escaparHTML(nombreCompetencia(documento.competenciaId))}</p><p>${escaparHTML(documento.tema || "Tema por confirmar")}</p><p class="library-instructor">${escaparHTML(nombreInstructor(documento.instructorId))}</p><div class="library-card-actions"><a class="button button-primary" href="${escaparHTML(documento.url)}" target="_blank" rel="noopener">Abrir ↗</a>${claseFecha ? `<button type="button" class="button button-secondary" data-library-class="${escaparHTML(claseFecha)}" data-go="clases">Ver clase del ${escaparHTML(formatearFecha(claseFecha, { day: "numeric", month: "short" }))}</button>` : ""}</div></article>`;
 }
 
 export function resaltarDocumento(id) {

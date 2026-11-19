@@ -13,6 +13,7 @@ import {
   registrarResultadoTranscrito
 } from "./actividades.js";
 import { escaparHTML, formatearFecha, renderEstado } from "./view-utils.js";
+import { competenceMarker } from "./competencias-ui.js";
 
 let seleccionada = FICHA.actividades[0]?.id ?? null;
 let busqueda = "";
@@ -83,7 +84,7 @@ function actividadesFiltradas(personal) {
 }
 
 function renderFiltros() {
-  const chips = FICHA.competencias.map(competencia => `<button type="button" class="ficha-competence-filter${filtroCompetencia === competencia.id ? " is-active" : ""}" data-activity-competence="${escaparHTML(competencia.id)}" aria-pressed="${filtroCompetencia === competencia.id}"><i data-comp="${competencia.comp || 1}" aria-hidden="true"></i>${escaparHTML(competencia.nombre)}</button>`).join("");
+  const chips = [...FICHA.competencias].sort((a,b)=>(a.tipo==="principal"?0:1)-(b.tipo==="principal"?0:1)||a.orden-b.orden).map(competencia => `<button type="button" class="ficha-competence-filter${filtroCompetencia === competencia.id ? " is-active" : ""}" data-activity-competence="${escaparHTML(competencia.id)}" aria-pressed="${filtroCompetencia === competencia.id}">${competenceMarker(competencia.id)}${escaparHTML(competencia.nombre)}${competencia.tipo==="transversal"?'<small>Transversal</small>':""}</button>`).join("");
   return `
     <div class="ficha-activities-filters">
       <label>

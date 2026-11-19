@@ -8,7 +8,7 @@ import {
 } from "../src/ficha/filtros.js";
 import { initClases } from "../src/ficha/view-clases.js";
 import { filtrarDocumentosBiblioteca, renderBiblioteca } from "../src/ficha/view-biblioteca.js";
-import { competenceKey, competenceLogo } from "../src/ficha/competencias-ui.js";
+import { competenceKey, competenceLogo, competenceMarker } from "../src/ficha/competencias-ui.js";
 
 const read = path => readFile(new URL(path, import.meta.url), "utf8");
 
@@ -68,14 +68,15 @@ test("el horario coincide con los días, horas, temas e instructores de la image
   assert.equal(FICHA.horarioNotas.length, 0);
 });
 
-test("cada competencia tiene emblema propio y una identidad cromática", () => {
+test("cada competencia usa el marcador compartido con identidad estable y forma", () => {
   const ids = ["establecer-requisitos", "evaluar-requisitos", "tics", "comunicacion", "matematicas"];
   const keys = ids.map(competenceKey);
   assert.equal(new Set(keys).size, ids.length);
   for (const id of ids) {
-    const icon = competenceLogo(id);
-    assert.match(icon, /<svg viewBox="0 0 24 24"/);
-    assert.match(icon, new RegExp("competence-emblem--" + competenceKey(id)));
+    const marker = competenceMarker(id);
+    assert.match(marker, new RegExp(`competence-marker--${id}`));
+    assert.match(marker, /data-forma="(circulo|rombo|cuadrado|triangulo|hexagono)"/);
+    assert.match(competenceLogo(id), new RegExp("competence-emblem--" + id));
   }
 });
 
