@@ -21,7 +21,7 @@ test("la pantalla Intenta primero acompaña el ejercicio y respeta el modo prese
   await expect(intro).not.toBeVisible();
 
   await page.locator("#simulator-controls-toggle").click();
-  await page.locator("#simulator-controls-panel [data-exercise-shortcut='2']").evaluate(button => button.click());
+  await page.locator("#simulator-exercise-nav [data-exercise-shortcut='2']").evaluate(button => button.click());
   await expect(intro).toBeVisible();
   await page.locator("#simulator-intro-skip-checkbox").check();
   await page.locator("#simulator-reveal").click();
