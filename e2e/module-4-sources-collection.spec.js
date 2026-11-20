@@ -60,10 +60,10 @@ test("la tarjeta terciaria termina sin requisito directo y activa verificación 
 test("la Mesa ofrece controles de paso y se adapta a móvil",async({page})=>{
   await page.setViewportSize({width:375,height:812});
   await page.goto("/");
-  await goToSpace(page,"learn");
-  await page.locator('[data-learn-competence="establecer-requisitos"]').click();
-  await page.locator('[data-topic-open="fuentes-informacion"]').click();
   await goToSpace(page,"simulator");
+  await page.locator('#simulator-entry [data-sim-competence="establecer-requisitos"]').click();
+  await page.locator('#simulator-entry [data-sim-theme="fuentes-informacion"]').click();
+  await page.locator('#simulator-entry [data-sim-exercise]').first().click();
   await expect(page.locator("#source-simulator")).toBeVisible();
   await expect(page.locator("[data-source-sim-next]")).toBeEnabled();
   await page.locator("[data-source-sim-next]").click();
@@ -76,5 +76,5 @@ test("la Mesa ofrece controles de paso y se adapta a móvil",async({page})=>{
   await page.locator("[data-source-sim-exit]").click();
   await expect(page.locator("#view-learn")).toBeVisible();
   await goToSpace(page,"simulator");
-  await expect(page.locator("#source-simulator")).toBeVisible();
+  await expect(page.locator("#simulator-entry")).toBeVisible();
 });

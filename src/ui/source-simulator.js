@@ -1,9 +1,12 @@
 import {sourceScenarios,sourceTypes,sourceCoverage,validateSourceScenarios} from "../content/source-scenarios.js";
 import {createClock} from "./kit/clock.js";
+import {createSimulatorShell} from "./simulator-shell.js";
+import {classificationTemplate} from "./templates/classification.js";
+import {renderClassificationScene} from "./scenes/classification.js";
 
 const esc=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 const root=()=>document.querySelector("#source-simulator");
-let scenario=sourceScenarios[0],step=0,timer=0,playing=false,clock=null,lastFrame=null,predict=null,hiddenBefore=new Map(),originalTitle="",originalStatus="";
+let scenario=sourceScenarios[0],step=0,timeline=null,timer=0,playing=false,clock=null,lastFrame=null,predict=null,hiddenBefore=new Map(),originalTitle="",originalStatus="";
 let textScale=1,camera=true;
 const STEP_DURATION=1100;
 
@@ -37,8 +40,7 @@ function predictMarkup(source){
 
 function render(){
   const host=root();if(!host||!scenario)return;
-  const source=sourceAt(),coverage=progressAt();
-  const requirement=source.requirementIds.map(id=>scenario.requirements.find(item=>item.id===id)).find(Boolean);
+  const stepData=timeline?.current,source=stepData?.escena.datos.source??sourceAt(),coverage=progressAt();
   const seenSourceIds=new Set(scenario.sources.slice(0,step+1).map(item=>item.id));
   const requirements=scenario.requirements.map(item=>{
     const evidence=scenario.sources.find(entry=>entry.id===item.sourceId),seen=seenSourceIds.has(item.sourceId);
@@ -46,33 +48,26 @@ function render(){
   }).join("");
   const areaRows=coverage.areas.map(area=>'<li class="'+(area.covered?(area.primaryVerified?"is-primary-verified":"is-unverified") : "is-pending")+'"><span class="source-sim-area-icon" aria-hidden="true">'+(area.primaryVerified?"✓":area.covered?"⚠":"○")+'</span><span>'+esc(area.title)+'</span><b>'+ (area.primaryVerified?"Verificada con P":area.covered?"Por verificar con una fuente primaria":"Sin evidencia aún")+'</b></li>').join("");
   const lanes=["P","S","T"].map(type=>'<section class="source-sim-lane source-sim-lane-'+type+'"><header>'+badge(type)+'<strong>'+sourceTypes[type].name+'</strong></header><div>'+scenario.sources.filter(item=>item.type===type).map(item=>'<button type="button" data-source-sim-select="'+esc(item.id)+'" class="source-sim-source '+(item.id===source.id?"is-current":"")+'" aria-current="'+String(item.id===source.id)+'"><span>'+esc(item.title)+'</span><small>'+item.hops+' salto'+(item.hops===1?"":"s")+'</small></button>').join("")+'</div></section>').join("");
-  const routeNodes=source.type==="P"?[
-    {title:source.title,kind:"source",type:source.type},{title:"Persona analista",kind:"analyst"}
-  ]:source.type==="S"?[
-    {title:"Dato o actividad original",kind:"origin"},{title:source.title,kind:"source",type:source.type},{title:"Persona analista",kind:"analyst"}
-  ]:[
-    {title:"Información original",kind:"origin"},{title:"Documento fuente",kind:"intermediary"},{title:source.title,kind:"source",type:source.type},{title:"Persona analista",kind:"analyst"}
-  ];
-  const route=routeNodes.map((node,index)=>'<span class="source-sim-route-node '+(index===routeNodes.length-1?"is-current":"is-passed")+'">'+(node.type?badge(node.type):'<b class="source-sim-route-symbol" aria-hidden="true">'+(node.kind==="analyst"?"⌕":"▤")+'</b>')+'<small>'+esc(node.title)+'</small></span>').join('<span class="source-sim-route-arrow" aria-hidden="true">→</span>');
+  const classificationScene=renderClassificationScene(stepData?.escena);
   const final=step===scenario.sources.length-1?sourceCoverage(scenario):null;
-  host.innerHTML='<header class="source-sim-toolbar"><div><p class="eyebrow">MESA DE RECOLECCIÓN</p><h2>'+esc(scenario.title)+'</h2><p>'+esc(scenario.description)+'</p></div><div class="source-sim-toolbar-actions"><label>Escenario<select data-source-sim-scenario>'+sourceScenarios.map(item=>'<option value="'+esc(item.id)+'"'+(item.id===scenario.id?" selected":"")+'>'+esc(item.title)+'</option>').join("")+'</select></label><button type="button" class="button button-secondary" data-source-sim-exit>‹ Volver</button></div></header>'+
-    '<div class="source-sim-controls"><button type="button" data-source-sim-first aria-label="Ir al primer paso" '+(step===0?"disabled":"")+'>|‹</button><button type="button" data-source-sim-prev aria-label="Paso anterior" '+(step===0?"disabled":"")+'>← Anterior</button><button type="button" data-source-sim-play aria-pressed="'+String(playing)+'" '+(step>=scenario.sources.length-1?"disabled":"")+'>'+(playing?"Ⅱ Pausar":"▶ Reproducir")+'</button><button type="button" data-source-sim-next aria-label="Paso siguiente" '+(step>=scenario.sources.length-1?"disabled":"")+'>Siguiente →</button><button type="button" data-source-sim-last aria-label="Ir al último paso" '+(step>=scenario.sources.length-1?"disabled":"")+'>›|</button><label class="source-sim-scrubber"><span>Paso '+(step+1)+' de '+scenario.sources.length+'</span><input type="range" min="0" max="'+(scenario.sources.length-1)+'" value="'+step+'" data-source-sim-range aria-label="Recorrido de fuentes"></label><button type="button" data-source-sim-predict aria-pressed="'+String(Boolean(predict?.open))+'">🎯 Predice</button><button type="button" data-source-sim-camera aria-pressed="'+String(camera)+'">◎ '+(camera?"Cámara automática":"Centrar fuente")+'</button><button type="button" data-source-sim-focus aria-pressed="'+String(host.classList.contains("is-concentrated"))+'">⛶ Concentración</button><span class="source-sim-text-controls" aria-label="Tamaño del texto"><button type="button" data-source-sim-text="-1" aria-label="Reducir texto">A−</button><button type="button" data-source-sim-text="0" aria-label="Restablecer texto">A</button><button type="button" data-source-sim-text="1" aria-label="Aumentar texto">A+</button></span></div>'+
-    '<div class="source-sim-workspace" style="--source-sim-scale:'+textScale+'"><aside class="source-sim-lanes" aria-label="Carriles de fuentes">'+lanes+'</aside><main class="source-sim-center"><header><span>PASO '+String(step+1).padStart(2,"0")+' / '+scenario.sources.length+'</span><h3>'+esc(source.title)+'</h3></header><div class="source-sim-route">'+route+'<span class="source-sim-route-destination">'+(requirement?"Hoja de requisitos":"Análisis")+'</span></div><article class="source-sim-contribution"><div class="source-sim-evidence-type">'+badge(source.type)+'<span>'+source.hops+' salto'+(source.hops===1?"":"s")+' desde el origen</span></div><p class="eyebrow">QUÉ APORTA</p><strong>'+esc(source.contribution)+'</strong>'+(source.requirementIds.length?'<div class="source-sim-emitted">'+source.requirementIds.map(id=>{const req=scenario.requirements.find(item=>item.id===id);return '<article>'+badge(source.type)+'<b>'+esc(id)+'</b><span>'+esc(req.text)+'</span></article>';}).join("")+'</div>':'<p class="source-sim-no-requirement">Esta fuente orienta la búsqueda; no produce un requisito directo.</p>')+'</article><details class="source-sim-mini-window" open><summary>Qué aporta y qué limita</summary><div><p><b>Aporta</b>'+esc(source.contribution)+'</p><p><b>Límite</b>'+esc(source.limitation)+'</p></div></details></main><aside class="source-sim-sheet"><header><p class="eyebrow">HOJA DE REQUISITOS</p><h3>Trazabilidad</h3><span>'+coverage.coveredAreas+' de '+coverage.totalAreas+' áreas cubiertas · '+coverage.primaryVerified+' verificadas con P</span></header><ol>'+requirements+'</ol><section class="source-sim-areas"><h4>Cobertura por área</h4><ul>'+areaRows+'</ul></section>'+(final?'<section class="source-sim-completion"><b>Cobertura final</b><span>'+final.coveredAreas+'/'+final.totalAreas+' áreas cubiertas · '+final.primaryVerified+'/'+final.totalAreas+' verificadas con fuente primaria</span>'+(final.needsPrimary?'<strong>⚠ '+final.needsPrimary+' áreas: Por verificar con una fuente primaria</strong>':'<strong>✓ Todas las áreas cuentan con evidencia primaria</strong>')+'</section>':"")+'</aside></div>'+predictMarkup(source);
+  host.innerHTML=`<header class="source-sim-toolbar"><div><p class="eyebrow">MESA DE RECOLECCIÓN</p><h2>${esc(scenario.title)}</h2><p>${esc(scenario.description)}</p></div><div class="source-sim-toolbar-actions"><label>Escenario<select data-source-sim-scenario>${sourceScenarios.map(item=>`<option value="${esc(item.id)}"${item.id===scenario.id?" selected":""}>${esc(item.title)}</option>`).join("")}</select></label><button type="button" class="button button-secondary" data-source-sim-exit>‹ Volver</button></div></header>
+    <div class="source-sim-controls"><button type="button" data-source-sim-first aria-label="Ir al primer paso" ${step===0?"disabled":""}>|‹</button><button type="button" data-source-sim-prev aria-label="Paso anterior" ${step===0?"disabled":""}>← Anterior</button><button type="button" data-source-sim-play aria-pressed="${String(playing)}" ${step>=scenario.sources.length-1?"disabled":""}>${playing?"Ⅱ Pausar":"▶ Reproducir"}</button><button type="button" data-source-sim-next aria-label="Paso siguiente" ${step>=scenario.sources.length-1?"disabled":""}>Siguiente →</button><button type="button" data-source-sim-last aria-label="Ir al último paso" ${step>=scenario.sources.length-1?"disabled":""}>›|</button><label class="source-sim-scrubber"><span>Paso ${step+1} de ${scenario.sources.length}</span><input type="range" min="0" max="${scenario.sources.length-1}" value="${step}" data-source-sim-range aria-label="Recorrido de fuentes"></label><button type="button" data-source-sim-predict aria-pressed="${String(Boolean(predict?.open))}">🎯 Predice</button><button type="button" data-source-sim-camera aria-pressed="${String(camera)}">◎ ${camera?"Cámara automática":"Centrar fuente"}</button><button type="button" data-source-sim-focus aria-pressed="${String(host.classList.contains("is-concentrated"))}">⛶ Concentración</button><span class="source-sim-text-controls" aria-label="Tamaño del texto"><button type="button" data-source-sim-text="-1" aria-label="Reducir texto">A−</button><button type="button" data-source-sim-text="0" aria-label="Restablecer texto">A</button><button type="button" data-source-sim-text="1" aria-label="Aumentar texto">A+</button></span></div>
+    <div class="source-sim-workspace" style="--source-sim-scale:${textScale}"><aside class="source-sim-lanes" aria-label="Carriles de fuentes">${lanes}</aside><main class="source-sim-center"><header><span>PASO ${String(step+1).padStart(2,"0")} / ${scenario.sources.length}</span><h3>${esc(source.title)}</h3></header>${classificationScene}</main><aside class="source-sim-sheet"><header><p class="eyebrow">HOJA DE REQUISITOS</p><h3>Trazabilidad</h3><span>${coverage.coveredAreas} de ${coverage.totalAreas} áreas cubiertas · ${coverage.primaryVerified} verificadas con P</span></header><ol>${requirements}</ol><section class="source-sim-areas"><h4>Cobertura por área</h4><ul>${areaRows}</ul></section>${final?`<section class="source-sim-completion"><b>Cobertura final</b><span>${final.coveredAreas}/${final.totalAreas} áreas cubiertas · ${final.primaryVerified}/${final.totalAreas} verificadas con fuente primaria</span>${final.needsPrimary?`<strong>⚠ ${final.needsPrimary} áreas: Por verificar con una fuente primaria</strong>`:"<strong>✓ Todas las áreas cuentan con evidencia primaria</strong>"}</section>`:""}</aside></div>${predictMarkup(source)}`;
   const status=document.querySelector("#simulator-status");if(status)status.textContent="FUENTE "+String(step+1).padStart(2,"0")+" DE "+scenario.sources.length+" · "+sourceTypes[source.type].name.toLocaleUpperCase("es");
 }
 
-function seek(next){step=Math.max(0,Math.min(scenario.sources.length-1,next));render();if(camera)document.querySelector(".source-sim-source.is-current")?.scrollIntoView({block:"nearest",inline:"nearest"});}
+function seek(next){timeline.seek(next);step=timeline.index;render();if(camera)document.querySelector(".source-sim-source.is-current")?.scrollIntoView({block:"nearest",inline:"nearest"});}
 function stop(){if(timer)cancelAnimationFrame(timer);timer=0;lastFrame=null;playing=false;clock?.pause();}
 function play(){
   if(playing){stop();render();return;}
   if(matchMedia("(prefers-reduced-motion: reduce)").matches||document.documentElement.dataset.motion==="reduced")return;
-  if(step>=scenario.sources.length-1)step=0;
+  if(step>=scenario.sources.length-1){timeline.first();step=timeline.index;}
   clock=createClock({duration:scenario.sources.length*STEP_DURATION});clock.seek(step*STEP_DURATION);clock.play();playing=true;render();
   const frame=timestamp=>{
     if(!playing||!clock)return;
-    if(lastFrame!==null){clock.advance(Math.min(100,Math.max(0,timestamp-lastFrame)));const next=Math.min(scenario.sources.length-1,Math.floor(clock.time/STEP_DURATION));if(next!==step){step=next;render();}}
+    if(lastFrame!==null){clock.advance(Math.min(100,Math.max(0,timestamp-lastFrame)));const next=Math.min(scenario.sources.length-1,Math.floor(clock.time/STEP_DURATION));if(next!==step){timeline.seek(next);step=timeline.index;render();}}
     lastFrame=timestamp;
-    if(clock.playing)timer=requestAnimationFrame(frame);else{playing=false;timer=0;lastFrame=null;step=scenario.sources.length-1;render();}
+    if(clock.playing)timer=requestAnimationFrame(frame);else{playing=false;timer=0;lastFrame=null;timeline.last();step=timeline.index;render();}
   };
   timer=requestAnimationFrame(frame);
 }
@@ -84,7 +79,7 @@ function close(){
   const title=document.querySelector("#simulator-title"),status=document.querySelector("#simulator-status");if(title)title.textContent=originalTitle;if(status)status.textContent=originalStatus;
 }
 function open(scenarioId){
-  stop();scenario=sourceScenarios.find(item=>item.id===scenarioId)??sourceScenarios[0];step=0;predict=null;clock=null;
+  stop();scenario=sourceScenarios.find(item=>item.id===scenarioId)??sourceScenarios[0];timeline=createSimulatorShell(classificationTemplate,scenario,scenario);step=timeline.index;predict=null;clock=null;
   const host=root();if(!host)return;
   for(const selector of ["#math-player",".simulator-mobile-tabs",".simulator-grid"]){const element=document.querySelector(selector);if(element){hiddenBefore.set(element,{hidden:element.hidden,display:element.style.getPropertyValue("display"),priority:element.style.getPropertyPriority("display")});element.hidden=true;element.style.setProperty("display","none","important");}}
   const title=document.querySelector("#simulator-title"),status=document.querySelector("#simulator-status");
@@ -120,7 +115,7 @@ export function initSourceSimulator(){
     const sourceButton=button.closest("[data-source-sim-select]");if(sourceButton){stop();seek(scenario.sources.findIndex(item=>item.id===sourceButton.dataset.sourceSimSelect));}
   });
   root().addEventListener("change",event=>{
-    if(event.target.matches("[data-source-sim-scenario]")){stop();scenario=sourceScenarios.find(item=>item.id===event.target.value)??sourceScenarios[0];step=0;clock=null;predict=null;render();}
+    if(event.target.matches("[data-source-sim-scenario]")){stop();scenario=sourceScenarios.find(item=>item.id===event.target.value)??sourceScenarios[0];timeline=createSimulatorShell(classificationTemplate,scenario,scenario);step=timeline.index;clock=null;predict=null;render();}
     if(event.target.matches("[data-source-sim-range]")){stop();seek(Number(event.target.value));}
   });
   root().addEventListener("keydown",event=>{
