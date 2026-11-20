@@ -8,7 +8,7 @@
 | 5 | completa, pasos 1–7 | `007d18d` (paso 7) |
 | 6 | excluida temporalmente; no implementar multi-ficha | — |
 | 7 | implementación steps 1–6 completa; configuración de cuenta pendiente | `3aaf8f9` (paso 5) |
-| 8 | steps 1–2 completos; Matemáticas pendiente | siguiente: step 3 |
+| 8 | steps 1–3 completos; limpieza pendiente | siguiente: step 4 |
 
 ## Arquitectura y decisiones
 
@@ -16,7 +16,7 @@
 - Fase 3b espera aprobación expresa del informe antes de redactar o reescribir contenido. `MAT-ENT-15` requiere confirmar transcripción. `reference/` está protegida.
 - Aprende ofrece competencias → temas → ejercicios, lista ordenada, filtros, estado local y hoja de lectura con apartados disponibles, tema compartido, enlaces, pseudocódigo opcional, simulador, resolución y scroll restaurado.
 - Laboratorio agrupa 34 mecánicas por competencia/tema, conserva estrellas y medallas; el Simulador permite competencia → tema → ejercicio y mantiene accesos directos desde Aprende.
-- Fuentes adapta sus escenarios a `createSimulatorShell` con plantilla `clasificacion` y renderer de dominio; conserva carriles, hoja y controles. Matemáticas aún usa su reproductor propio. No se mutan catálogos.
+- Fuentes y Matemáticas usan `createSimulatorShell` con plantillas `clasificacion` y `calculo` y renderers de dominio; conservan controles y visualizaciones. No se mutan catálogos.
 - Fase 7 implementa Worker, D1 singleton, Access JWT, lectura con caché y respaldo offline, escritura versionada con auditoría y `/administrar.html`; incluye gestión, vista previa real, historial y respaldo JSON validado. Guía Cloudflare en `docs/CONFIGURAR_CLOUDFLARE.md`. Multi-ficha y sincronización de estado personal quedan fuera.
 - El panel incluye registro diario y, al completar step 5, gestión de competencias, horarios, instructores, comunicados y metadatos; contactos públicos requieren consentimiento y los borrados son lógicos.
 - No desplegar ni cambiar la cuenta de Cloudflare. Pasos preparados en `docs/CONFIGURAR_CLOUDFLARE.md`; el usuario crea D1, configura Access/rutas y aprueba.
@@ -36,4 +36,4 @@
 - Fase 7 steps 1–3: validación API/Access, migraciones SQLite y pruebas de servidor completas; steps 2 E2E 2/2.
 - Fase 7 step 4: registro diario E2E 1/1 en 390 px; valida borrador, publicación y deshacer.
 - Fase 7 steps 5–6: gestión, vista previa, historial y respaldos; E2E de Administración 3/3 y validación Worker 3/3.
-- Fase 8 step 2: plantilla de clasificación 2 tests; fuentes y entrada al Simulador E2E 6/6; movimiento reducido mantiene la escena estática.
+- Fase 8 steps 2–3: plantillas de clasificación/cálculo 4 tests; E2E de Fuentes 6/6 y Matemáticas/entrada 13/13; renderers estáticos respetan movimiento reducido.
