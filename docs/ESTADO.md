@@ -7,8 +7,8 @@
 | 0–4 | completas | commits previos de la rama |
 | 5 | completa, pasos 1–7 | `007d18d` (paso 7) |
 | 6 | excluida temporalmente; no implementar multi-ficha | — |
-| 7 | implementación steps 1–6 completa; configuración de cuenta pendiente | `3aaf8f9` (paso 5) |
-| 8 | steps 1–3 completos; limpieza pendiente | siguiente: step 4 |
+| 7 | implementación steps 1–6 completa; configuración de cuenta pendiente | `5f0fd6e` (paso 6) |
+| 8 | steps 1–4 completos; cierre responsive pendiente | siguiente: step 5 |
 
 ## Arquitectura y decisiones
 
@@ -17,6 +17,7 @@
 - Aprende ofrece competencias → temas → ejercicios, lista ordenada, filtros, estado local y hoja de lectura con apartados disponibles, tema compartido, enlaces, pseudocódigo opcional, simulador, resolución y scroll restaurado.
 - Laboratorio agrupa 34 mecánicas por competencia/tema, conserva estrellas y medallas; el Simulador permite competencia → tema → ejercicio y mantiene accesos directos desde Aprende.
 - Fuentes y Matemáticas usan `createSimulatorShell` con plantillas `clasificacion` y `calculo` y renderers de dominio; conservan controles y visualizaciones. No se mutan catálogos.
+- La auditoría del step 4 confirmó que los controladores de ambos reproductores siguen importados por `src/app.js`; sus adaptadores, renderer y controladores se conservan porque tienen uso activo.
 - Fase 7 implementa Worker, D1 singleton, Access JWT, lectura con caché y respaldo offline, escritura versionada con auditoría y `/administrar.html`; incluye gestión, vista previa real, historial y respaldo JSON validado. Guía Cloudflare en `docs/CONFIGURAR_CLOUDFLARE.md`. Multi-ficha y sincronización de estado personal quedan fuera.
 - El panel incluye registro diario y, al completar step 5, gestión de competencias, horarios, instructores, comunicados y metadatos; contactos públicos requieren consentimiento y los borrados son lógicos.
 - No desplegar ni cambiar la cuenta de Cloudflare. Pasos preparados en `docs/CONFIGURAR_CLOUDFLARE.md`; el usuario crea D1, configura Access/rutas y aprueba.
