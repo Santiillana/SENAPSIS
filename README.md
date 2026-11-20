@@ -80,3 +80,7 @@ La aplicación es estática. El workflow `.github/workflows/pages.yml` permite u
 ## Mi ficha · Actividades
 
 La vista Actividades reúne consignas, instrucciones, entregables y documentos publicados; permite buscar y filtrar, registrar el checklist, notas y devoluciones transcritas. El seguimiento personal permanece en el navegador. El contenido oficial se publica mediante cambios versionados revisados; la carga autenticada de archivos requiere un backend.
+
+## Plantillas de simulación
+
+Fuentes y Matemáticas comparten `createSimulatorShell` y el contrato de pasos. La plantilla `clasificacion` presenta la ruta de una fuente, sus aportes y la cobertura de requisitos; `calculo` adapta cada operación a tablas, áreas constantes, barras de fracciones o árboles de operación. Los catálogos conservan sus ejercicios y valores actuales, incluido el ejercicio de Enteros pendiente de confirmar con el original.

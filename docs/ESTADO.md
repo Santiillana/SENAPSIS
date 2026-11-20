@@ -1,5 +1,4 @@
 # ESTADO · Traza · 19 de noviembre de 2026
-
 ## Avance
 
 | Fase | Estado | Último commit |
@@ -8,7 +7,7 @@
 | 5 | completa, pasos 1–7 | `007d18d` (paso 7) |
 | 6 | excluida temporalmente; no implementar multi-ficha | — |
 | 7 | implementación steps 1–6 completa; configuración de cuenta pendiente | `5f0fd6e` (paso 6) |
-| 8 | steps 1–4 completos; cierre responsive pendiente | siguiente: step 5 |
+| 8 | implementación y validación focalizada completas; suite global conserva fallos en otras áreas | `e572461` (step 5) |
 
 ## Arquitectura y decisiones
 
@@ -24,10 +23,8 @@
 - Cambios ajenos ya presentes en el árbol: README, mapa, progreso, simulador, prueba de contrato de teclado y archivos de `mejoras imp/`. Mantenerlos fuera de commits salvo necesidad clara y origen identificable.
 
 ## Próximos pasos
-- Fase 7 step 6: vista previa, historial, deshacer y exportar/importar JSON.
-- Documentar pasos Cloudflare y detenerse antes de cualquier despliegue o cambio de cuenta.
-- Fase 8 steps 2–4: migrar Fuentes y Matemáticas, retirar código viejo solo sin usos; step 5: barrido responsive en 390/768/1366, tema claro, README y mapa.
-- Ejecutar validaciones focalizadas y la suite Node/E2E al cierre; separar cada step en su propio commit.
+- Fase 7: configuración de D1 y Access en la cuenta del usuario; despliegue solo con aprobación expresa.
+- Fase 8: cierre funcional verificado. La última suite global registrada quedó en 159/170 antes de corregir el recorrido móvil de Fuentes; 10 E2E restantes fallaron en suites de otras áreas. La suite focalizada posterior de Fuentes, Matemáticas y entrada al Simulador pasó 10/10; `npm test` pasó 379/379.
 
 ## Validación reciente
 
@@ -38,3 +35,4 @@
 - Fase 7 step 4: registro diario E2E 1/1 en 390 px; valida borrador, publicación y deshacer.
 - Fase 7 steps 5–6: gestión, vista previa, historial y respaldos; E2E de Administración 3/3 y validación Worker 3/3.
 - Fase 8 steps 2–3: plantillas de clasificación/cálculo 4 tests; E2E de Fuentes 6/6 y Matemáticas/entrada 13/13; renderers estáticos respetan movimiento reducido.
+- Fase 8 cierre: responsive 10/10; `npm test` 379/379; E2E focalizado de Fuentes, Matemáticas y entrada al Simulador 10/10. El servidor estático de Playwright devuelve 404 en `/api/v1/version` porque no inicia el Worker; el repositorio maneja la API caída con respaldo local. En la corrida global, los 10 fallos restantes corresponden a diagnósticos, Constructor/Laboratorio, Centro de control y simulador de flujo, fuera de los cambios de Fase 8.
