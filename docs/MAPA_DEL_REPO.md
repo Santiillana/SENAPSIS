@@ -1,4 +1,4 @@
-# Mapa del repositorio · Senapsis (código Traza)
+# Mapa del repositorio · Senapsis
 
 Senapsis organiza la información compartida de una ficha para aprendices e instructores autorizados; **Mi ficha** es el espacio central y **Aprende** complementa la formación con material de repaso. Esta instalación administra una ficha. Conteos derivados de los catálogos actuales: **5 temas, 40 lecciones, 108 ejercicios y 4 actividades de Mi ficha**. Detalle: 17/45 en diagramas, 8/24 en fuentes y 15/39 en matemáticas. TICs y Comunicación permanecen como competencias próximas sin temas vacíos.
 
@@ -21,7 +21,7 @@ Senapsis organiza la información compartida de una ficha para aprendices e inst
 | `src/ui/content-view.js` | Catálogo, lecciones y progreso | `content`, E2E |
 | `src/ui/source-simulator.js` | Simulador de recolección de fuentes | `source-requirements`, E2E de fuentes |
 | `src/ui/simulator-shell.js`, `src/ui/flow-step-contract.js` | Navegación genérica y validación de pasos para plantillas de simulador | `simulator-shell`, `flow-step-contract` |
-| `src/ui/simulator.js`, `src/ui/simulator-intro.js` | Traza, cámara, apoyo sencillo por paso y preferencias de introducción | E2E de Simulador |
+| `src/ui/simulator.js`, `src/ui/simulator-intro.js` | Recorrido de ejecución, cámara, apoyo sencillo por paso y preferencias de introducción | E2E de Simulador |
 | `src/styles/` | Tokens, vistas, componentes y responsive | `contrast`, E2E |
 | `tests/` | Contratos, contenido, motor, accesibilidad y regresiones | `npm test` |
 | `e2e/navigation.js`, `e2e/ui-layout.js` | Navegación de aceptación y detección de desbordamiento/solapamiento en las ocho rutas principales | `shared-navigation-header`, E2E |

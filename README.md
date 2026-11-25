@@ -1,6 +1,6 @@
 # Senapsis · plataforma colaborativa para una ficha de formación
 
-Senapsis reúne en un espacio compartido la información importante de una ficha de formación. Los aprendices pueden consultar sus clases, horarios, actividades y materiales; los instructores y moderadores autorizados pueden mantener actualizada la información de la ficha. **Aprende** complementa ese espacio con lecciones, ejercicios y simuladores para repasar las competencias que cursa el aprendiz. El nombre técnico del repositorio y sus contratos internos siguen siendo Traza.
+Senapsis reúne en un espacio compartido la información importante de una ficha de formación. Los aprendices pueden consultar sus clases, horarios, actividades y materiales; los instructores y moderadores autorizados pueden mantener actualizada la información de la ficha. **Aprende** complementa ese espacio con lecciones, ejercicios y simuladores para repasar las competencias que cursa el aprendiz.
 
 Esta versión administra una ficha compartida. La configuración para varias fichas y las cuentas individuales de aprendices están fuera del alcance actual. Los permisos de administración aún no se separan por instructor: las personas autorizadas pueden gestionar la ficha completa. El panel se protege con Cloudflare Access cuando se configura y despliega el Worker; las marcas personales de actividades y el progreso de Lecciones se guardan en el navegador de cada aprendiz.
 

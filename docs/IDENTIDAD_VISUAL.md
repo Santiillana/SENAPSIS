@@ -9,4 +9,4 @@
 - La bienvenida usa una cuadrícula verde tenue sobre marfil y permanece hasta que se pulse **Ingresar**. El botón abre la plataforma de consulta sin pedir credenciales. La administración de la ficha está en una página aparte, protegida por Cloudflare Access cuando se configura; esta versión no ofrece cuentas individuales para aprendices.
 - La transición respeta `prefers-reduced-motion`; en ese modo el contenido aparece estático y el botón continúa disponible.
 
-El repositorio conserva el nombre técnico Traza en rutas, claves locales y contratos internos para no invalidar datos ni integraciones existentes.
+Senapsis es el nombre del producto, de la interfaz y del repositorio.

@@ -4,7 +4,7 @@ La aplicación y el Worker están preparados, pero no se ha accedido a la cuenta
 
 ## Valores que debes reunir en tu cuenta
 
-- Dominio público de Traza, con DNS proxied por Cloudflare.
+- Dominio público de Senapsis, con DNS proxied por Cloudflare.
 - Correo autorizado para administrar.
 - Team domain de Access (`<equipo>.cloudflareaccess.com`) y Audience tag de la aplicación Access.
 - ID de la base D1 que crearás en el paso siguiente.
@@ -18,7 +18,7 @@ npx wrangler login
 npx wrangler d1 create traza-content
 ```
 
-Copia el `database_id` que devuelve Wrangler en `wrangler.jsonc`, reemplazando `REPLACE_WITH_D1_DATABASE_ID`. Completa las cuatro variables `REPLACE_WITH_…` con el Team domain, Audience tag, correo autorizado y origen público exacto (por ejemplo `https://traza.example.edu`). No añadas barra final al origen. No pongas secretos en el navegador.
+Copia el `database_id` que devuelve Wrangler en `wrangler.jsonc`, reemplazando `REPLACE_WITH_D1_DATABASE_ID`. Completa las cuatro variables `REPLACE_WITH_…` con el Team domain, Audience tag, correo autorizado y origen público exacto (por ejemplo `https://senapsis.example.edu`). No añadas barra final al origen. No pongas secretos en el navegador.
 
 Aplica las migraciones remotas después de revisar cuenta, base y configuración:
 
