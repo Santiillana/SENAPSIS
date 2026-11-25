@@ -41,16 +41,26 @@ test("el catálogo es compacto y ordena las tarjetas por dificultad y número",a
   await expect(page.locator('#exercise-grid [data-select-exercise="2"] .exercise-row-status')).toContainText("Visto");
 });
 
-test("dificultad, clase y búsqueda se combinan y se limpian",async({page})=>{
+test("dificultad, concepto, clase y búsqueda se combinan y se limpian",async({page})=>{
   await openExercises(page);
   await page.locator('[data-exercise-difficulty="2"]').click();
   await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(10);
   await page.locator('[data-exercise-difficulty="2"]').click();
+  await page.locator('[data-exercise-concept="ciclo-para"]').click();
+  const conceptCount=await page.locator("#exercise-grid [data-select-exercise]").count();
+  expect(conceptCount).toBeGreaterThan(0);expect(conceptCount).toBeLessThan(45);
+  await expect(page).toHaveURL(/concepto=ciclo-para/);
+  await page.reload();
+  const splash=page.locator("#brand-splash");
+  if(await splash.isVisible()){await page.locator("#brand-enter").click();await expect(splash).toHaveCount(0);}
+  await expect(page.locator('[data-exercise-concept="ciclo-para"]')).toHaveAttribute("aria-pressed","true");
+  await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(conceptCount);
+  await page.locator('[data-exercise-concept="ciclo-para"]').click();
   await page.locator("#exercise-class-only").click();
   const ids=await page.locator("#exercise-grid [data-select-exercise]").evaluateAll(cards=>cards.map(card=>Number(card.dataset.selectExercise)).sort((a,b)=>a-b));
   expect(ids).toEqual([22,23,24,28]);
   await page.locator("#exercise-search").fill("no existe");
-  await expect(page.getByText("Ningún ejercicio coincide")).toBeVisible();
+  await expect(page.getByText("Ningún ejercicio coincide",{exact:true})).toBeVisible();
   await page.locator("#exercise-empty-clear").click();
   await expect(page.locator("#exercise-grid [data-select-exercise]")).toHaveCount(45);
 });
@@ -69,11 +79,13 @@ test("la hoja de ejercicio reúne sus apartados y conserva el pseudocódigo de r
   await page.locator("#exercise-detail [data-sheet-theme-toggle]").click();
   await expect(page.locator("#exercise-detail .sheet-theme-surface")).toHaveAttribute("data-sheet-theme", "dark");
   await expect(page.locator("#exercise-detail [data-sheet-theme-toggle]")).toHaveAttribute("aria-pressed", "true");
-  await page.locator("#exercise-detail .exercise-detail-scroll").evaluate(element=>{element.scrollTop=240;});
+  await page.locator("#exercise-detail").evaluate(element=>{element.scrollTop=240;});
+  const savedDetailScroll=await page.locator("#exercise-detail").evaluate(element=>element.scrollTop);
   await expect(page.locator('#exercise-detail [data-solution-section="pasos"]')).toHaveClass(/is-in-view/);
   await page.locator('[data-select-exercise="24"]').click();
   await page.locator('[data-select-exercise="23"]').click();
-  await expect.poll(()=>page.locator("#exercise-detail .exercise-detail-scroll").evaluate(element=>element.scrollTop)).toBe(240);
+  const maxDetailScroll=await page.locator("#exercise-detail").evaluate(element=>element.scrollHeight-element.clientHeight);
+  await expect.poll(()=>page.locator("#exercise-detail").evaluate(element=>element.scrollTop)).toBe(Math.min(savedDetailScroll,maxDetailScroll));
   await page.locator("[data-exercise-resolved]").click();
   await expect(page.locator("[data-exercise-resolved]")).toBeFocused();
   await expect(page.locator('#exercise-grid [data-select-exercise="23"] .exercise-row-status')).toContainText("Resuelto");
@@ -88,19 +100,38 @@ test("la hoja de ejercicio reúne sus apartados y conserva el pseudocódigo de r
   await dismissSimulatorIntro(page);
   await expect(page.locator('[data-view="simulator"]')).toBeVisible();
   await expect(page.locator("#simulator-exercise-title")).toContainText("Fibonacci");
+  await expect(page).toHaveURL(/pestana=simulador.*ejercicio=flujo%3A23/);
+  await page.goBack();
+  await expect(page.locator("#view-exercises")).toBeVisible();
+  await expect(page.locator("#exercise-detail h3")).toHaveText("Fibonacci: términos que no superen 40");
+  await expect(page).toHaveURL(/ejercicio=flujo%3A23/);
 });
 
 test("la vista de lista y los filtros se adaptan a móvil sin desbordar",async({page})=>{
   await page.setViewportSize({width:390,height:844});await openExercises(page);
   const disclosure=page.locator("#exercise-list-disclosure");
-  await expect(disclosure).not.toHaveAttribute("open","");
-  await disclosure.locator("summary").click();
+  const toggle=page.locator("#exercise-detail [data-exercise-list]");
+  await expect(page.locator("#exercise-grid")).toBeHidden();
+  await toggle.click();
+  await expect(disclosure).toHaveAttribute("aria-modal","true");
+  await expect(toggle).toHaveAttribute("aria-expanded","true");
   await expect(page.locator("#exercise-grid")).toBeVisible();
   await page.locator('[data-select-exercise="1"]').click();
-  await expect(disclosure).not.toHaveAttribute("open","");
+  await expect(toggle).toHaveAttribute("aria-expanded","false");
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
   await expect(page.locator("#exercise-detail")).toContainText("Antes de empezar");
+});
+
+test("una direccion del Simulador restaura directamente el ejercicio solicitado",async({page})=>{
+  await page.emulateMedia({reducedMotion:"reduce"});
+  await page.addInitScript(()=>localStorage.setItem("traza:v1:simulator-intro",JSON.stringify({skip:true,seen:[]})));
+  await page.goto("/?pestana=simulador&competencia=evaluar-requisitos&tema=diagramas-flujo&ejercicio=flujo%3A23");
+  const splash=page.locator("#brand-splash");
+  if(await splash.isVisible()){await page.locator("#brand-enter").click();await expect(splash).toHaveCount(0);}
+  await dismissSimulatorIntro(page);
+  await expect(page.locator('[data-view="simulator"]')).toBeVisible();
+  await expect(page.locator("#simulator-exercise-title")).toContainText("Fibonacci");
 });
 
 test("la lista compacta y la hoja caben en móvil, portátil y monitor",async({page})=>{

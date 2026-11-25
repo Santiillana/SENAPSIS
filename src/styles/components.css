@@ -12,7 +12,7 @@
 .challenge-copy .lead { max-width:620px; margin:0; color:var(--muted-strong); font-size:15px; line-height:1.75; }
 .challenge-actions { display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin-top:27px; }
 .button { display:inline-flex; align-items:center; justify-content:center; gap:11px; min-height:46px; padding:0 17px; border-radius:12px; font-size:13px; font-weight:770; text-decoration:none; cursor:pointer; }
-.button-primary { border:1px solid var(--accent); color:#fff; background:var(--accent); box-shadow:0 8px 18px rgba(75,99,213,.2); }
+.button-primary { border:1px solid var(--accent); color:var(--primary-button-text); background:var(--accent); box-shadow:0 8px 18px var(--button-primary-shadow); }
 .button-primary:hover { background:var(--accent-strong); } .button svg { width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
 .text-link { color:var(--accent-strong); font-size:13px; font-weight:780; text-decoration:none; } .text-link:hover { text-decoration:underline; }
 .challenge-card { position:relative; z-index:1; padding:22px 22px 16px; border:1px solid var(--line); border-radius:12px; background:color-mix(in srgb,var(--surface) 94%,transparent); box-shadow:var(--shadow-lg); }
@@ -65,34 +65,18 @@ button:disabled { cursor:not-allowed; opacity:.46; } .diagram-stage { position:r
 .dock-description { display:flex; align-items:center; gap:11px; } .dock-live-dot { flex:0 0 7px; background:var(--muted); box-shadow:0 0 0 4px var(--surface-soft); }
 .dock-description strong { display:block; font-size:13px; } .dock-description small { display:block; margin-top:2px; color:var(--muted); font-size:13px; }
 .dock-controls { display:flex; gap:5px; } .transport-button { display:grid; place-items:center; width:31px; height:31px; border:1px solid var(--line); border-radius:8px; color:var(--muted-strong); background:var(--surface-soft); font-size:13px; }
-.transport-play { color:#fff; background:var(--accent); border-color:var(--accent); } .timeline-label { display:flex; justify-content:space-between; margin-bottom:7px; color:var(--muted); font-size:13px; font-weight:830; letter-spacing:.7px; }
+.transport-play { color:var(--primary-button-text); background:var(--accent); border-color:var(--accent); } .timeline-label { display:flex; justify-content:space-between; margin-bottom:7px; color:var(--muted); font-size:13px; font-weight:830; letter-spacing:.7px; }
 .timeline-label b { color:var(--muted-strong); font:750 13px ui-monospace,monospace; } .timeline-track { height:4px; overflow:hidden; border-radius:99px; background:var(--line); } .timeline-track i { display:block; width:0; height:100%; background:var(--accent); }
 .dock-speed { color:var(--muted); font-size:13px; font-weight:800; letter-spacing:.7px; white-space:nowrap; } .dock-speed b { margin-left:5px; color:var(--ink-soft); font-size:13px; }
-.lab-layout { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(340px,.85fr); gap:14px; align-items:stretch; }
-.lab-context { display:flex; flex-direction:column; min-height:550px; } .lab-diagram-placeholder { display:flex; flex:1; flex-direction:column; align-items:center; justify-content:center; margin:0 14px; padding:28px; border:1px solid var(--line); border-radius:12px; text-align:center; background-color:var(--surface-soft); background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px); background-size:24px 24px; }
-.lab-diagram-placeholder>p { max-width:300px; color:var(--muted); font-size:13px; } .lab-flow-mark { display:flex; flex-direction:column; align-items:center; gap:5px; margin:12px 0; }
-.lab-flow-mark i { width:54px; height:22px; border:1px solid var(--line-strong); border-radius:8px; background:var(--surface); } .lab-flow-mark b { width:1px; height:17px; background:var(--line-strong); }
-.lab-context-footer { display:flex; justify-content:space-around; gap:12px; padding:15px; color:var(--muted); font-size:13px; font-weight:800; letter-spacing:.5px; } .lab-context-footer b { margin-left:6px; color:var(--muted-strong); }
 .activity-panel { padding-bottom:12px; } .activity-list { display:grid; gap:7px; padding:0 13px; }
 .activity-card { display:grid; grid-template-columns:34px 1fr auto; align-items:center; gap:10px; padding:10px; border:1px solid var(--line); border-radius:11px; background:var(--surface); }
 .activity-icon { display:grid; place-items:center; width:32px; height:32px; border-radius:9px; color:var(--accent); background:var(--accent-soft); font-size:15px; font-weight:800; }
 .activity-card strong { font-size:13px; } .activity-card p { margin:2px 0 0; color:var(--muted); font-size:13px; } .activity-lock { color:var(--muted); font:800 13px ui-monospace,monospace; }
-.builder-grid { display:grid; grid-template-columns:minmax(205px,.65fr) minmax(380px,1.6fr) minmax(205px,.65fr); gap:13px; min-height:550px; }
-.builder-palette,.builder-inspector { padding-bottom:15px; } .palette-item { display:grid; grid-template-columns:37px 1fr auto; align-items:center; gap:10px; margin:0 13px; padding:11px 3px; border-bottom:1px solid var(--line); }
-.palette-item b { display:block; font-size:13px; } .palette-item small { display:block; margin-top:1px; color:var(--muted); font-size:13px; } .palette-item em { color:var(--muted); font:750 13px ui-monospace,monospace; font-style:normal; }
-.palette-shape { display:block; justify-self:center; width:29px; height:20px; border:1.5px solid var(--accent); background:var(--accent-soft); }
-.terminal-shape { height:17px; border-radius:999px; } .io-shape { transform:skew(-17deg); } .process-shape { border-radius:3px; }
-.decision-shape { width:18px; height:18px; transform:rotate(45deg); } .connector-shape { width:17px; height:17px; border-radius:50%; }
-.builder-canvas { display:flex; flex-direction:column; min-height:550px; } .builder-empty { display:flex; flex:1; flex-direction:column; align-items:center; justify-content:center; margin:0 12px 12px; border:1px solid var(--line); border-radius:12px; background-color:var(--surface-soft); background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px); background-size:24px 24px; text-align:center; }
-.builder-crosshair { display:grid; place-items:center; width:60px; height:60px; margin-bottom:12px; border:1px dashed var(--line-strong); border-radius:17px; color:var(--accent); background:var(--surface); font-size:25px; }
-.builder-empty strong { font-size:13px; } .builder-empty p { max-width:280px; color:var(--muted); font-size:13px; }
-.inspector-empty { display:flex; flex-direction:column; align-items:center; padding:50px 20px; text-align:center; } .inspector-empty>span { display:grid; place-items:center; width:54px; height:54px; margin-bottom:13px; border:1px solid var(--line); border-radius:15px; color:var(--accent); background:var(--accent-soft); font-size:22px; }
-.inspector-empty strong { font-size:13px; } .inspector-empty p { max-width:190px; color:var(--muted); font-size:13px; }
 
 /* Botones y controles de la identidad cuaderno/pizarra */
 .button{border-radius:8px;box-shadow:none}
-.button-primary{border:1px solid var(--accent-strong);color:#1b2928;background:var(--accent);box-shadow:none}
-.button-primary:hover{color:#142522;background:var(--accent-strong)}
+.button-primary{border:1px solid var(--accent-strong);color:var(--primary-button-hover-text);background:var(--accent);box-shadow:none}
+.button-primary:hover{color:var(--primary-button-hover-text);background:var(--accent-strong)}
 .button-secondary{border:1px solid var(--line-strong);color:var(--ink-soft);background:var(--surface-soft)}
 .button-secondary:hover{border-color:var(--accent);color:var(--accent-strong);background:var(--accent-soft)}
 .text-link{color:var(--accent-strong)}
@@ -211,7 +195,7 @@ dialog.modal{
   overflow:auto;padding:0;border:1px solid var(--border);border-radius:16px;
   color:var(--text);background:var(--surface);box-shadow:var(--shadow-lg);
 }
-dialog.modal::backdrop{background:rgba(5,12,18,.58);backdrop-filter:blur(3px)}
+dialog.modal::backdrop{background:var(--overlay-backdrop);backdrop-filter:blur(3px)}
 dialog.modal[open]{animation:traza-modal-in var(--dur-2) var(--ease) both}
 .modal__header,.modal__body,.modal__footer{padding:18px 22px}
 .modal__header{border-bottom:1px solid var(--border)}

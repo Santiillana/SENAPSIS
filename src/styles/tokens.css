@@ -26,6 +26,24 @@
   --traza-green:#1F9A67;--traza-pink:#D94761;--traza-amber:#FFC400;--traza-glow:#FFC400;
   --traza-stage-grid:rgba(76,103,127,.12);--traza-stage-grid-major:rgba(76,103,127,.17);
   --traza-shadow:0 8px 22px rgba(27,42,58,.10);
+  --learn-level-basic:#167653;--learn-level-basic-fill:#E5F5ED;
+  --learn-level-intermediate:#3159BD;--learn-level-intermediate-fill:#EAF0FF;
+  --learn-level-advanced:#9A3B7E;--learn-level-advanced-fill:#FBEAF5;
+  --learn-level-expert:#7546B8;--learn-level-expert-fill:#F0EAFF;
+  --learn-figure-input:#4B94C7;--learn-figure-process:#B98539;--learn-figure-output:#519A91;
+  --learn-figure-decision:#D18B37;--learn-figure-terminal:#3C9971;--learn-figure-loop:#BD8551;
+  --learn-figure-variable:#AD7EC0;--learn-figure-calculation:#4D8EB0;--learn-figure-sequence:#5B947D;
+  --learn-figure-decision-nested:#D38B37;--learn-figure-counter:#4C8DB4;--learn-figure-nested:#BA8250;
+  --learn-figure-validation:#BF6B68;--learn-figure-comparison:#C18D38;--learn-figure-while:#4F9A8E;--learn-figure-do-while:#B57A4C;
+  --learn-figure-on-accent:#FFFFFF;--learn-math-sign-ink:#102038;--learn-math-positive:#6C9CFF;--learn-math-negative:#E58B7A;
+  --source-category-primary:#187A6E;--source-category-secondary:#2F5FD0;--source-category-tertiary:#A85B00;
+  --primary-button-text:#FFFFFF;--primary-button-hover-text:#142522;--learn-level-complete:#5DBB8A;
+  --button-primary-shadow:0 8px 18px rgba(75,99,213,.2);--overlay-backdrop:rgba(5,12,18,.58);
+  --learn-scene-overlay:rgba(9,23,25,.76);--learn-figure-shadow:rgba(0,0,0,.32);
+  --learn-figure-input-tint:rgba(75,148,199,.12);--learn-figure-process-tint:rgba(185,133,57,.13);
+  --learn-figure-output-tint:rgba(81,154,145,.13);--learn-figure-decision-tint:rgba(209,139,55,.15);
+  --learn-figure-calculation-tint:rgba(77,142,176,.13);--learn-figure-variable-tint:rgba(173,126,192,.12);
+  --learn-figure-loop-tint:rgba(189,133,81,.08);
 }
 :root[data-theme="dark"]{
   color-scheme:dark;--ink:#EDF2F7;--ink-soft:#D8E1E9;--muted:#AABAC8;--muted-strong:#BFCBD5;
@@ -41,6 +59,25 @@
   --traza-green:#3CCF8E;--traza-pink:#FF6B85;--traza-amber:#FFC400;--traza-glow:#FFC400;
   --traza-stage-grid:rgba(154,186,215,.10);--traza-stage-grid-major:rgba(154,186,215,.16);
   --traza-shadow:0 10px 28px rgba(0,0,0,.30);
+  --learn-level-basic:#3FBF8A;--learn-level-basic-fill:#173D31;
+  --learn-level-intermediate:#8AB4FF;--learn-level-intermediate-fill:#1D3047;
+  --learn-level-advanced:#F06BB0;--learn-level-advanced-fill:#482832;
+  --learn-level-expert:#B39DFF;--learn-level-expert-fill:#302B45;
+  --learn-figure-input:#6E9BFF;--learn-figure-process:#A98BFF;--learn-figure-output:#F06BB0;
+  --learn-figure-decision:#F2B705;--learn-figure-terminal:#3FBF8A;--learn-figure-loop:#F59D45;
+  --learn-figure-variable:#3CC3CF;--learn-figure-calculation:#A98BFF;--learn-figure-sequence:#ECE7DA;
+  --learn-figure-decision-nested:#F2B705;--learn-figure-counter:#B5D957;--learn-figure-nested:#F59D45;
+  --learn-figure-validation:#F0695E;--learn-figure-comparison:#F2B705;--learn-figure-while:#F59D45;--learn-figure-do-while:#F59D45;
+  --learn-figure-on-accent:#0D1524;--learn-math-sign-ink:#ECE7DA;--learn-math-positive:#6E9BFF;--learn-math-negative:#F0695E;
+  --source-category-primary:#5BC4B5;--source-category-secondary:#7FA6FF;--source-category-tertiary:#F3B36B;
+  --primary-button-text:#FFFFFF;--primary-button-hover-text:#142522;--learn-level-complete:#3FBF8A;
+  --learn-figure-input-tint:color-mix(in srgb,var(--learn-figure-input) 18%,transparent);
+  --learn-figure-process-tint:color-mix(in srgb,var(--learn-figure-process) 18%,transparent);
+  --learn-figure-output-tint:color-mix(in srgb,var(--learn-figure-output) 18%,transparent);
+  --learn-figure-decision-tint:color-mix(in srgb,var(--learn-figure-decision) 18%,transparent);
+  --learn-figure-calculation-tint:color-mix(in srgb,var(--learn-figure-calculation) 18%,transparent);
+  --learn-figure-variable-tint:color-mix(in srgb,var(--learn-figure-variable) 18%,transparent);
+  --learn-figure-loop-tint:color-mix(in srgb,var(--learn-figure-loop) 18%,transparent);
 }
 *{box-sizing:border-box}
 html{min-width:320px;scroll-behavior:smooth}
@@ -533,8 +570,8 @@ body{background-size:24px 24px}
   --track:var(--surface-page);
 }
 :root[data-section="aprende"]{--section-accent:var(--c-green)}
-:root[data-section="aprende"] .section-switch button.is-active{border:2px solid var(--edge);color:var(--on-strong);background:var(--section-accent);box-shadow:0 3px 0 var(--edge)}
-:root[data-section="aprende"] .section-switch{border:2px solid var(--line);background:var(--surface-card)}
+:root[data-section="aprende"] .section-switch button.is-active{border-color:var(--edge);color:var(--on-strong);background:var(--section-accent);box-shadow:0 3px 0 var(--edge)}
+:root[data-section="aprende"] .section-switch{border-color:var(--line);background:var(--surface-card)}
 :root[data-section="aprende"] .primary-nav .nav-button.is-active{color:var(--section-accent);border-bottom-color:var(--section-accent)}
 :root[data-section="aprende"] .button-primary{border:2px solid var(--edge);color:var(--on-strong);background:var(--section-accent);box-shadow:0 3px 0 var(--edge)}
 :root[data-section="aprende"] .button-primary:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
@@ -561,10 +598,100 @@ body{background-size:24px 24px}
 :root[data-section="aprende"] .lesson-visual-variable{--lesson-scene-accent:var(--c-teal)}
 :root[data-section="aprende"] .lesson-visual-counter{--lesson-scene-accent:var(--c-lime)}
 :root[data-section="aprende"] .lesson-visual-sequence{--lesson-scene-accent:var(--stroke)}
-:root[data-section="aprende"] body{background-color:var(--surface-page);background-image:linear-gradient(var(--surface-grid) 1px,transparent 1px),linear-gradient(90deg,var(--surface-grid) 1px,transparent 1px);background-size:22px 22px}
+:root[data-section="aprende"] body[data-active-space="learn"],:root[data-section="aprende"] body[data-active-space="exercises"]{background-color:var(--learn-page);background-image:linear-gradient(var(--learn-grid) 1px,transparent 1px),linear-gradient(90deg,var(--learn-grid) 1px,transparent 1px);background-size:24px 24px}
+:root[data-section="aprende"] body[data-active-space="learn"],:root[data-section="aprende"] body[data-active-space="exercises"]{
+  --learn-page:#F7F1E3;--learn-grid:#E4D8BC;--learn-surface:#FBF8F1;--learn-raised:#FBF8F1;
+  --learn-ink:#14213D;--learn-muted:#5B6477;--learn-line:#D9D2C0;--learn-line-strong:#7A8396;
+  --learn-brand:#0B3D2E;--learn-action:#0F7B4F;--learn-action-hover:#0B6A43;--learn-action-text:#FBF8F1;
+  --learn-accent:#F2B705;--learn-accent-text:#14213D;--learn-alert:#C8362B;
+  --explain-focus-fill:#F2B705;--explain-focus-ink:#8A6500;--explain-focus-on:#14213D;
+  --explain-correct-fill:#0F7B4F;--explain-correct-ink:#0B6A43;--explain-correct-on:#FBF8F1;
+  --explain-error-fill:#C8362B;--explain-error-ink:#A82B24;--explain-error-on:#FBF8F1;
+  --explain-structure-fill:#14213D;--explain-structure-ink:#14213D;--explain-structure-on:#FBF8F1;
+  --explain-data-fill:#2D69E1;--explain-data-ink:#2459D6;--explain-data-on:#FBF8F1;
+  --explain-calculation-fill:#7B4DE0;--explain-calculation-ink:#6539C4;--explain-calculation-on:#FBF8F1;
+  --explain-result-fill:#CE2D80;--explain-result-ink:#B8236F;--explain-result-on:#FBF8F1;
+  --explain-repeat-fill:#F28A1E;--explain-repeat-ink:#B35A00;--explain-repeat-on:#14213D;
+  --explain-variable-fill:#0E9AA7;--explain-variable-ink:#0A6F79;--explain-variable-on:#14213D;
+  --explain-counter-fill:#A6CE39;--explain-counter-ink:#4F6B00;--explain-counter-on:#14213D;
+  --explain-outline:#14213D;--explain-neutral-fill:var(--learn-surface);--explain-neutral-ink:var(--learn-ink);
+  --surface-page:var(--learn-page);--surface-grid:var(--learn-grid);--surface-card:var(--learn-surface);--surface-raised:var(--learn-raised);
+  --text:var(--learn-ink);--text-muted:var(--learn-muted);--line:var(--learn-line);--edge:var(--learn-line-strong);
+  --stroke:var(--learn-ink);--btn2-bg:var(--learn-surface);--btn2-fg:var(--learn-ink);--track:var(--learn-surface);
+  --canvas:var(--learn-page);--surface:var(--learn-surface);--surface-raised:var(--learn-raised);
+  --surface-soft:color-mix(in srgb,var(--learn-surface) 78%,var(--learn-page));
+  --ink:var(--learn-ink);--ink-soft:var(--learn-ink);--muted:var(--learn-muted);--muted-strong:var(--learn-muted);
+  --line-strong:var(--learn-line-strong);--border:var(--learn-line);--text-2:var(--learn-muted);
+  --bg:var(--learn-page);--card:var(--learn-surface);--lienzo:var(--learn-surface);
+  --accent:var(--learn-action);--accent-strong:var(--learn-action-hover);--accent-text:var(--learn-action);
+  --accent-soft:color-mix(in srgb,var(--learn-action) 18%,var(--learn-surface));
+  --positive:var(--learn-action);--positive-soft:color-mix(in srgb,var(--learn-action) 14%,var(--learn-surface));
+  --danger:var(--learn-alert);--danger-soft:color-mix(in srgb,var(--learn-alert) 13%,var(--learn-surface));
+  --warning:var(--learn-accent);--warning-soft:color-mix(in srgb,var(--learn-accent) 20%,var(--learn-surface));
+  --on-accent:var(--learn-action-text);--section-accent:var(--learn-action);--on-strong:var(--learn-action-text);
+  --on-bright:var(--learn-accent-text);--focus:#2F6FED;--grid-line:var(--learn-grid);
+  --primary-button-text:var(--learn-action-text);--primary-button-hover-text:var(--learn-ink);
+  --sheet-light-bg:var(--learn-surface);--sheet-light-ink:var(--learn-ink);--sheet-light-muted:var(--learn-muted);
+  --sheet-light-line:var(--learn-line);--sheet-light-grid:var(--learn-grid);
+}
+:root[data-section="aprende"][data-theme="dark"] body[data-active-space="learn"],:root[data-section="aprende"][data-theme="dark"] body[data-active-space="exercises"]{
+  --learn-page:#0D1524;--learn-grid:#1A2A45;--learn-surface:#141F33;--learn-raised:#1B2A44;
+  --learn-ink:#ECE7DA;--learn-muted:#A5AFC4;--learn-muted-tertiary:#7C879E;
+  --learn-line:#2E3F5F;--learn-line-strong:#62779F;--learn-brand:#0B3D2E;
+  --learn-action:#2BB37A;--learn-action-hover:#3FBF8A;--learn-link:#3FBF8A;--learn-action-text:#06130D;
+  --learn-tab:#1E5C45;--learn-tab-text:#ECE7DA;--learn-tab-border:#3FBF8A;
+  --learn-accent:#F2B705;--learn-accent-text:#0D1524;--learn-alert:#F0695E;
+  --explain-focus-fill:#F2B705;--explain-focus-ink:#F2B705;--explain-focus-on:#0D1524;
+  --explain-correct-fill:#3FBF8A;--explain-correct-ink:#3FBF8A;--explain-correct-on:#0D1524;
+  --explain-error-fill:#F0695E;--explain-error-ink:#F0695E;--explain-error-on:#0D1524;
+  --explain-structure-fill:#ECE7DA;--explain-structure-ink:#ECE7DA;--explain-structure-on:#0D1524;
+  --explain-data-fill:#6E9BFF;--explain-data-ink:#6E9BFF;--explain-data-on:#0D1524;
+  --explain-calculation-fill:#A98BFF;--explain-calculation-ink:#A98BFF;--explain-calculation-on:#0D1524;
+  --explain-result-fill:#F06BB0;--explain-result-ink:#F06BB0;--explain-result-on:#0D1524;
+  --explain-repeat-fill:#F59D45;--explain-repeat-ink:#F59D45;--explain-repeat-on:#0D1524;
+  --explain-variable-fill:#3CC3CF;--explain-variable-ink:#3CC3CF;--explain-variable-on:#0D1524;
+  --explain-counter-fill:#B5D957;--explain-counter-ink:#B5D957;--explain-counter-on:#0D1524;
+  --explain-outline:#0D1524;--explain-neutral-fill:var(--learn-raised);--explain-neutral-ink:var(--learn-ink);
+  --text:var(--learn-ink);--text-muted:var(--learn-muted);--line:var(--learn-line);--edge:var(--learn-line-strong);
+  --stroke:var(--learn-ink);--btn2-bg:var(--learn-raised);--btn2-fg:var(--learn-ink);--track:var(--learn-page);
+  --surface-soft:color-mix(in srgb,var(--learn-surface) 78%,var(--learn-page));
+  --ink:var(--learn-ink);--ink-soft:var(--learn-ink);--muted:var(--learn-muted);--muted-strong:var(--learn-muted);
+  --line-strong:var(--learn-line-strong);--border:var(--learn-line);--text-2:var(--learn-muted);
+  --bg:var(--learn-page);--card:var(--learn-surface);--lienzo:var(--learn-surface);
+  --accent:var(--learn-action);--accent-strong:var(--learn-link);--accent-text:var(--learn-link);
+  --accent-soft:color-mix(in srgb,var(--learn-action) 22%,var(--learn-surface));
+  --positive:var(--learn-link);--positive-soft:color-mix(in srgb,var(--learn-link) 18%,var(--learn-surface));
+  --danger:var(--learn-alert);--danger-soft:color-mix(in srgb,var(--learn-alert) 16%,var(--learn-surface));
+  --warning:var(--learn-accent);--warning-soft:color-mix(in srgb,var(--learn-accent) 22%,var(--learn-surface));
+  --on-accent:var(--learn-action-text);--on-strong:var(--learn-action-text);--on-bright:var(--learn-accent-text);
+  --section-accent:var(--learn-link);--focus:#5E8EF7;--grid-line:var(--learn-grid);--c-green:var(--learn-link);--c-brick:var(--learn-alert);--c-mustard:var(--learn-accent);
+  --primary-button-text:var(--learn-action-text);--primary-button-hover-text:var(--learn-action-text);
+  --sheet-dark-bg:var(--learn-surface);--sheet-dark-ink:var(--learn-ink);--sheet-dark-muted:var(--learn-muted);
+  --sheet-dark-line:var(--learn-line);--sheet-dark-grid:var(--learn-grid);
+}
+:root[data-section="aprende"] body[data-active-space="learn"] .section-switch button.is-active,
+:root[data-section="aprende"] body[data-active-space="exercises"] .section-switch button.is-active{border-color:var(--learn-brand);color:var(--learn-action-text);background:var(--learn-brand);box-shadow:0 3px 0 var(--learn-brand)}
+:root[data-section="aprende"][data-theme="dark"] body[data-active-space="learn"] .section-switch button.is-active,
+:root[data-section="aprende"][data-theme="dark"] body[data-active-space="exercises"] .section-switch button.is-active{border-color:var(--learn-tab-border);color:var(--learn-tab-text);background:var(--learn-tab);box-shadow:0 3px 0 var(--learn-tab-border)}
+:root[data-section="aprende"] body[data-active-space="learn"] .button-primary,
+:root[data-section="aprende"] body[data-active-space="exercises"] .button-primary{border-color:var(--learn-action);color:var(--learn-action-text);background:var(--learn-action);box-shadow:0 3px 0 var(--learn-line-strong)}
+:root[data-section="aprende"] body[data-active-space="learn"] .button-primary:hover,
+:root[data-section="aprende"] body[data-active-space="exercises"] .button-primary:hover{border-color:var(--learn-action-hover);background:var(--learn-action-hover)}
+:root[data-section="aprende"] body[data-active-space="learn"] #main-content h1,
+:root[data-section="aprende"] body[data-active-space="learn"] #main-content h2,
+:root[data-section="aprende"] body[data-active-space="learn"] #main-content h3,
+:root[data-section="aprende"] body[data-active-space="exercises"] #main-content h1,
+:root[data-section="aprende"] body[data-active-space="exercises"] #main-content h2,
+:root[data-section="aprende"] body[data-active-space="exercises"] #main-content h3{color:var(--learn-brand)}
 :root[data-section="aprende"] :focus-visible{outline:3px solid var(--c-blue);outline-offset:2px}
 :root[data-theme-changing="true"] body,:root[data-theme-changing="true"] body *{transition-property:background-color,border-color,color,fill,stroke;transition-duration:150ms;transition-timing-function:ease}
 @media(prefers-reduced-motion:reduce){:root[data-theme-changing="true"] body,:root[data-theme-changing="true"] body *{transition-duration:0ms!important}}
+@media(forced-colors:active){
+  :root[data-section="aprende"] body[data-active-space="learn"],
+  :root[data-section="aprende"] body[data-active-space="exercises"],
+  :root[data-section="aprende"] body[data-active-space="learn"] .sheet-theme-surface,
+  :root[data-section="aprende"] body[data-active-space="exercises"] .sheet-theme-surface{background-image:none!important}
+}
 
 /* Marcadores compartidos por las explicaciones de Aprende y del Simulador;
    las tarjetas de portada usan verde y ladrillo en tintes suaves. */

@@ -12,6 +12,17 @@ El plan de `docs/PLAN_MAESTRO.md` coincide byte por byte con `/home/santiago/Des
 | Fase 0, pasos 1–7 | Completa | Cabecera sticky consistente (101 px), nueve rutas, subsección «Lecciones», modo Concentración opcional y helper E2E en cuatro tamaños/dos temas. Informe y 72 capturas en `docs/informes/fase-0/`. La matriz y la suite completa pasaron. |
 | Fases 1–8 | Pendientes de auditoría detallada | Se evaluarán en orden después de cerrar Fase 0, sin rehacer código existente. La referencia se copió a `docs/referencia-simulador/`. |
 
+## Fase 1 · Simulador de diagramas de flujo
+
+### Step 1: inventario y propuesta de arquitectura
+
+**Completo** (`feat(step-1): inventariar arquitectura del simulador`). Solo se añadió el informe `docs/informes/fase-1/INVENTARIO.md`; no se modificó código de producto. El inventario verificó 45 ejercicios, 64 métodos y 185 casos de contenido, y mapeó parser/intérprete, layout/render SVG, escenas, carcasa, navegación por teclado y simulador separado de fuentes.
+
+- `npm test`: 29 archivos aprobados, cero fallos.
+- `npm run test:browser -- --workers=2`: 144/144 aprobadas en 5,6 min.
+- `git diff --check`: limpio.
+- Resultado: la traza del intérprete es el punto de integración existente. El step 2 extraerá un adaptador pequeño sin cambiar semántica del parser, el motor ni la cámara.
+
 ## Paso 0
 
 - Commit de cambios locales: `a282d0d fix: concentración oculta cabecera y diagnóstico actualizado`.

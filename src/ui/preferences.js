@@ -50,7 +50,7 @@ export function initPreferences() {
     }
     root.dataset.theme = normalized;
     document.querySelector('meta[name="theme-color"]')?.setAttribute(
-      "content", normalized === "light" ? "#FBF8F1" : "#0E1522"
+      "content", normalized === "light" ? "#F7F1E3" : "#0D1524"
     );
     savePreference(STORAGE_KEYS.themePrefix + section, normalized);
 

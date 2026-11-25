@@ -28,3 +28,19 @@ test("el reproductor mapea los eventos del motor a momentos de receta en orden",
   assert.equal(recipeMoment(recipe,0,5),recipe.moments[0]);
   assert.equal(recipeMoment(recipe,4,5),recipe.moments.at(-1));
 });
+
+test("los diagramas aplican marcadores semánticos, texto legible y leyenda contextual",()=>{
+  const svg=recipeSceneMarkup(lessonRecipe("algorithm"),0);
+  for(const role of ["structure","data","calculation","result","focus"]){
+    assert.match(svg,new RegExp("recipe-role-"+role));
+  }
+  assert.match(svg,/Colores: Ahora: mira aquí; Trazo: estructura y camino; Dato: entra; Cálculo: se transforma; Resultado: sale/);
+  assert.match(svg,/doble = n × 2/);
+  assert.match(svg,/Mostrar<\/tspan><tspan[^>]*>doble/);
+  assert.doesNotMatch(svg,/#(?:[\da-f]{3,8})\b|rgba?\(/i);
+  const decision=recipeSceneMarkup(lessonRecipe("nested-decisions"),0);
+  assert.match(decision,/¿Mayor de/);
+  assert.match(decision,/edad\?/);
+  assert.match(decision,/Sí ✓/);
+  assert.match(decision,/No ✗/);
+});

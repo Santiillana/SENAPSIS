@@ -3,6 +3,7 @@ import { test, expect, goToSpace } from "./navigation.js";
 test("humo de producción: Factorial, Mayor de 10 números, Concentración y Predice",async({page},testInfo)=>{
   // Medido: 10.9 s aislado y 20.7 s con dos workers mientras se ejecuta el recorrido de hasta 50 pasos.
   test.setTimeout(35_000);
+  await page.route("**/api/v1/version",route=>route.fulfill({json:{version:0,updatedAt:null}}));
   const consoleErrors=[];
   page.on("console",message=>{if(message.type()==="error")consoleErrors.push(message.text());});
   page.on("pageerror",error=>consoleErrors.push(error.message));

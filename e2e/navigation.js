@@ -12,6 +12,11 @@ async function activate(locator) {
 }
 
 export async function goToSpace(page, space, options = {}) {
+  const splash = page.locator("#brand-splash");
+  if (await splash.isVisible()) {
+    await activate(page.locator("#brand-enter"));
+    await expect(splash).toHaveCount(0);
+  }
   let exerciseTopicContext = null;
   if (space === "exercises") {
     const topicTitle = page.locator("#learn-topic-title");
@@ -26,7 +31,7 @@ export async function goToSpace(page, space, options = {}) {
       })[title] ?? null;
     }
   }
-  if (space === "simulator" && options.dismissSimulatorIntro !== false) {
+  if (space === "simulator" && options.keepSimulatorEntry !== true && options.dismissSimulatorIntro !== false) {
     await page.evaluate(() => {
       try {
         let preference = { skip: false, seen: [] };
@@ -56,9 +61,17 @@ export async function goToSpace(page, space, options = {}) {
   if (space === "exercises" && options.exerciseTheme !== false) {
     await openExerciseTheme(page, options.exerciseTheme ?? exerciseTopicContext ?? "diagramas-flujo");
   }
-  if (space === "simulator" && options.dismissSimulatorIntro !== false) {
-    const reveal = page.locator("#simulator-reveal");
-    if (await reveal.isVisible()) await reveal.click();
+  if (space === "simulator" && options.keepSimulatorEntry !== true) {
+    const entry = page.locator("#simulator-entry");
+    if (await entry.isVisible()) {
+      await page.locator('#simulator-entry [data-sim-competence="evaluar-requisitos"]').click();
+      await page.locator('#simulator-entry [data-sim-theme="diagramas-flujo"]').click();
+      await page.locator('#simulator-entry [data-sim-exercise]').first().click();
+    }
+    if (options.dismissSimulatorIntro !== false) {
+      const reveal = page.locator("#simulator-reveal");
+      if (await reveal.isVisible()) await reveal.click();
+    }
   }
 }
 

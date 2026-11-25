@@ -24,7 +24,6 @@ export function adaptLegacyExercise(exercise, labels, isClassExercise = false) {
       cuandoSeUsa: ""
     },
     simulable: { plantilla: "flujo", ejercicioId: exercise.id },
-    laboratorio: null,
     esDeClase: isClassExercise,
     preguntasGuia: ["¿Qué entra y qué se imprime?", "¿Qué se calcula y en qué orden?", "¿Algo se decide o se repite?"],
     oraculo: () => exercise.methods.flatMap(method => method.tests ?? [])
@@ -37,7 +36,7 @@ export function adaptSourceExercise(item) {
     titulo: item.title, dificultad: item.level, nivel: item.level, tipo: "clasificacion",
     conceptos: [], enunciado: item.prompt, datos: item.options,
     solucion: { queSePide: item.options[item.answer] ?? "", porQue: item.why, paraQue: "", pasos: [], cuandoSeUsa: "" },
-    simulable: { plantilla: "clasificacion", ejercicioId: item.scenario }, laboratorio: null,
+    simulable: { plantilla: "clasificacion", ejercicioId: item.scenario },
     esDeClase: false, preguntasGuia: [], oraculo: () => item.answer
   };
 }
@@ -58,7 +57,7 @@ export function adaptMathExercise(item) {
       cuandoSeUsa: ""
     },
     simulable: item.pending ? null : { plantilla: "calculo", ejercicioId: item.id },
-    laboratorio: null, esDeClase: Boolean(item.classExercise), preguntasGuia: [],
+    esDeClase: Boolean(item.classExercise), preguntasGuia: [],
     oraculo: () => item.expected
   };
 }
@@ -72,7 +71,6 @@ export function validateExercise(exercise) {
     exercise.solucion && ["queSePide", "porQue", "paraQue", "pasos", "cuandoSeUsa"].every(key =>
       key === "pasos" ? Array.isArray(exercise.solucion[key]) : typeof exercise.solucion[key] === "string") &&
     (exercise.simulable === null || (exercise.simulable && typeof exercise.simulable.plantilla === "string")) &&
-    (exercise.laboratorio === null || typeof exercise.laboratorio === "string") &&
     typeof exercise.esDeClase === "boolean" && Array.isArray(exercise.preguntasGuia) &&
     typeof exercise.oraculo === "function");
 }

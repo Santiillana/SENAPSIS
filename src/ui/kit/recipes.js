@@ -114,16 +114,47 @@ const recipes = {
   }
 };
 
+function explanationRole(type,label){
+  if(type==="input")return "data";
+  if(type==="output"||type==="document")return "result";
+  if(type==="loop")return "repeat";
+  if(type==="terminal")return "structure";
+  if(type==="decision")return "decision";
+  if(type==="process"&&/(?:\+\+|\+=|cont(?:ador)?|contador|suma)/i.test(label))return "counter";
+  if(type==="process"&&(/(?:>=|<=|==|!=|≥|≤|>|<)/.test(label)||/[×÷+*/]/.test(label)))return "calculation";
+  return "variable";
+}
+
+function wrapLabel(label,limit){
+  const words=label.split(/\s+/),lines=[];
+  let line="";
+  for(const word of words){
+    const candidate=line?line+" "+word:word;
+    if(line&&candidate.length>limit){lines.push(line);line=word;}else line=candidate;
+  }
+  if(line)lines.push(line);
+  return lines;
+}
+
+const roleNames={focus:"Ahora: mira aquí",structure:"Trazo: estructura y camino",data:"Dato: entra",calculation:"Cálculo: se transforma",result:"Resultado: sale",repeat:"Repite: ciclo",variable:"Variable: memoria",counter:"Contador: avance"};
+
 function shape(type,x,y,label,active,index,activePart=-1){
-  const common='class="recipe-node'+(active?" is-active":"")+'"';
+  const role=explanationRole(type,label);
+  const common='class="recipe-node recipe-role-'+role+(active?" is-active":"")+'"';
   let figure="";
   if(type==="terminal")figure='<ellipse '+common+' cx="'+x+'" cy="'+y+'" rx="57" ry="31"/>';
   else if(type==="input"||type==="output")figure='<polygon '+common+' points="'+(x-48)+','+(y-28)+' '+(x+58)+','+(y-28)+' '+(x+48)+','+(y+28)+' '+(x-58)+','+(y+28)+'"/>';
   else if(type==="decision")figure='<polygon '+common+' points="'+x+','+(y-38)+' '+(x+64)+','+y+' '+x+','+(y+38)+' '+(x-64)+','+y+'"/>';
   else if(type==="document")figure='<path '+common+' d="M'+(x-49)+' '+(y-30)+'h88l12 12v48h-100z M'+(x+39)+' '+(y-30)+'v13h13"/>';
   else if(type==="loop")figure='<polygon '+common+' points="'+(x-70)+','+(y-31)+' '+(x+53)+','+(y-31)+' '+(x+70)+','+y+' '+(x+53)+','+(y+31)+' '+(x-70)+','+(y+31)+' '+(x-53)+','+y+'"/>';
-  else figure='<rect '+common+' x="'+(x-54)+'" y="'+(y-30)+'" width="108" height="60" rx="7"/>';
-  const text=type==="loop"&&label.includes(";")?'<text class="recipe-node-label recipe-loop-label" x="'+x+'" y="'+(y+5)+'" text-anchor="middle">'+label.split(";").map((part,position)=>'<tspan class="'+(position===activePart?"is-active":"")+'">'+escapeHTML(part.trim())+'</tspan>').join('<tspan> ; </tspan>')+'</text>':'<text class="recipe-node-label" x="'+x+'" y="'+(y+5)+'" text-anchor="middle">'+escapeHTML(label)+'</text>';
+  else figure='<rect '+common+' x="'+(x-66)+'" y="'+(y-32)+'" width="132" height="64" rx="7"/>';
+  let text;
+  if(type==="loop"&&label.includes(";"))text='<text class="recipe-node-label recipe-loop-label recipe-role-text-'+role+'" x="'+x+'" y="'+(y+5)+'" text-anchor="middle">'+label.split(";").map((part,position)=>'<tspan class="'+(position===activePart?"is-active":"")+'">'+escapeHTML(part.trim())+'</tspan>').join('<tspan> ; </tspan>')+'</text>';
+  else{
+    const limit=type==="decision"?9:type==="terminal"?11:type==="input"||type==="output"?12:type==="loop"?14:type==="document"?11:14;
+    const lines=wrapLabel(label,limit),offset=(lines.length-1)*8;
+    text='<text class="recipe-node-label recipe-role-text-'+role+'" x="'+x+'" y="'+(y+5-offset)+'" text-anchor="middle">'+lines.map((line,lineIndex)=>'<tspan x="'+x+'" dy="'+(lineIndex===0?0:16)+'">'+escapeHTML(line)+'</tspan>').join("")+'</text>';
+  }
   return figure+text+'<text class="recipe-order" x="'+x+'" y="'+(y+57)+'" text-anchor="middle">'+(index+1)+'</text>';
 }
 
@@ -135,15 +166,21 @@ export function recipeSceneMarkup(recipe,frame=0,momentIndex=0){
   const gap=nodes.length>1?(width-margin*2)/(nodes.length-1):0;
   const xs=nodes.map((_,index)=>margin+gap*index);
   const current=Math.max(0,Math.min(nodes.length-1,frame));
-  const halfWidth=kind=>kind==="terminal"?57:kind==="decision"?64:kind==="loop"?70:kind==="input"||kind==="output"?58:kind==="document"?55:54;
-  const arrows=nodes.slice(1).map((_,index)=>'<path class="recipe-arrow" d="M'+(xs[index]+halfWidth(nodes[index][0])-2)+' '+y+'H'+(xs[index+1]-halfWidth(nodes[index+1][0])+2)+'" marker-end="url(#recipe-arrowhead)"/>').join("");
+  const halfWidth=kind=>kind==="terminal"?57:kind==="decision"?64:kind==="loop"?70:kind==="input"||kind==="output"?58:kind==="document"?55:66;
+  const halfHeight=kind=>kind==="decision"?38:kind==="terminal"?31:32;
+  const arrows=nodes.slice(1).map((_,index)=>'<path class="recipe-arrow" d="M'+(xs[index]+halfWidth(nodes[index][0])+3)+' '+y+'H'+(xs[index+1]-halfWidth(nodes[index+1][0])-10)+'" marker-end="url(#recipe-arrowhead)"/>').join("");
   const activePart=recipe.loopPartByMoment?.[momentIndex]??-1;
   const shapes=nodes.map(([kind,label],index)=>shape(kind,xs[index],y,label,index===current,index,kind==="loop"?activePart:-1)).join("");
   const choiceIndex=nodes.findIndex(([kind])=>kind==="decision"),choiceX=xs[choiceIndex];
-  const choices=recipe.choices&&choiceIndex>=0?'<path class="recipe-choice-arrow" d="M'+(choiceX-20)+' 143L'+(choiceX-62)+' 183M'+(choiceX+20)+' 143L'+(choiceX+62)+' 183"/><g class="recipe-choice recipe-choice-yes"><rect x="'+(choiceX-122)+'" y="185" width="60" height="30" rx="15"/><text x="'+(choiceX-92)+'" y="205" text-anchor="middle">'+escapeHTML(recipe.choices[0])+'</text></g><g class="recipe-choice recipe-choice-no"><rect x="'+(choiceX+62)+'" y="185" width="60" height="30" rx="15"/><text x="'+(choiceX+92)+'" y="205" text-anchor="middle">'+escapeHTML(recipe.choices[1])+'</text></g>':'';
+  const choices=recipe.choices&&choiceIndex>=0?'<path class="recipe-choice-arrow" d="M'+(choiceX-18)+' 151L'+(choiceX-62)+' 176M'+(choiceX+18)+' 151L'+(choiceX+62)+' 176" marker-end="url(#recipe-arrowhead)"/><g class="recipe-choice"><rect x="'+(choiceX-122)+'" y="185" width="60" height="30" rx="15"/><text x="'+(choiceX-92)+'" y="205" text-anchor="middle">'+escapeHTML(recipe.choices[0])+'</text></g><g class="recipe-choice"><rect x="'+(choiceX+62)+'" y="185" width="60" height="30" rx="15"/><text x="'+(choiceX+92)+'" y="205" text-anchor="middle">'+escapeHTML(recipe.choices[1])+'</text></g>':'';
   const [from,to]=recipe.returnLink??[];
-  const returnPath=Number.isInteger(from)&&Number.isInteger(to)?'<path class="recipe-return" d="M'+(xs[from]+halfWidth(nodes[from][0])-3)+' '+y+'H'+(width-12)+'V30H'+xs[to]+'V'+(y-(nodes[to][0]==="decision"?39:32))+'" marker-end="url(#recipe-arrowhead)"/>':'';
-  return '<svg class="lesson-recipe-svg" viewBox="0 0 '+width+' '+(recipe.choices?240:220)+'" role="img" aria-label="'+escapeHTML(recipe.cierre)+'"><defs><marker id="recipe-arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z"/></marker></defs>'+arrows+returnPath+choices+shapes+'<circle class="recipe-guide" cx="'+xs[0]+'" cy="55" r="8" transform="translate('+(xs[current]-xs[0])+' 0)" aria-hidden="true"/></svg>';
+  const returnPath=Number.isInteger(from)&&Number.isInteger(to)?'<path class="recipe-return" d="M'+(xs[from]+halfWidth(nodes[from][0])+4)+' '+y+'H'+(width-12)+'V30H'+xs[to]+'V'+(y-halfHeight(nodes[to][0])-9)+'" marker-end="url(#recipe-arrowhead)"/>':'';
+  const roles=[...new Set(nodes.map(([kind,label])=>explanationRole(kind,label)).filter(role=>role!=="decision"))];
+  const legendRoles=["focus",...roles],legendStart=(width-legendRoles.length*136)/2;
+  const legend='<g class="recipe-legend" aria-hidden="true">'+legendRoles.map((role,index)=>'<g class="recipe-legend-item recipe-role-'+role+'" transform="translate('+(legendStart+index*136)+' 0)"><circle cx="0" cy="0" r="5"/><text x="9" y="4">'+escapeHTML(roleNames[role]??role)+'</text></g>').join("")+'</g>';
+  const legendY=recipe.choices?240:205,height=recipe.choices?258:224;
+  const usedNames=legendRoles.map(role=>roleNames[role]??role).join("; ");
+  return '<svg class="lesson-recipe-svg" viewBox="0 0 '+width+' '+height+'" role="img" aria-label="'+escapeHTML(recipe.cierre+" Colores: "+usedNames)+ '"><defs><marker id="recipe-arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z"/></marker></defs>'+arrows+returnPath+choices+shapes+'<circle class="recipe-guide" cx="'+xs[0]+'" cy="55" r="8" transform="translate('+(xs[current]-xs[0])+' 0)" aria-hidden="true"/><g transform="translate(0 '+legendY+')">'+legend+'</g></svg>';
 }
 
 export function recipeFrame(recipe,step,eventCount=1){

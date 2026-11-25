@@ -1,15 +1,15 @@
+import { initBrandSplash } from "./ui/brand-splash.js";
 import { initNavigation } from "./ui/navigation.js";
 import { initPreferences } from "./ui/preferences.js";
-import { initContentViews } from "./ui/content-view.js";
+import { initContentViews, restoreLearnSimulatorRoute } from "./ui/content-view.js";
 import { initSimulator } from "./ui/simulator.js";
-import { initLab } from "./ui/lab.js";
-import { initBuilder } from "./ui/builder.js";
 import { initFicha } from "./ficha/init.js";
 import { initMathPlayer } from "./ui/player/math-player.js";
 import { initSourceSimulator } from "./ui/source-simulator.js";
 import { initSimulatorEntry } from "./ui/simulator-entry.js";
 import { initFichaRepository } from "./ficha/repository.js";
 
+initBrandSplash();
 initFichaRepository();
 initFicha();
 initNavigation();
@@ -17,7 +17,6 @@ initPreferences();
 initContentViews();
 initSimulatorEntry();
 initSimulator();
-initLab();
-initBuilder();
 initMathPlayer();
 initSourceSimulator();
+restoreLearnSimulatorRoute();

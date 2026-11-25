@@ -1,7 +1,7 @@
 import { test, expect, goToSpace } from "./navigation.js";
 
 test("el simulador abre el catálogo y permite llegar al reproductor matemático",async({page})=>{
-  await page.goto("/");await goToSpace(page,"simulator");
+  await page.goto("/");await goToSpace(page,"simulator",{keepSimulatorEntry:true});
   await expect(page.locator("#simulator-entry")).toBeVisible();
   await expect(page.locator("#simulator-entry [data-sim-competence]")).toHaveCount(5);
   await expect(page.locator(".simulator-grid")).toBeHidden();
@@ -16,7 +16,7 @@ test("el simulador abre el catálogo y permite llegar al reproductor matemático
 });
 
 test("el catálogo dirige los temas de fuentes y flujo a sus simuladores",async({page})=>{
-  await page.goto("/");await goToSpace(page,"simulator");
+  await page.goto("/");await goToSpace(page,"simulator",{keepSimulatorEntry:true});
   await page.locator('#simulator-entry [data-sim-competence="establecer-requisitos"]').click();
   await page.locator('#simulator-entry [data-sim-theme="fuentes-informacion"]').click();
   await page.locator('#simulator-entry [data-sim-exercise]').first().click();

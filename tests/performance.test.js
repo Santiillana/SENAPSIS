@@ -40,7 +40,7 @@ test("la línea de tiempo puede saltar de cientos de eventos y volver sin altera
 });
 
 test("el motor no ejecuta código JavaScript arbitrario",async()=>{
-  const files=["expression.js","parser.js","interpreter.js","flow-compiler.js"];
+  const files=["expression.js","parser.js","interpreter.js"];
   const sources=await Promise.all(files.map(name=>readFile(new URL("../src/core/"+name,import.meta.url),"utf8")));
   const source=sources.join("\n");
   assert.doesNotMatch(source,/\beval\s*\(/);

@@ -2,30 +2,44 @@
 <html lang="es" data-section="home" data-theme="dark" data-motion="full">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Laboratorio visual e interactivo para aprender a resolver problemas mediante diagramas de flujo.">
+  <meta name="description" content="SENAPSIS conecta, comprende y transforma el aprendizaje de algoritmos, matemáticas y análisis de información.">
+  <meta name="application-name" content="SENAPSIS"><meta property="og:site_name" content="SENAPSIS"><meta property="og:title" content="SENAPSIS — plataforma de aprendizaje">
   <meta name="traza-release" content="simulador-v3-20261115-1850">
-  <meta name="theme-color" content="#0E1522"><title>Traza — laboratorio de diagramas de flujo</title>
-  <script>let theme;try{theme=localStorage.getItem("traza:v4:theme:home")}catch{}if(theme!=="light"&&theme!=="dark")theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=theme;document.querySelector('meta[name="theme-color"]').content=theme==="dark"?"#0E1522":"#FBF8F1"</script>
+  <meta name="theme-color" content="#F7F1E3"><title>SENAPSIS — plataforma de aprendizaje</title>
+  <link rel="icon" type="image/png" sizes="128x128" href="./src/assets/senapsis-favicon.png">
+  <script>let theme,motion;try{theme=localStorage.getItem("traza:v4:theme:home");motion=localStorage.getItem("traza:v2:motion")||localStorage.getItem("traza-motion")}catch{}if(theme!=="light"&&theme!=="dark")theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";if(!["full","soft","reduced"].includes(motion))motion=matchMedia("(prefers-reduced-motion: reduce)").matches?"reduced":"full";document.documentElement.dataset.theme=theme;document.documentElement.dataset.motion=motion;document.querySelector('meta[name="theme-color"]').content=theme==="dark"?"#0D1524":"#F7F1E3"</script>
   <link rel="stylesheet" href="./src/styles/tokens.css"><link rel="stylesheet" href="./src/styles/layout.css">
   <link rel="stylesheet" href="./src/styles/components.css"><link rel="stylesheet" href="./src/styles/motion.css">
-  <link rel="stylesheet" href="./src/styles/responsive.css"><link rel="stylesheet" href="./src/styles/content.css"><link rel="stylesheet" href="./src/styles/simulator.css"><link rel="stylesheet" href="./src/styles/lab-builder.css"><link rel="stylesheet" href="./src/styles/shell.css"><script type="module" src="./src/app.js"></script>
+  <link rel="stylesheet" href="./src/styles/responsive.css"><link rel="stylesheet" href="./src/styles/content.css"><link rel="stylesheet" href="./src/styles/simulator.css"><link rel="stylesheet" href="./src/styles/shell.css"><script type="module" src="./src/app.js"></script>
   <link rel="stylesheet" href="./src/styles/ficha.css"><link rel="stylesheet" href="./src/styles/ficha-activities.css">
   <link rel="stylesheet" href="./src/styles/ficha-catalog.css">
   <link rel="stylesheet" href="./src/styles/learn-catalog.css">
   <link rel="stylesheet" href="./src/styles/kit.css">
   <link rel="stylesheet" href="./src/styles/lesson-reading.css">
   <link rel="stylesheet" href="./src/styles/sources.css">
+  <link rel="stylesheet" href="./src/styles/brand.css">
 </head>
 <body>
+<section class="brand-splash" id="brand-splash" aria-labelledby="brand-splash-title">
+  <h1 class="sr-only" id="brand-splash-title">Senapsis. Conecta. Comprende. Transforma.</h1>
+  <div class="brand-splash-lockup" aria-hidden="true">
+    <img class="brand-splash-symbol" src="./src/assets/senapsis-symbol.png" alt="">
+    <span class="brand-splash-divider"></span>
+    <div class="brand-splash-copy">
+      <img class="brand-splash-wordmark" src="./src/assets/senapsis-wordmark.png" data-dark-src="./src/assets/senapsis-wordmark-dark.png" alt="">
+      <img class="brand-splash-tagline" src="./src/assets/senapsis-tagline.png" data-dark-src="./src/assets/senapsis-tagline-dark.png" alt="">
+    </div>
+  </div>
+  <button class="brand-enter" id="brand-enter" type="button">Ingresar<span aria-hidden="true">→</span></button>
+</section>
+<script>if(document.documentElement.dataset.theme==="dark"){document.querySelectorAll(".brand-splash-wordmark[data-dark-src],.brand-splash-tagline[data-dark-src]").forEach(image=>image.src=image.dataset.darkSrc)}</script>
+<div class="app-shell" id="app-shell" inert aria-hidden="true">
 <a class="skip-link" href="#main-content">Saltar al contenido</a>
-<div class="app-shell">
   <header class="topbar" id="hd" data-layout-region="header" data-section-switcher-hidden="false">
     <div class="topbar-main">
-      <a class="brand" href="#main-content" data-go="home" data-space="home" aria-label="Traza, volver a la portada">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 48 48" fill="none"><path d="M9 40V28H22V16H34" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="40" r="3.2" fill="currentColor"/><circle cx="38" cy="16" r="11" fill="var(--brand-dot)" opacity=".28"/><circle cx="38" cy="16" r="6.2" fill="var(--brand-dot)"/></svg>
-        </span>
-        <span class="brand-copy"><strong>traza<span>.</span></strong></span>
+      <a class="brand" href="#main-content" data-go="home" data-space="home" aria-label="Senapsis, volver a la portada">
+        <span class="brand-mark" aria-hidden="true"><img src="./src/assets/senapsis-symbol.png" alt=""></span>
+        <span class="brand-copy"><strong>SENAPSIS</strong></span>
       </a>
       <nav class="section-switch" aria-label="Sección principal">
         <button type="button" data-section-switch="ficha" aria-pressed="false">Mi ficha</button>
@@ -52,14 +66,13 @@
         <button class="nav-button" type="button" data-space="learn" aria-current="false"><span class="subnav-icon" aria-hidden="true">◉</span><span>Lecciones</span></button>
         <button class="nav-button" type="button" data-space="exercises" aria-current="false"><span class="subnav-icon" aria-hidden="true">▤</span><span>Ejercicios</span></button>
         <button class="nav-button" type="button" data-space="simulator" aria-current="false"><span class="subnav-icon" aria-hidden="true">⌘</span><span>Simulador</span></button>
-        <button class="nav-button" type="button" data-space="lab" aria-current="false"><span class="subnav-icon" aria-hidden="true">⌑</span><span>Laboratorio</span></button>
       </div>
     </nav>
   </header>
 
-  <main class="page-shell" id="main-content" data-layout-region="content">
+  <main class="page-shell" id="main-content" tabindex="-1" data-layout-region="content">
     <section class="page-heading" aria-label="Contexto del espacio">
-      <div><p class="eyebrow" id="space-kicker">ESPACIO 02 / 04 · PRÁCTICA GUIADA</p>
+      <div><p class="eyebrow" id="space-kicker">ESPACIO 02 / 03 · PRÁCTICA GUIADA</p>
         <h1 id="space-heading">Piensa el problema. Después, dibuja el camino.</h1>
         <p class="page-subtitle" id="space-description">Un entorno para entender cómo se transforma una idea en instrucciones claras y verificables.</p>
       </div>
@@ -110,22 +123,23 @@
       </section>
 
       <section id="exercise-topic-workspace" class="exercise-topic-workspace" aria-labelledby="exercise-topic-title" hidden>
-        <header class="exercise-topic-header"><button type="button" class="learn-catalog-back" id="exercise-topic-back">‹ Competencias y temas</button><div><p id="exercise-topic-competence" class="eyebrow"></p><h3 id="exercise-topic-title"></h3></div></header>
+        <header class="exercise-topic-header"><nav class="learn-topic-crumb" aria-label="Ruta de aprendizaje"><button type="button" class="learn-catalog-back" id="exercise-topic-back">‹ Competencias</button><span aria-hidden="true">›</span><span id="exercise-topic-competence"></span><span aria-hidden="true">›</span><strong id="exercise-topic-title"></strong></nav></header>
       <div class="exercise-workspace exercise-workspace-catalog">
-        <details class="panel exercise-list-panel" id="exercise-list-disclosure" open>
-          <summary class="exercise-list-heading"><div><p class="eyebrow">EJERCICIOS</p><strong id="exercise-topic-count"></strong></div><span aria-hidden="true">⌄</span></summary>
+        <aside class="panel exercise-list-panel" id="exercise-list-disclosure" aria-label="Lista de ejercicios">
+          <header class="exercise-list-heading"><div><p class="eyebrow">EJERCICIOS</p><strong id="exercise-topic-count">Ejercicios</strong></div></header>
           <button type="button" id="exercise-generate-math" class="button button-secondary" hidden>Generar reto</button>
           <select id="exercise-bank" hidden aria-hidden="true" tabindex="-1"><option value="diagramas">Diagramas de flujo</option><option value="matematicas">Matemáticas</option><option value="fuentes">Fuentes de información</option></select>
           <select id="exercise-math-topic" hidden aria-hidden="true" tabindex="-1"><option value="todos">Todos</option><option value="enteros">Enteros</option><option value="racionales">Racionales</option><option value="regla-de-tres">Regla de tres</option></select>
           <div class="exercise-list-controls">
             <label class="catalog-search" id="exercise-search-wrap"><span>Buscar</span><input id="exercise-search" type="search" placeholder="Título o número…" autocomplete="off"></label>
             <div class="exercise-difficulty-filter"><span>Dificultad</span><div id="exercise-difficulty-options" role="group" aria-label="Filtrar por dificultad"></div></div>
+            <div class="exercise-concept-filter"><span>Concepto</span><div id="exercise-concept-options" role="group" aria-label="Filtrar por concepto"></div></div>
             <button type="button" id="exercise-class-only" class="exercise-class-filter" aria-pressed="false" hidden>De clase</button>
           </div>
-          <p id="exercise-filter-summary" class="exercise-filter-summary" aria-live="polite"></p>
+          <p id="exercise-filter-summary" class="exercise-filter-summary sr-only" aria-live="polite"></p>
           <div class="exercise-grid exercise-list" id="exercise-grid"></div>
-        </details>
-        <aside class="panel exercise-detail-panel" id="exercise-detail" aria-live="polite" aria-label="Información del ejercicio">
+        </aside>
+        <aside class="panel exercise-detail-panel" id="exercise-detail" aria-live="polite" aria-label="Explicación del ejercicio" tabindex="-1">
           <div class="detail-empty">
             <span class="detail-empty-mark">↖</span>
             <p class="eyebrow">DETALLE</p>
@@ -142,8 +156,8 @@
     <section class="space-view learn-view" id="view-learn" data-view="learn" aria-labelledby="learn-title" hidden>
       <header class="section-intro learn-intro"><div><p class="eyebrow">LECCIONES · ADSO</p><h2 id="learn-title">Lecciones</h2></div><div class="learn-intro-actions"><span id="learn-streak" class="learn-streak">Racha: 0 días</span><button type="button" class="button button-secondary" id="learn-open-progress">Mi progreso</button></div></header>
       <section id="learn-catalog-home" class="learn-catalog-home" aria-label="Catálogo de competencias y temas"><div id="learn-competence-filters" class="learn-competence-grid" role="group" aria-label="Competencias"></div><div id="learn-catalog-bands" hidden></div></section>
-      <dialog id="learn-progress-page" class="learn-progress-page learn-progress-drawer" aria-labelledby="learn-progress-title" aria-modal="true"><header><div><p class="eyebrow">APRENDE</p><h2 id="learn-progress-title">Mi progreso</h2></div><button type="button" class="learn-progress-close" data-progress-close aria-label="Cerrar Mi progreso">×</button></header><section class="learn-progress-overview" aria-label="Progreso general de Aprende"><div class="learn-progress-ring" id="learn-progress-ring" role="progressbar" aria-label="Progreso de las 40 lecciones" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0"><span id="learn-progress-percent">0%</span></div><div class="learn-progress-copy"><p class="eyebrow">TU PROGRESO</p><strong id="learn-progress-total">0 de 40 lecciones completadas</strong><p id="learn-progress-next"></p><p id="learn-streak-drawer" class="learn-progress-streak">Racha: 0 días</p><div class="learn-progress-stats"><span id="learn-progress-stars" class="learn-progress-stat">☆ 0 estrellas</span><span id="learn-progress-medals" class="learn-progress-stat">🏅 0 medallas</span></div></div></section><section id="learn-progress-empty" class="learn-progress-empty" hidden><p>Aún no has completado una lección. Elige una para comenzar.</p><button type="button" class="button button-primary" data-progress-start>Empezar la primera lección</button></section><div id="learn-progress-topics" class="learn-progress-topics"></div></dialog>
-      <section id="learn-topic-space" class="learn-topic-space" hidden><header class="learn-topic-header"><div class="learn-topic-crumb"><button type="button" data-learn-back aria-label="Volver a competencias">‹ Competencias</button><span aria-hidden="true">›</span><span id="learn-topic-competence"></span><span aria-hidden="true">›</span><strong id="learn-topic-title"></strong><span id="learn-current-lesson-wrap" hidden><span aria-hidden="true">›</span><span id="learn-current-lesson"></span></span></div></header><p id="learn-topic-note" class="learn-topic-note" hidden></p><div class="learn-workspace" id="learn-lessons-content"><aside class="panel lesson-catalog-panel"><div class="panel-heading"><div><p class="eyebrow">LECCIONES</p><h3 id="learn-catalog-count">40 lecciones</h3></div></div><p class="lesson-route-progress" id="lesson-route-count">1 de 40</p><div class="lesson-catalog" id="lesson-catalog"></div></aside><article class="panel lesson-detail-panel sheet-theme-surface" id="lesson-detail"><div class="detail-empty"><span class="detail-empty-mark">40</span><p class="eyebrow">APRENDE PASO A PASO</p><h3>Elige una lección para empezar.</h3><p>Cada tema conecta una explicación sencilla, la definición técnica, una visualización manipulable, un ejemplo y una comprobación.</p></div></article></div></section>
+      <dialog id="learn-progress-page" class="learn-progress-page learn-progress-drawer" aria-labelledby="learn-progress-title" aria-modal="true"><header><div><p class="eyebrow">APRENDE</p><h2 id="learn-progress-title">Mi progreso</h2></div><button type="button" class="learn-progress-close" data-progress-close aria-label="Cerrar Mi progreso">×</button></header><section class="learn-progress-overview" aria-label="Progreso general de Aprende"><div class="learn-progress-ring" id="learn-progress-ring" role="progressbar" aria-label="Progreso de las 40 lecciones" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0"><span id="learn-progress-percent">0%</span></div><div class="learn-progress-copy"><p class="eyebrow">TU PROGRESO</p><strong id="learn-progress-total">0 de 40 lecciones completadas</strong><p id="learn-progress-next"></p><p id="learn-streak-drawer" class="learn-progress-streak">Racha: 0 días</p></div></section><section id="learn-progress-empty" class="learn-progress-empty" hidden><p>Aún no has completado una lección. Elige una para comenzar.</p><button type="button" class="button button-primary" data-progress-start>Empezar la primera lección</button></section><div id="learn-progress-topics" class="learn-progress-topics"></div></dialog>
+      <section id="learn-topic-space" class="learn-topic-space" hidden><header class="learn-topic-header"><div class="learn-topic-crumb"><button type="button" data-learn-back aria-label="Volver a competencias">‹ Competencias</button><span aria-hidden="true">›</span><span id="learn-topic-competence"></span><span aria-hidden="true">›</span><strong id="learn-topic-title"></strong><span id="learn-current-lesson-wrap" hidden><span aria-hidden="true">›</span><span id="learn-current-lesson"></span></span></div></header><p id="learn-topic-note" class="learn-topic-note" hidden></p><div class="learn-workspace" id="learn-lessons-content"><aside class="panel lesson-catalog-panel" aria-label="Lista de lecciones"><div class="panel-heading"><div><p class="eyebrow">LECCIONES</p><h3 id="learn-catalog-count">40 lecciones</h3></div></div><p class="lesson-route-progress" id="lesson-route-count">1 de 40</p><div class="lesson-catalog" id="lesson-catalog"></div></aside><article class="panel lesson-detail-panel sheet-theme-surface" id="lesson-detail" aria-label="Explicación de la lección"><div class="detail-empty two-zone-state two-zone-state--empty" role="status" aria-live="polite" data-state="empty"><span class="detail-empty-mark">40</span><p class="eyebrow">APRENDE PASO A PASO</p><h3>Elige una lección para empezar.</h3><p>Cada tema conecta una explicación sencilla, la definición técnica, una visualización manipulable, un ejemplo y una comprobación.</p></div></article></div></section>
     </section>
 
     <dialog class="simulator-intro" id="simulator-intro" aria-labelledby="simulator-intro-title" aria-describedby="simulator-intro-statement">
@@ -252,7 +266,7 @@
               </div>
               <div id="simulator-question" class="simulator-question" hidden></div>
               <div id="simulator-shortcuts" class="simulator-shortcuts" role="dialog" aria-label="Atajos" hidden><strong>Atajos</strong><span>Espacio reproducir · ←/→ paso · Inicio/Fin extremos</span><span>+ / − zoom · 0 centrar · C cámara · P predice · F concentración · Esc salir</span><button type="button" id="simulator-shortcuts-close">Cerrar</button></div>
-              <span class="canvas-coordinate coordinate-top">TRAZA / SVG</span><span class="canvas-coordinate coordinate-bottom" id="diagram-dimensions">VIEWPORT</span>
+              <span class="canvas-coordinate coordinate-top">SENAPSIS / SVG</span><span class="canvas-coordinate coordinate-bottom" id="diagram-dimensions">VIEWPORT</span>
               <button type="button" id="diagram-fullscreen-exit" class="diagram-fullscreen-exit" hidden aria-label="Salir de pantalla completa">Salir de pantalla completa ✕</button>
             </div>
           </div>
@@ -283,87 +297,14 @@
       </div>
     </section>
 
-    <section class="space-view lab-view" id="view-lab" data-view="lab" aria-labelledby="lab-title" hidden>
-      <header class="section-intro lab-intro">
-        <div><p class="eyebrow">LABORATORIO · PRÁCTICA ACTIVA</p><h2 id="lab-title">Practica con retos cortos.</h2><p>Observa, construye e investiga con la misma ejecución del Simulador.</p></div>
-      </header>
-      <section id="lab-topic-home" class="lab-topic-home" aria-label="Competencias y temas del Laboratorio"></section>
-      <header id="lab-topic-heading" class="lab-topic-heading" hidden><button type="button" class="learn-catalog-back" id="lab-topic-back">‹ Competencias y temas</button><div><p id="lab-topic-competence" class="eyebrow"></p><h3 id="lab-topic-title"></h3></div></header>
-      <div class="lab-catalog-filters" aria-label="Filtrar mecánicas"><div class="lab-filter-group"><span>Concepto</span><div id="lab-filter-concepts" role="group" aria-label="Filtrar por concepto"></div></div><div class="lab-filter-group"><span>Dificultad</span><div id="lab-filter-difficulty" role="group" aria-label="Filtrar por dificultad"></div></div><button type="button" id="lab-filter-clear" hidden>Limpiar</button></div>
-      <section class="lab-mode-cards" id="lab-mode-cards" aria-label="Mecánicas del Laboratorio">
-        <section class="lab-family-band" aria-labelledby="lab-observe-title"><header class="lab-family-heading"><span class="lab-family-symbol" aria-hidden="true">◉</span><div><h3 id="lab-observe-title">Observa</h3><p>Mira y anticipa</p></div></header><div class="lab-mechanics-grid">
-          <button type="button" class="lab-mode-card" data-lab-mode="read" data-lab-activity="predict"><span class="lab-mechanic-art" aria-hidden="true"><b>?</b><i></i></span><strong>Predice</strong><small>Anticipa el siguiente paso de una ejecución.</small><span class="lab-mechanic-meta"><span>1 a 3 min</span><span data-topic-stars="predict" aria-label="Hasta tres estrellas">☆☆☆</span></span></button>
-          <button type="button" class="lab-mode-card" data-lab-mode="read" data-lab-activity="follow-arrow"><span class="lab-mechanic-art" aria-hidden="true"><b>↘</b><i></i></span><strong>Sigue la flecha</strong><small>Recorre las figuras en el orden del programa.</small><span class="lab-mechanic-meta"><span>1 a 3 min</span><span data-topic-stars="follow-arrow" aria-label="Hasta tres estrellas">☆☆☆</span></span></button>
-          <button type="button" class="lab-mode-card" data-lab-mode="read" data-lab-activity="table"><span class="lab-mechanic-art" aria-hidden="true"><b>▦</b><i></i></span><strong>Tabla de seguimiento</strong><small>Completa los valores de cada paso.</small><span class="lab-mechanic-meta"><span>1 a 3 min</span><span data-topic-stars="table" aria-label="Hasta tres estrellas">☆☆☆</span></span></button>
-        </div></section>
-        <section class="lab-family-band" aria-labelledby="lab-build-title"><header class="lab-family-heading"><span class="lab-family-symbol" aria-hidden="true">◇</span><div><h3 id="lab-build-title">Construye</h3><p>Arma y completa</p></div></header><div class="lab-mechanics-grid">
-          <button type="button" class="lab-mode-card" data-lab-mode="build" data-lab-activity="order"><span class="lab-mechanic-art" aria-hidden="true"><b>↕</b><i></i></span><strong>Ordena</strong><small>Organiza instrucciones para reconstruir el algoritmo.</small><span class="lab-mechanic-meta"><span>1 a 3 min</span><span data-topic-stars="order" aria-label="Hasta tres estrellas">☆☆☆</span></span></button>
-          <button type="button" class="lab-mode-card" data-lab-mode="build" data-lab-activity="fill-gap"><span class="lab-mechanic-art" aria-hidden="true"><b>＿</b><i></i></span><strong>Completa el hueco</strong><small>Elige qué instrucción completa el programa.</small><span class="lab-mechanic-meta"><span>1 a 3 min</span><span data-topic-stars="fill-gap" aria-label="Hasta tres estrellas">☆☆☆</span></span></button>
-          <button type="button" class="lab-mode-card" data-lab-mode="build" data-lab-activity="build-diagram"><span class="lab-mechanic-art" aria-hidden="true"><b>⌘</b><i></i></span><strong>Arma el diagrama</strong><small>Coloca las piezas en un flujo estructurado.</small><span class="lab-mechanic-meta"><span>1 a 3 min</span><span data-topic-stars="build-diagram" aria-label="Hasta tres estrellas">☆☆☆</span></span></button>
-          <button type="button" class="lab-mode-card" data-lab-mode="build" data-lab-activity="symbol"><span class="lab-mechanic-art" aria-hidden="true"><b>◇</b><i></i></span><strong>Identifica el símbolo</strong><small>Relaciona una instrucción con su figura.</small><span class="lab-mechanic-meta"><span>1 a 3 min</span><span data-topic-stars="symbol" aria-label="Hasta tres estrellas">☆☆☆</span></span></button>
-          <button type="button" class="lab-mode-card" data-lab-mode="build" data-lab-activity="match"><span class="lab-mechanic-art" aria-hidden="true"><b>⇄</b><i></i></span><strong>Empareja</strong><small>Une cada concepto con su ejemplo.</small><span class="lab-mechanic-meta"><span>1 a 3 min</span><span data-topic-stars="match" aria-label="Hasta tres estrellas">☆☆☆</span></span></button>
-        </div></section>
-        <section class="lab-family-band" aria-labelledby="lab-investigate-title"><header class="lab-family-heading"><span class="lab-family-symbol" aria-hidden="true">⌕</span><div><h3 id="lab-investigate-title">Investiga</h3><p>Busca y pregunta</p></div></header><div class="lab-mechanics-grid">
-          <button type="button" class="lab-mode-card" data-lab-mode="debug" data-lab-activity="error"><span class="lab-mechanic-art" aria-hidden="true"><b>⌕</b><i></i></span><strong>Encuentra el error</strong><small>Detecta el primer paso que produce un resultado distinto.</small><span class="lab-mechanic-meta"><span>1 a 3 min</span><span data-topic-stars="error" aria-label="Hasta tres estrellas">☆☆☆</span></span></button>
-          <button type="button" class="lab-mode-card" data-lab-mode="debug" data-lab-activity="whatif"><span class="lab-mechanic-art" aria-hidden="true"><b>¿…?</b><i></i></span><strong>¿Y si…?</strong><small>Cambia un dato y anticipa qué efecto tendrá.</small><span class="lab-mechanic-meta"><span>1 a 3 min</span><span data-topic-stars="whatif" aria-label="Hasta tres estrellas">☆☆☆</span></span></button>
-        </div></section>
-      </section>
-      <p id="lab-filter-empty" class="lab-filter-empty" hidden>No hay mecánicas disponibles con estos filtros.</p>
-      <p class="lab-mode-footnote"><span aria-hidden="true">⌁</span> Los retos usan la ejecución del Simulador para mantener sincronizados el diagrama, la escena y las variables.</p>
-      <p class="lab-medal-announcement" id="lab-medal-announcement" role="status" hidden></p>
-      <dialog class="lab-prepare-dialog" id="lab-prepare-dialog" aria-labelledby="lab-prepare-title">
-        <form method="dialog" class="lab-prepare-card">
-          <button class="lab-prepare-close" value="cancel" aria-label="Cerrar">×</button>
-          <p class="eyebrow">PREPARA TU PARTIDA</p><h3 id="lab-prepare-title">Elige cómo practicar</h3>
-          <fieldset><legend>Concepto</legend><div class="lab-prepare-options" id="lab-prepare-concepts"></div></fieldset>
-          <fieldset><legend>Dificultad</legend><div class="lab-prepare-options lab-prepare-levels" id="lab-prepare-levels"></div></fieldset>
-          <button type="button" class="button button-primary" id="lab-prepare-play">Jugar</button>
-        </form>
-      </dialog>
-      <div class="lab-practice-workspace" id="lab-practice-workspace" hidden>
-        <div class="lab-practice-heading"><button type="button" class="text-link" id="lab-back-to-modes">← Las tres formas de practicar</button><div><p class="eyebrow" id="lab-mode-kicker">01 · LEER</p><h3 id="lab-mode-title">Sigue la ficha</h3><p id="lab-mode-description">Tú decides el siguiente movimiento; el programa te explica el porqué.</p></div></div>
-        <div class="lab-layout lab-layout-live">
-          <section class="panel lab-context lab-context-live">
-            <div class="panel-heading"><div><p class="eyebrow">DIAGRAMA EN VIVO</p><h3 id="lab-context-title">Diagrama de flujo · Sin ejecución</h3></div></div>
-            <div class="lab-live-diagram" id="lab-diagram-container"><div class="lab-diagram-empty"><strong>Selecciona un ejercicio y ejecútalo.</strong><p>El diagrama y el paso actual aparecerán aquí mientras practicas</p></div></div>
-            <div class="lab-live-inspector"><section class="lab-mini-panel"><p class="eyebrow">EN ESCENA</p><div id="lab-scene-content"><strong>Sin evento activo.</strong><p>La explicación del paso seleccionado aparecerá aquí.</p></div></section><section class="lab-mini-panel"><p class="eyebrow">VARIABLES</p><div id="lab-variables-content"><span class="empty-state-copy">Sin variables todavía.</span></div></section></div>
-            <div class="lab-context-footer"><span id="lab-current-step">PASO <b>—</b></span><span id="lab-current-exercise">EJERCICIO <b>—</b></span><button type="button" class="text-link" id="lab-open-simulator">Abrir simulador ↗</button></div>
-          </section>
-          <aside class="panel activity-panel activity-panel-live">
-            <div class="panel-heading"><div><p class="eyebrow">ELIGE UN RETO</p><h3 id="lab-activity-heading">Lee y comprende</h3></div></div>
-            <div class="activity-list" id="lab-activity-list"></div>
-            <button type="button" class="button button-secondary lab-open-builder" id="lab-open-builder" hidden>✎ Lienzo libre · Constructor</button>
-          </aside>
-        </div>
-        <section class="panel lab-task-panel" id="lab-task-panel" aria-live="polite" hidden>
-          <div class="panel-heading"><div><p class="eyebrow">RETO ACTUAL</p><h3 id="lab-task-title" tabindex="-1">Elige una actividad</h3></div></div>
-          <div id="lab-task-content" class="lab-task-content"><p>Selecciona una actividad para empezar. La explicación y las pistas acompañarán cada paso.</p></div>
-        </section>
-      </div>
-      <section id="lab-builder-stage" class="lab-builder-stage" hidden>
-        <div class="lab-builder-stage-heading"><button type="button" class="text-link" id="lab-builder-back">← Volver a Arma el diagrama</button><h3 id="lab-builder-title" tabindex="-1">Construye tu propio flujo</h3></div>
-        <div class="builder-toolbar panel">
-          <div><p class="eyebrow">PLANTILLAS DE INICIO</p><strong>Prueba con un flujo base o empieza desde cero.</strong></div>
-          <div class="builder-presets"><button type="button" class="button button-secondary" id="builder-undo" aria-label="Deshacer último cambio" aria-keyshortcuts="Control+Z Meta+Z" title="Deshacer · Ctrl+Z" disabled>Deshacer</button><button type="button" class="button button-secondary" id="builder-redo" aria-label="Rehacer último cambio" aria-keyshortcuts="Control+Shift+Z Control+Y Meta+Shift+Z Meta+Y" title="Rehacer · Ctrl+Shift+Z o Ctrl+Y" disabled>Rehacer</button><button type="button" class="button button-secondary" data-builder-preset="sequence">Secuencia</button><button type="button" class="button button-secondary" data-builder-preset="decision">Decisión</button><button type="button" class="button button-secondary" data-builder-preset="for">Para</button><button type="button" class="button button-secondary" data-builder-preset="while">Mientras</button><button type="button" class="button button-secondary" data-builder-preset="doWhile">Hacer–Mientras</button><button type="button" class="button button-secondary" data-builder-preset="empty">Vacío</button></div>
-        </div>
-        <div class="builder-grid builder-grid-live">
-          <aside class="panel builder-palette"><div class="panel-heading"><div><p class="eyebrow">PALETA DE ELEMENTOS</p><h3>Añadir símbolo</h3></div></div>
-            <div class="builder-palette-list"><button type="button" class="palette-action" data-add-node="input"><i class="palette-shape io-shape"></i><span><b>Entrada</b><small>Leer datos</small></span><em>+</em></button><button type="button" class="palette-action" data-add-node="process"><i class="palette-shape process-shape"></i><span><b>Proceso</b><small>Asignar / calcular</small></span><em>+</em></button><button type="button" class="palette-action" data-add-node="output"><i class="palette-shape output-shape"></i><span><b>Salida</b><small>Imprimir resultado</small></span><em>+</em></button><button type="button" class="palette-action" data-add-node="decision"><i class="palette-shape decision-shape"></i><span><b>Decisión</b><small>Rutas V / F</small></span><em>+</em></button><button type="button" class="palette-action" data-add-node="for"><i class="palette-shape loop-shape"></i><span><b>Ciclo Para</b><small>Preparar, evaluar, avanzar</small></span><em>+</em></button><button type="button" class="palette-action" data-add-node="while"><i class="palette-shape decision-shape"></i><span><b>Ciclo Mientras</b><small>Evaluar antes de entrar</small></span><em>+</em></button><button type="button" class="palette-action" data-add-node="doWhile"><i class="palette-shape terminal-shape"></i><span><b>Hacer–Mientras</b><small>Evaluar al final</small></span><em>+</em></button></div>
-          </aside>
-          <section class="panel builder-editor"><div class="panel-heading"><div><p class="eyebrow">LIENZO ESTRUCTURADO</p><h3>Secuencia y bloques</h3></div><span class="canvas-status"><i></i><span id="builder-status">SIN VALIDAR</span></span></div><nav id="builder-breadcrumb" class="builder-breadcrumb" aria-label="Ubicación del bloque"></nav><div id="builder-canvas-list" class="builder-canvas-list"></div><div class="builder-canvas-actions"><button type="button" class="button button-secondary" id="builder-validate">Validar estructura</button><button type="button" class="button button-primary" id="builder-run">Ejecutar diagrama <span aria-hidden="true">▶</span></button></div><div id="builder-errors" class="builder-errors" role="status"></div></section>
-          <aside class="panel builder-inspector builder-inspector-live"><div class="panel-heading"><div><p class="eyebrow">PROPIEDADES</p><h3>Inspector del símbolo</h3></div></div><div id="builder-inspector-content" class="builder-inspector-content"><p class="empty-state-copy">Selecciona un símbolo para editar sus propiedades.</p></div></aside>
-        </div>
-        <section class="panel builder-preview-panel"><div class="panel-heading"><div><p class="eyebrow">VALIDACIÓN Y EJECUCIÓN</p><h3>El mismo diagrama, la misma traza</h3></div></div><div class="builder-preview-grid"><section class="builder-preview-column"><p class="eyebrow">PSEUDOCÓDIGO COMPILADO</p><pre id="builder-code" class="builder-code">Añade instrucciones y valida el flujo.</pre><label class="builder-field"><span>DATOS DE ENTRADA</span><input id="builder-inputs" type="text" placeholder="Ejemplo: 8" autocomplete="off"></label><div id="builder-runtime-message" class="builder-runtime-message" role="status">El constructor aún no ha generado una ejecución.</div></section><section class="builder-preview-column"><p class="eyebrow">DIAGRAMA SVG</p><div id="builder-diagram" class="builder-diagram"><p class="empty-state-copy">El SVG aparecerá cuando el diagrama sea válido.</p></div></section><section class="builder-preview-column"><p class="eyebrow">EN ESCENA</p><div id="builder-scene" class="builder-live-panel"><p>Esperando una ejecución.</p></div><p class="eyebrow">VARIABLES</p><div id="builder-variables" class="builder-live-panel"><p>Sin variables.</p></div><p class="eyebrow">SALIDA</p><ol id="builder-output" class="builder-output"><li>Sin salida.</li></ol></section></div><div class="builder-execution-dock"><button type="button" class="transport-button" id="builder-first" disabled aria-label="Inicio">|◀</button><button type="button" class="transport-button" id="builder-previous" disabled aria-label="Anterior">◀</button><button type="button" class="transport-button" id="builder-next" disabled aria-label="Siguiente">▶</button><button type="button" class="transport-button" id="builder-last" disabled aria-label="Final">▶|</button><span id="builder-timeline-label">Paso — / —</span><input id="builder-timeline" type="range" min="0" max="0" value="0" disabled aria-label="Paso de ejecución del diagrama"></div></section>
-      </section>
-    </section>
 
 
     <section class="space-view ficha-view" id="view-hoy" data-view="hoy" aria-labelledby="hoy-title" hidden></section>
     <section class="space-view ficha-view" id="view-clases" data-view="clases" aria-labelledby="clases-title" hidden></section>
     <section class="space-view ficha-view" id="view-actividades" data-view="actividades" aria-labelledby="actividades-title" hidden></section>
     <section class="space-view ficha-view" id="view-biblioteca" data-view="biblioteca" aria-labelledby="biblioteca-title" hidden></section>
-    <footer class="page-footer"><a href="./reference/diagramas_de_flujo_original.html" target="_blank" rel="noopener">Consultar el prototipo original ↗</a><small>Traza · Pizarra de algoritmos</small></footer>
+    <footer class="page-footer"><a href="./reference/diagramas_de_flujo_original.html" target="_blank" rel="noopener">Consultar el prototipo original ↗</a><small>Senapsis · Conecta. Comprende. Transforma.</small></footer>
   </main>
 </div>
-<noscript><p class="noscript-message">Activa JavaScript para navegar por los cuatro espacios. El prototipo original permanece disponible en la carpeta reference.</p></noscript>
+<noscript><p class="noscript-message">Activa JavaScript para navegar por los tres espacios. El prototipo original permanece disponible en la carpeta reference.</p></noscript>
 </body></html>

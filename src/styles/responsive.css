@@ -9,8 +9,6 @@
   .problem-panel .problem-details[open] .mini-divider { display:none; }
   .problem-panel .problem-details[open] .helper-copy { grid-column:2; }
   .diagram-stage { min-height:440px; } .learning-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .builder-grid { grid-template-columns:minmax(180px,.7fr) minmax(0,1.5fr); }
-  .builder-inspector { grid-column:1/-1; } .inspector-empty { padding:24px; }
 }
 @media (max-width:760px) {
   .page-shell { width:min(100% - 28px,var(--content-width)); padding-top:22px; }
@@ -28,8 +26,6 @@
   .execution-dock { grid-template-columns:1fr auto; gap:12px; }
   .timeline-block { grid-column:1/-1; grid-row:2; } .dock-speed { grid-column:2; grid-row:1; }
   .dock-description { grid-column:1; } .dock-controls { grid-column:1/-1; justify-content:center; grid-row:3; }
-  .lab-layout { grid-template-columns:1fr; } .lab-context { min-height:350px; }
-  .builder-grid { grid-template-columns:1fr; } .builder-canvas { min-height:380px; } .builder-inspector { grid-column:auto; }
   .page-footer { align-items:flex-start; flex-direction:column; gap:8px; }
 }
 @media (max-width:440px) {
@@ -38,5 +34,4 @@
   .challenge-actions { align-items:stretch; flex-direction:column; } .challenge-actions .text-link { text-align:center; }
   .learning-grid { grid-template-columns:1fr; } .learning-card { min-height:170px; }
   .inspector-stack { grid-template-columns:1fr; } .diagram-legend { flex-wrap:wrap; gap:8px 13px; }
-  .lab-context-footer { flex-wrap:wrap; justify-content:flex-start; }
 }

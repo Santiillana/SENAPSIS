@@ -3419,7 +3419,7 @@ body[data-active-space="simulator"].focus #view-simulator.simulator-view{z-index
   grid-template-areas:"exercise exercise exercise" "problem diagram inspector" "dock dock dock"!important
  }
  body[data-active-space="simulator"] #simulator-exercise-nav{
-  position:relative!important;inset:auto!important;grid-area:exercise!important;transform:none!important;
+  position:relative!important;inset:auto!important;grid-area:exercise!important;transform:none!important;z-index:auto!important;
   display:flex!important;align-items:center;gap:6px;width:100%!important;max-width:none!important;
   min-width:0;max-height:40px!important;margin:0!important;padding:2px 4px!important;
   overflow-x:auto!important;overflow-y:hidden!important;overscroll-behavior-x:contain;

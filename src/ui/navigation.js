@@ -1,17 +1,16 @@
 const SPACE_META = {
-  home: { title: "Traza", description: "Tu ficha y tu aprendizaje, en un solo lugar." },
+  home: { title: "Inicio", description: "Tu ficha y tu aprendizaje, en un solo lugar." },
   hoy: { title: "Centro de control", description: "Tu agenda académica y lo que requiere tu atención." },
   clases: { title: "Clases", description: "Consulta tus clases por día, semana o mes." },
   actividades: { title: "Actividades", description: "Tus entregas, estados y retroalimentación." },
   biblioteca: { title: "Biblioteca", description: "Tus materiales y recursos de estudio." },
   learn: { title: "Lecciones", description: "Comprende cada figura, decisión y ciclo con ejemplos y escenas propias." },
   exercises: { title: "Ejercicios", description: "Elige un problema y revisa qué necesitas para resolverlo." },
-  simulator: { title: "Simulador", description: "Observa el algoritmo paso a paso y entiende cada cambio." },
-  lab: { title: "Laboratorio", description: "Sigue la ficha, arma diagramas y encuentra errores." }
+  simulator: { title: "Simulador", description: "Observa el algoritmo paso a paso y entiende cada cambio." }
 };
 
 const FICHA_SPACES = new Set(["hoy", "clases", "actividades", "biblioteca"]);
-const APRENDE_SPACES = new Set(["learn", "exercises", "simulator", "lab"]);
+const APRENDE_SPACES = new Set(["learn", "exercises", "simulator"]);
 const DEFAULT_LAST = { ficha: "hoy", aprende: "learn", section: "aprende" };
 const LAST_KEY = "traza:v4:last";
 function readLastViews() {
@@ -50,7 +49,6 @@ export function initNavigation() {
   const lastViews = readLastViews();
 
   function activate(space, options = {}) {
-    if (space === "builder") space = "lab";
     const meta = SPACE_META[space];
     const target = views.find(view => view.dataset.view === space);
     if (!meta || !target) return;
@@ -75,7 +73,7 @@ export function initNavigation() {
     document.body.dataset.activeSpace = space;
     document.body.dataset.activeSection = section;
     if (header) header.dataset.sectionSwitcherHidden = "false";
-    document.title = meta.title + " · Traza";
+    document.title = meta.title + " · SENAPSIS";
 
     if (space !== "home") {
       lastViews[section] = space;
@@ -119,7 +117,7 @@ export function initNavigation() {
   document.addEventListener("click", event => {
     const shortcut = event.target.closest("[data-go]");
     if (!shortcut) return;
-    const space = shortcut.dataset.go === "builder" ? "lab" : shortcut.dataset.go;
+    const space = shortcut.dataset.go;
     if (!SPACE_META[space]) return;
     if (shortcut instanceof HTMLAnchorElement) event.preventDefault();
     activate(space, { focus: true });

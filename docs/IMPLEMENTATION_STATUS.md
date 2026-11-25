@@ -1,6 +1,6 @@
 # Estado de implementación · Traza
 
-**Actualizado:** 17 de noviembre de 2026  
+**Actualizado:** 20 de noviembre de 2026
 **Repositorio:** `Santiillana/Traza`  
 **Rama principal:** `main`  
 **SHA de main después de M6 Mi ficha:** `1d6628f081ea413dd84eecdb6574072c9d0720f4`  
@@ -8,6 +8,8 @@
 **PR M6 Mi ficha:** [#24](https://github.com/Santiillana/Traza/pull/24), fusionada el 17 de noviembre de 2026.
 
 ## Estado ejecutivo
+
+**Cambio posterior:** por decisión del producto del 20 de noviembre de 2026 se retiraron Laboratorio y el Constructor gráfico que formaba parte de esa sección. Las tablas y los informes históricos de abajo describen el estado anterior a este retiro; el estado actual de temas y navegación está en `docs/MAPA_DEL_REPO.md`.
 
 Los módulos V5 y la ampliación v4 del catálogo están integrados en `main`. La auditoría M5 se fusionó mediante la PR #20 el 16 de noviembre; la CI posterior sobre `main` fue correcta. El Módulo 6, derivado de la Fase 6 del informe de mejoras v2, amplía la portada v4 y verifica el historial del Constructor. La PR #21 se fusionó en `main` el 16 de noviembre de 2026.
 

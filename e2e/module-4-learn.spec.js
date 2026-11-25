@@ -35,6 +35,64 @@ test("el progreso de lectura permite marcar y desmarcar una lección manualmente
   await expect(page.locator("#lesson-route-count")).toHaveText("0 de 17 completadas");
 });
 
+test("la lectura usa una sola superficie y navega entre lecciones con foco y URL actualizados",async({page})=>{
+  await page.goto("/");
+  await openDiagramLessons(page);
+  const detail=page.locator("#lesson-detail");
+  await page.locator('#lesson-catalog [data-lesson-id="algorithm"]').click();
+  await expect(detail).toBeFocused();
+  await expect(page.locator('#lesson-catalog [data-lesson-id="algorithm"]')).toHaveAttribute("aria-current","true");
+  await expect(detail.locator(".lesson-reading-section")).toHaveCount(6);
+  const frames=await detail.locator("#lesson-idea,.lesson-idea-scene").evaluateAll(nodes=>nodes.map(node=>({border:getComputedStyle(node).borderTopWidth,background:getComputedStyle(node).backgroundColor})));
+  expect(frames.every(frame=>frame.border==="0px"&&frame.background==="rgba(0, 0, 0, 0)")).toBeTruthy();
+  await page.locator("[data-lesson-next-nav]").click();
+  await expect(detail.locator(".lesson-detail-heading h3")).toHaveText("Leer flechas y seguir el flujo");
+  await expect(page).toHaveURL(/leccion=reading/);
+  await page.locator("[data-lesson-previous]").click();
+  await expect(detail.locator(".lesson-detail-heading h3")).toHaveText("Algoritmos y diagramas de flujo");
+});
+
+test("lección y ejercicio relacionados se abren en ambos sentidos conservando el tema",async({page})=>{
+  await page.goto("/");await openDiagramLessons(page);
+  await page.locator('#lesson-catalog [data-lesson-id="input"]').click();
+  const exerciseLink=page.locator("#lesson-detail [data-open-related-exercise]").first();
+  await expect(exerciseLink).toBeVisible();
+  const exerciseTitle=(await exerciseLink.textContent()).replace("→","").trim();
+  await exerciseLink.click();
+  await expect(page.locator("#view-exercises")).toBeVisible();
+  await expect(page).toHaveURL(/tema=diagramas-flujo.*ejercicio=flujo%3A/);
+  await expect(page.locator("#exercise-detail h3")).toHaveText(exerciseTitle);
+  const lessonLink=page.locator("#exercise-detail [data-open-exercise-lesson]").first();
+  await expect(lessonLink).toBeVisible();
+  const lessonTitle=(await lessonLink.textContent()).replace("→","").trim();
+  await lessonLink.click();
+  await expect(page.locator("#view-learn")).toBeVisible();
+  await expect(page.locator("#lesson-detail .lesson-detail-heading h3")).toHaveText(lessonTitle);
+  await expect(page).toHaveURL(/tema=diagramas-flujo.*leccion=/);
+});
+
+test("la auditoría de cobertura solo reporta ejercicios sin lección compartida",async({page})=>{
+  await page.goto("/");
+  const coverage=await page.evaluate(async()=>{const module=await import("/src/ui/content-view.js");return module.auditLearnLinkCoverage();});
+  expect(coverage).toHaveLength(5);
+  expect(coverage.every(topic=>Array.isArray(topic.uncovered))).toBeTruthy();
+  console.log("Cobertura de ejercicios sin lección relacionada:",JSON.stringify(coverage.filter(topic=>topic.uncovered.length)));
+});
+
+test("en móvil la lista abre como cajón accesible y Escape devuelve el foco",async({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto("/");
+  await openDiagramLessons(page);
+  const toggle=page.locator("[data-learn-list]");
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded","true");
+  await expect(page.locator(".lesson-catalog-panel")).toHaveAttribute("aria-modal","true");
+  await expect(page.locator("#lesson-detail")).toHaveAttribute("inert","");
+  await page.keyboard.press("Escape");
+  await expect(toggle).toHaveAttribute("aria-expanded","false");
+  await expect(toggle).toBeFocused();
+});
+
 test("cada lección conserva escena, ejemplo ejecutable y comprobación inmediata",async({page})=>{
   await page.goto("/");
   await openDiagramLessons(page);
@@ -161,7 +219,7 @@ test("Aprende navega competencia, tema y lección sin pestañas internas",async(
   await expect(page.locator("#learn-topic-space")).toBeVisible();
   await expect(page.locator("#learn-topic-title")).toHaveText("Diagramas de flujo");
   await expect(page.locator("#learn-current-lesson")).toHaveText("Algoritmos y diagramas de flujo");
-  await expect(page.locator(".learn-topic-crumb")).toHaveCount(1);
+  await expect(page.locator("#learn-topic-space .learn-topic-crumb")).toHaveCount(1);
   await expect(page.locator(".lesson-breadcrumb")).toHaveCount(0);
   await expect(page.locator("#learn-topic-tabs, #learn-topic-select, #learn-difficulty")).toHaveCount(0);
 });

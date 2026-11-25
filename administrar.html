@@ -3,15 +3,18 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Administración protegida de la ficha académica.">
+  <meta name="application-name" content="SENAPSIS">
   <meta name="traza-api-base" content="">
-  <meta name="theme-color" content="#FBF8F1"><title>Administrar · Traza</title>
+  <meta name="theme-color" content="#F7F1E3"><title>Administrar · SENAPSIS</title>
+  <link rel="icon" type="image/png" sizes="128x128" href="./src/assets/senapsis-favicon.png">
   <link rel="stylesheet" href="./src/styles/tokens.css"><link rel="stylesheet" href="./src/styles/admin.css">
+  <link rel="stylesheet" href="./src/styles/brand.css">
   <script type="module" src="./src/admin.js"></script>
 </head>
 <body class="admin-body">
   <a class="admin-skip" href="#admin-main">Saltar al formulario</a>
   <main id="admin-main" class="admin-shell">
-    <header class="admin-header"><a href="/" class="admin-brand">traza<span>.</span></a><div><p class="eyebrow">MODERACIÓN</p><h1>Administrar la ficha</h1><p id="admin-session" role="status">Comprobando acceso…</p></div><span id="admin-version" class="admin-version">Sin publicar</span></header>
+    <header class="admin-header"><a href="/" class="admin-brand"><img src="./src/assets/senapsis-symbol.png" alt=""><span>SENAPSIS</span></a><div><p class="eyebrow">MODERACIÓN</p><h1>Administrar la ficha</h1><p id="admin-session" role="status">Comprobando acceso…</p></div><span id="admin-version" class="admin-version">Sin publicar</span></header>
     <div id="admin-access-error" class="admin-alert" role="alert" hidden></div>
     <nav id="admin-tabs" class="admin-tabs" aria-label="Herramientas de administración" hidden>
       <button type="button" data-admin-tab="daily" aria-pressed="true">Registro diario</button>

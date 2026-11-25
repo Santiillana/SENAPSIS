@@ -52,6 +52,17 @@ test("los atajos del simulador funcionan sin clic previo y respetan el foco", as
   await expect(page.locator("body")).toHaveAttribute("data-active-space", "learn");
 });
 
+test("tras entrar por la pestaña Simulador, las flechas recorren el algoritmo y no cambian de sección",async({page})=>{
+  await page.goto("/");
+  await goToSpace(page,"simulator");
+  await expect(page.locator("#flow-diagram-container")).toBeFocused();
+  await expect(page.locator("body")).toHaveAttribute("data-active-space","simulator");
+  await page.keyboard.press("ArrowRight");
+  await expect(page.locator("#timeline-count")).toHaveText(/2 \/ \d+/);
+  await expect(page.locator("body")).toHaveAttribute("data-active-space","simulator");
+  await expect(page.locator('#primary-nav [data-space="simulator"]')).toHaveAttribute("aria-current","page");
+});
+
 test("el diagrama encuadra la figura inicial al entrar y al cerrar la pantalla previa", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 950 });
   await page.goto("/");

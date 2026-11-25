@@ -1,6 +1,6 @@
-# Traza · laboratorio visual de diagramas de flujo
+# Senapsis · plataforma de aprendizaje
 
-Traza es una plataforma educativa interactiva para analizar problemas, construir algoritmos y comprender su ejecución mediante diagramas de flujo, pseudocódigo y seguimiento de variables.
+Senapsis conecta, comprende y transforma el aprendizaje. La plataforma educativa interactiva permite analizar problemas, construir algoritmos y comprender su ejecución mediante diagramas de flujo, pseudocódigo y seguimiento de variables. El nombre técnico del repositorio y sus contratos internos siguen siendo Traza.
 
 ## Contenido disponible
 
@@ -15,16 +15,11 @@ Acceso a Mi ficha y Aprende y continuidad del último espacio visitado. El progr
 Cuatro espacios para organizar el trabajo académico: **Centro de control, Clases, Actividades y Biblioteca**. Clases ofrece vistas diaria, semanal y mensual. Incluye cuatro actividades publicadas; el seguimiento personal se conserva en este navegador.
 
 ### Aprende
-Cuatro espacios: **Lecciones, Ejercicios, Simulador y Laboratorio**. El selector principal conserva el nombre «Aprende».
+Tres espacios: **Lecciones, Ejercicios y Simulador**. El selector principal conserva el nombre «Aprende».
 
 - **Lecciones:** 40 lecciones por tema, con explicación intuitiva y técnica, escenas, ejemplos, errores frecuentes y comprobación. El progreso se conserva localmente.
 - **Ejercicios:** catálogo de 108 retos (45 algoritmos, 24 fuentes y 39 matemáticas), con búsqueda, filtros y ficha de solución.
-- **Simulador:** parser e intérprete restringidos para pseudocódigo educativo. Una pantalla «Intenta primero» presenta el enunciado y los datos de ejemplo antes del recorrido. Una traza determinista alimenta el diagrama SVG, el pseudocódigo activo, En escena, Variables, Pantalla, Historial y la línea de tiempo. Incluye avance, retroceso, reproducción, predicción, zoom, ajuste, cámara, pantalla completa, tema, tamaño de texto y movimiento reducido.
-- **Laboratorio:** 10 mecánicas de diagramas, 6 de fuentes y 18 de matemáticas. Incluye además un constructor gráfico estructurado que compila al mismo motor del Simulador.
-
-## Constructor · historial de cambios
-
-El Constructor conserva hasta 60 estados del modelo. Incluye Deshacer/Rehacer, atajos de teclado y controles accesibles. El historial está limitado a los últimos 60 estados; una edición posterior a deshacer descarta la rama futura.
+- **Simulador:** parser e intérprete restringidos para pseudocódigo educativo. Antes de mostrar la solución, «Intenta primero» presenta una guía breve para entender entradas y resultados, ordenar instrucciones, seguir variables y comprobar la respuesta. Una traza determinista alimenta el diagrama SVG, el pseudocódigo activo, En escena, Variables, Pantalla, Historial y la línea de tiempo. La guía flotante explica cada paso en palabras sencillas; las ilustraciones muestran los datos, la operación y el resultado, mientras la memoria destaca y anuncia los cambios de variables. La cámara automática conserva figuras cercanas y la navegación con flechas sigue el algoritmo sin cambiar de pestaña. Incluye avance, retroceso, reproducción, predicción, zoom, ajuste, cámara, pantalla completa, tema, tamaño de texto y movimiento reducido.
 
 ## Arquitectura
 
@@ -51,7 +46,7 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-La suite incluye pruebas del parser, intérprete, compilador del constructor, ejecución de todos los métodos y escenarios de los ejercicios, un oráculo matemático independiente, rendimiento de ciclos, accesibilidad de contraste, navegación y aceptación visual con Chromium.
+La suite incluye pruebas del parser e intérprete, ejecución de todos los métodos y escenarios de los ejercicios, un oráculo matemático independiente, rendimiento de ciclos, accesibilidad de contraste, navegación y aceptación visual con Chromium.
 
 ## CI y capturas
 
@@ -75,6 +70,7 @@ La aplicación es estática. El workflow `.github/workflows/pages.yml` permite u
 - Decisiones técnicas: `docs/DECISIONS.md`
 - Auditoría de equivalencia original: `docs/ORIGINAL_FEATURE_AUDIT.md`
 - Aceptación y limitaciones: `docs/FINAL_ACCEPTANCE.md`
+- Plan y estado de las diez mejoras visuales y pedagógicas del Simulador: `docs/SIMULATOR_VISUAL_REFINEMENT.md`
 
 
 ## Mi ficha · Actividades

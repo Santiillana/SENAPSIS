@@ -60,7 +60,7 @@ function launchExercise(button){
     }
   }finally{launchingFromEntry=false;}
   requestAnimationFrame(()=>{
-    const target=kind==="flow"?$("#simulator-run"):kind==="source"?$("#source-simulator button"):$("#math-player button");
+    const target=kind==="flow"?($("#simulator-intro")?.open?$("#simulator-reveal"):$("#flow-diagram-container")):kind==="source"?$("#source-simulator button"):$("#math-player button");
     target?.focus({preventScroll:true});
   });
 }

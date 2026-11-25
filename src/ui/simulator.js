@@ -30,7 +30,8 @@ function dismissSimulatorIntro(){
   introPreference=rememberIntro(exerciseId,introPreference,$("#simulator-intro-skip-checkbox")?.checked);
   saveIntroPreference(introPreference);
   dialog.close();
-  $("#simulator-run")?.focus({preventScroll:true});
+  const focusTarget=document.body.dataset.activeSpace==="simulator"?$("#flow-diagram-container"):$("#simulator-run");
+  focusTarget?.focus({preventScroll:true});
 }
 function showSimulatorIntro(){
   queueMicrotask(()=>{
@@ -1751,7 +1752,11 @@ function bind(){
     if(!execution)prepare();
     showSimulatorIntro();
     setMobilePanel("diagram");
-    requestAnimationFrame(()=>{syncDockHeight();fitDiagramWhenVisible();if(timeline&&cameraAuto)centerActiveNode(timeline.current,"auto");});
+    requestAnimationFrame(()=>{
+      syncDockHeight();fitDiagramWhenVisible();
+      if(timeline&&cameraAuto)centerActiveNode(timeline.current,"auto");
+      if(!$("#simulator-intro")?.open)$("#flow-diagram-container")?.focus({preventScroll:true});
+    });
   });
   syncDockHeight();
   const dock=$("#dock");
@@ -1771,12 +1776,12 @@ function bind(){
     methodIndex=Number(event.detail?.methodIndex)||0;
     selectedVariable=null;
     prepare();
+    showSimulatorIntro();
     requestAnimationFrame(()=>{fitDiagram();if(timeline&&cameraAuto)centerActiveNode(timeline.current,"auto");});
   });
   document.addEventListener("traza:jump-to-step",event=>{
     if(Number.isInteger(event.detail?.index))seek(event.detail.index);
   });
-  document.addEventListener("traza:lab-sync-request",publishTrace);
 }
 
 export function initSimulator(){

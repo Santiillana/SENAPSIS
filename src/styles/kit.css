@@ -8,19 +8,43 @@
 .lesson-static-sequence li{display:grid;grid-template-columns:28px 1fr;align-items:start;gap:8px;color:var(--text)}
 .lesson-static-sequence li span{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--struct);color:var(--on-struct);font-variant-numeric:tabular-nums}
 .lesson-recipe-svg{display:block;width:100%;height:auto;min-height:150px;overflow:visible}
-.recipe-node{fill:var(--card);stroke:var(--struct);stroke-width:2;transition:stroke-width 180ms ease,fill 180ms ease}
-.recipe-node.is-active{fill:color-mix(in srgb,var(--accent) 18%,var(--card));stroke:var(--accent-text);stroke-width:3}
-.recipe-node-label{fill:var(--text);font:500 14px ui-monospace,monospace}
-.recipe-loop-label tspan.is-active{text-decoration:underline;text-decoration-color:var(--accent-text);text-decoration-thickness:3px;text-underline-offset:4px}
-.recipe-order{fill:var(--text-2);font:500 12px ui-monospace,monospace}
-.recipe-arrow{fill:none;stroke:var(--line);stroke-width:2}
-.recipe-guide{fill:var(--accent);stroke:var(--card);stroke-width:2;transition:transform 260ms cubic-bezier(.22,1,.36,1)}
-.recipe-choice-arrow{fill:none;stroke:var(--line);stroke-width:2}
-.recipe-return{fill:none;stroke:var(--struct);stroke-width:2}
-.recipe-choice rect{stroke-width:2}
-.recipe-choice text{font:600 14px ui-sans-serif,system-ui;fill:var(--text)}
-.recipe-choice-yes rect{fill:color-mix(in srgb,var(--status-approved) 18%,var(--card));stroke:var(--status-approved)}
-.recipe-choice-no rect{fill:color-mix(in srgb,var(--status-overdue) 14%,var(--card));stroke:var(--status-overdue)}
+.recipe-node{stroke-width:2;transition:stroke-width 180ms ease,fill 180ms ease}
+.recipe-role-structure{fill:var(--explain-structure-fill);stroke:var(--explain-outline)}
+.recipe-role-data{fill:var(--explain-data-fill);stroke:var(--explain-outline)}
+.recipe-role-calculation{fill:var(--explain-calculation-fill);stroke:var(--explain-outline)}
+.recipe-role-result{fill:var(--explain-result-fill);stroke:var(--explain-outline)}
+.recipe-role-repeat{fill:var(--explain-repeat-fill);stroke:var(--explain-outline)}
+.recipe-role-variable{fill:var(--explain-variable-fill);stroke:var(--explain-outline)}
+.recipe-role-counter{fill:var(--explain-counter-fill);stroke:var(--explain-outline)}
+.recipe-role-decision{fill:var(--explain-neutral-fill);stroke:var(--explain-structure-ink)}
+.recipe-node.is-active{stroke:var(--explain-focus-ink);stroke-width:4}
+.recipe-node-label{font:500 14px ui-monospace,monospace}
+.recipe-role-text-structure{fill:var(--explain-structure-on)}
+.recipe-role-text-data{fill:var(--explain-data-on)}
+.recipe-role-text-calculation{fill:var(--explain-calculation-on)}
+.recipe-role-text-result{fill:var(--explain-result-on)}
+.recipe-role-text-repeat{fill:var(--explain-repeat-on)}
+.recipe-role-text-variable{fill:var(--explain-variable-on)}
+.recipe-role-text-counter{fill:var(--explain-counter-on)}
+.recipe-role-text-decision{fill:var(--explain-neutral-ink)}
+.recipe-loop-label tspan.is-active{text-decoration:underline;text-decoration-color:var(--explain-focus-ink);text-decoration-thickness:3px;text-underline-offset:4px}
+.recipe-order{fill:var(--explain-structure-ink);font:500 12px ui-monospace,monospace}
+.recipe-arrow{fill:none;stroke:var(--explain-structure-ink);stroke-width:2}
+.recipe-arrowhead path{fill:var(--explain-structure-fill)}
+.recipe-guide{fill:var(--explain-focus-fill);stroke:var(--explain-outline);stroke-width:2;transition:transform 260ms cubic-bezier(.22,1,.36,1)}
+.recipe-choice-arrow{fill:none;stroke:var(--explain-structure-ink);stroke-width:2}
+.recipe-return{fill:none;stroke:var(--explain-structure-ink);stroke-width:2}
+.recipe-choice rect{fill:var(--explain-neutral-fill);stroke:var(--explain-structure-ink);stroke-width:2}
+.recipe-choice text{font:600 14px ui-sans-serif,system-ui;fill:var(--explain-neutral-ink)}
+.recipe-legend-item circle{fill:var(--explain-structure-fill)}
+.recipe-legend-item.recipe-role-focus circle{fill:var(--explain-focus-fill)}
+.recipe-legend-item.recipe-role-data circle{fill:var(--explain-data-fill)}
+.recipe-legend-item.recipe-role-calculation circle{fill:var(--explain-calculation-fill)}
+.recipe-legend-item.recipe-role-result circle{fill:var(--explain-result-fill)}
+.recipe-legend-item.recipe-role-repeat circle{fill:var(--explain-repeat-fill)}
+.recipe-legend-item.recipe-role-variable circle{fill:var(--explain-variable-fill)}
+.recipe-legend-item.recipe-role-counter circle{fill:var(--explain-counter-fill)}
+.recipe-legend-item text{fill:var(--explain-structure-ink);font:500 10px ui-sans-serif,system-ui}
 .recipe-static-sequence{margin-bottom:12px}
 .math-scene{display:grid;gap:14px;max-width:680px;min-height:190px;margin:0 auto;padding:22px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,color-mix(in srgb,var(--struct) 8%,var(--card)),var(--card));color:var(--text);transition:background-color 300ms ease}
 .math-scene-kicker{color:var(--text-2);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
@@ -41,8 +65,8 @@
 .math-proportion-grid span,.math-proportion-grid strong{padding:6px;border-radius:6px;background:color-mix(in srgb,var(--struct) 12%,var(--card))}
 .math-proportion-grid strong{color:var(--accent-text)}
 .math-sign-pairs{display:grid;grid-template-columns:repeat(6,32px);justify-content:center;gap:8px}
-.math-sign-pairs span{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;color:#102038;font-weight:800}
-.math-sign-pairs .is-positive{background:#6C9CFF}.math-sign-pairs .is-negative{background:#E58B7A}
+.math-sign-pairs span{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;color:var(--learn-math-sign-ink);font-weight:800}
+.math-sign-pairs .is-positive{background:var(--learn-math-positive)}.math-sign-pairs .is-negative{background:var(--learn-math-negative)}
 .math-expression-tree,.math-nested-groups,.math-decision-tree{display:grid;gap:12px;justify-items:center;padding:8px;color:var(--text);text-align:center}
 .math-tree-root,.math-nested-groups span,.math-decision-tree span,.math-decision-tree b,.math-decision-tree strong{padding:8px 12px;border:1px solid var(--struct);border-radius:10px;background:var(--card);font:600 15px ui-monospace,monospace}
 .math-tree-branches,.math-decision-tree>div{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}

@@ -5,9 +5,7 @@ const modules=[
   ["navigation","../src/ui/navigation.js","initNavigation"],
   ["preferences","../src/ui/preferences.js","initPreferences"],
   ["content","../src/ui/content-view.js","initContentViews"],
-  ["simulator","../src/ui/simulator.js","initSimulator"],
-  ["lab","../src/ui/lab.js","initLab"],
-  ["builder","../src/ui/builder.js","initBuilder"]
+  ["simulator","../src/ui/simulator.js","initSimulator"]
 ];
 
 for(const [name,path,exportName] of modules){

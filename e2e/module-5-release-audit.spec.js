@@ -13,6 +13,7 @@ const spaces = [
 ];
 
 test("auditoría integral: los nueve espacios abren sin errores JavaScript ni fallos de recursos", async ({ page }) => {
+  await page.route("**/api/v1/version",route=>route.fulfill({json:{version:0,updatedAt:null}}));
   const pageErrors = [];
   const consoleErrors = [];
   const failedAssets = [];
@@ -69,8 +70,8 @@ test("la navegación por teclado recorre los espacios visibles sin activar los o
   await expect(page.locator('#primary-nav [data-space="exercises"]')).toHaveAttribute("aria-current", "page");
 
   await page.keyboard.press("End");
-  await expect(page.locator('#primary-nav [data-space="lab"]')).toHaveAttribute("aria-current", "page");
-  await expect(page.locator('[data-view="lab"]')).toBeVisible();
+  await expect(page.locator('#primary-nav [data-space="simulator"]')).toHaveAttribute("aria-current", "page");
+  await expect(page.locator('[data-view="simulator"]')).toBeVisible();
 });
 
 test("la aplicación mantiene navegación y preferencias cuando el almacenamiento local está bloqueado", async ({ page }) => {

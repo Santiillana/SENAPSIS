@@ -8,8 +8,9 @@ test("la navegación declara portada y espacios de Mi ficha y Aprende", async ()
   const html = await read("../index.html");
   const spaces = [...html.matchAll(/data-space="([^"]+)"/g)].map(([,space]) => space);
   const views = [...html.matchAll(/data-view="([^"]+)"/g)].map(([,space]) => space);
-  assert.deepEqual(spaces, ["home", "hoy", "clases", "actividades", "biblioteca", "learn", "exercises", "simulator", "lab"]);
-  assert.deepEqual(new Set(views), new Set(["home", "hoy", "clases", "actividades", "biblioteca", "learn", "exercises", "simulator", "lab"]));
+  assert.deepEqual(spaces, ["home", "hoy", "clases", "actividades", "biblioteca", "learn", "exercises", "simulator"]);
+  assert.deepEqual(new Set(views), new Set(["home", "hoy", "clases", "actividades", "biblioteca", "learn", "exercises", "simulator"]));
+  assert.doesNotMatch(html, /data-space="lab"|data-view="lab"|lab-builder/);
   assert.doesNotMatch(html, /data-space="builder"/);
   assert.doesNotMatch(html, /data-view="builder"/);
   assert.match(html, /data-subnav-section="ficha"/);
@@ -76,35 +77,6 @@ test("el simulador reserva las cuatro ventanas pedagógicas y el dock", async ()
   }
 });
 
-test("el laboratorio organiza diez mecánicas en tres familias", async () => {
-  const html = await read("../index.html");
-  const lab = await read("../src/ui/lab.js");
-  for (const mode of ["read", "build", "debug"]) {
-    assert.match(html, new RegExp('data-lab-mode="' + mode + '"'), "Falta el modo " + mode);
-  }
-  assert.match(html, /id="lab-activity-list"/);
-  const activities = [
-    ["predict", "Predice"],
-    ["table", "Tabla de seguimiento"],
-    ["follow-arrow", "Sigue la flecha"],
-    ["order", "Ordena"],
-    ["symbol", "Identifica el símbolo"],
-    ["fill-gap", "Completa el hueco"],
-    ["build-diagram", "Arma el diagrama"],
-    ["match", "Empareja"],
-    ["error", "Encuentra el error"],
-    ["whatif", "¿Y si…?"]
-  ];
-  for (const [id, title] of activities) {
-    assert.ok(lab.includes('"'+id+'"'), "Falta registrar la actividad " + id);
-    assert.ok(html.includes('data-lab-activity="'+id+'"'), "Falta la mecánica " + id);
-    assert.ok(html.includes(">"+title+"</strong>"), "Falta el título de la mecánica " + title);
-  }
-  assert.match(html, /id="lab-builder-stage"/, "El constructor debe estar dentro del Laboratorio");
-  assert.match(html, /id="builder-canvas-list"/, "Falta el lienzo libre del constructor");
-  assert.doesNotMatch(html, /data-view="builder"/);
-});
-
 test("la interfaz contempla tabletas y móviles", async () => {
   const css = await read("../src/styles/responsive.css");
   assert.match(css, /max-width:\s*1080px/);
@@ -135,21 +107,22 @@ test("la nueva capa de interfaz no ejecuta pseudocódigo como JavaScript", async
   assert.doesNotMatch(source, /new\s+Function\s*\(/);
 });
 
-test("Ejercicios adapta los 45 retos al catálogo compacto con filtros combinables y detalle protegido",async()=>{
+test("Ejercicios adapta los retos al catálogo por tema con filtros combinables y detalle protegido",async()=>{
   const html=await read("../index.html");
   const source=await read("../src/ui/content-view.js");
   const adapter=await read("../src/content/exercise-adapter.js");
-  for(const id of ["exercise-search","exercise-difficulty-options","exercise-class-only","exercise-concepts","exercise-concepts-summary","exercise-filter-summary","exercise-active-filters","exercise-filters-clear","exercise-grid","exercise-detail","exercise-concept-search"]){
+  for(const id of ["exercise-search","exercise-difficulty-options","exercise-class-only","exercise-filter-summary","exercise-grid","exercise-detail","exercise-topic-count","exercise-list-disclosure"]){
     assert.match(html,new RegExp('id="'+id+'"'),"Falta el control "+id);
   }
   assert.doesNotMatch(html,/id="exercise-count"|id="exercise-level-shortcuts"|id="exercise-try-modal"/);
-  assert.match(html,/data-exercise-view="list"/);
   assert.ok(source.includes("const CLASS_EXERCISES = new Set([22,23,24,28]);"),"Los cuatro retos de clase no deben cambiar.");
   assert.match(source,/function renderExerciseCards\(\)/);
   assert.match(source,/function renderExerciseDetail\(\)/);
   assert.match(source,/data-start-exercise/);
   assert.match(source,/data-reveal-solution/);
   assert.match(source,/data-exercise-difficulty/);
+  assert.match(source,/data-open-exercise-lesson/);
+  assert.match(source,/Marcar como resuelto/);
   assert.match(adapter,/export function validateExercise/);
   assert.match(adapter,/oraculo: \(\) => exercise\.methods/);
 });

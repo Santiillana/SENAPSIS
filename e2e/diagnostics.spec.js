@@ -1,6 +1,7 @@
 import { test, expect, goToSpace } from "./navigation.js";
 
 test("la aplicación completa inicia sin excepciones JavaScript",async({page})=>{
+  await page.route("**/api/v1/version",route=>route.fulfill({json:{version:0,updatedAt:null}}));
   const pageErrors=[];
   const consoleErrors=[];
   page.on("pageerror",error=>pageErrors.push(error.stack??error.message));
