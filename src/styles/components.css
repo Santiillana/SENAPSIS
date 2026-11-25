@@ -95,7 +95,7 @@ button:disabled { cursor:not-allowed; opacity:.46; } .diagram-stage { position:r
 :root[data-section="aprende"] .tag-accent{color:var(--on-bright);background:var(--c-mustard)}
 
 
-/* Componentes compartidos de Traza v4. Todos consumen los tokens de sección. */
+/* Componentes compartidos de Senapsis v4. Todos consumen los tokens de sección. */
 .pill{
   display:inline-flex;align-items:center;gap:7px;min-height:26px;
   padding:3px 10px;border:1px solid var(--border);border-radius:999px;
@@ -196,11 +196,11 @@ dialog.modal{
   color:var(--text);background:var(--surface);box-shadow:var(--shadow-lg);
 }
 dialog.modal::backdrop{background:var(--overlay-backdrop);backdrop-filter:blur(3px)}
-dialog.modal[open]{animation:traza-modal-in var(--dur-2) var(--ease) both}
+dialog.modal[open]{animation:senapsis-modal-in var(--dur-2) var(--ease) both}
 .modal__header,.modal__body,.modal__footer{padding:18px 22px}
 .modal__header{border-bottom:1px solid var(--border)}
 .modal__footer{display:flex;justify-content:flex-end;gap:9px;border-top:1px solid var(--border)}
-@keyframes traza-modal-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes senapsis-modal-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 .kpi{
   display:grid;gap:4px;min-width:0;padding:16px;border:1px solid var(--border);

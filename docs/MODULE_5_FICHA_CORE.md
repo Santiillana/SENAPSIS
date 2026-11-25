@@ -4,11 +4,11 @@
 
 ## Alcance implementado
 
-- Datos personales versionados en `traza:v4:ficha`: actividades, checklist, intentos, favoritos y elementos guardados.
+- Datos personales versionados en `senapsis:v4:ficha`: actividades, checklist, intentos, favoritos y elementos guardados.
 - Validación de estructura, estados, fechas civiles, intentos y listas sin duplicados.
 - Lectura estricta que distingue almacenamiento vacío, inaccesible, JSON corrupto, versión desconocida y estructura inválida.
 - Escritura protegida: los cambios normales no sobrescriben datos corruptos ni esquemas futuros.
-- Respaldo JSON versionado `traza-ficha-personal-backup`, validación previa y recuperación explícita desde un respaldo íntegro.
+- Respaldo JSON versionado `senapsis-ficha-personal-backup`, validación previa y recuperación explícita desde un respaldo íntegro.
 - Estados controlados: el aprendiz no puede aprobarse a sí mismo; Aprobada y Por corregir requieren un resultado registrado como tal. Atrasada es derivada.
 - Contrato editorial de documentos por sección (`clases`, `actividades`, `biblioteca`), con borrador/publicado, URL HTTPS sin credenciales o ruta local sin traversal, metadatos y asociaciones a clase o actividad. La vista filtra documentos inválidos antes de publicarlos.
 - Horario oficial versionado en `src/content/ficha.js`; no se duplica en almacenamiento personal.

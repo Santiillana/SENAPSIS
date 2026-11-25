@@ -66,7 +66,7 @@ export async function saveDraft(request,env){
       env.DB.prepare(`INSERT INTO draft_state(singleton,base_version,payload,updated_at,updated_by) VALUES('current',?,?,?,?)
         ON CONFLICT(singleton) DO UPDATE SET base_version=excluded.base_version,payload=excluded.payload,updated_at=excluded.updated_at,updated_by=excluded.updated_by`)
         .bind(bodyVersion,JSON.stringify(parsed.payload),now,identity.email),
-      env.DB.prepare("INSERT INTO audit_log(actor,action,version,created_at,summary) VALUES(?, ?, ?, ?, ?)").bind(identity.email,request.headers.get("x-traza-action")==="backup_imported"?"backup_imported":"draft_saved",bodyVersion,now,JSON.stringify({sections,bytes:new TextEncoder().encode(JSON.stringify(parsed.payload)).byteLength}))
+      env.DB.prepare("INSERT INTO audit_log(actor,action,version,created_at,summary) VALUES(?, ?, ?, ?, ?)").bind(identity.email,request.headers.get("x-senapsis-action")==="backup_imported"?"backup_imported":"draft_saved",bodyVersion,now,JSON.stringify({sections,bytes:new TextEncoder().encode(JSON.stringify(parsed.payload)).byteLength}))
     ]);
     return json({saved:true,baseVersion:bodyVersion,updatedAt:now});
   }catch{return json({error:"storage_unavailable"},503);}

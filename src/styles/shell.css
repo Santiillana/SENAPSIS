@@ -1,5 +1,5 @@
 /*
- * Shell Traza v4: cabecera, navegación por sección y portada.
+ * Shell Senapsis v4: cabecera, navegación por sección y portada.
  * --topbar-h conserva la altura de la fila superior utilizada por el Simulador.
  */
 :root{--topbar-h:56px}
@@ -89,7 +89,7 @@
 .home-card[data-home-section="aprende"]{color:var(--home-aprende-text);border-color:var(--line);background:var(--home-aprende-bg)}
 .home-illustration{position:absolute;right:-8px;bottom:-14px;width:min(84%,420px);height:245px}
 .home-agenda{display:flex;align-items:flex-end;justify-content:center;gap:0;perspective:700px}
-.agenda-day{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:140px;height:176px;margin:0 -9px 15px;border:1px solid var(--line);border-radius:16px;color:var(--home-ficha-text);background:var(--home-ficha-surface);box-shadow:var(--traza-shadow);transition:transform var(--dur-2) var(--ease)}
+.agenda-day{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:140px;height:176px;margin:0 -9px 15px;border:1px solid var(--line);border-radius:16px;color:var(--home-ficha-text);background:var(--home-ficha-surface);box-shadow:var(--senapsis-shadow);transition:transform var(--dur-2) var(--ease)}
 .agenda-day small{font-size:15px;color:var(--home-ficha-muted)}.agenda-day b{font-size:34px;font-weight:550;font-variant-numeric:tabular-nums}
 .agenda-day-left{opacity:.68;transform:rotate(-5deg) translateY(5px) scale(.88)}.agenda-day-right{opacity:.68;transform:rotate(5deg) translateY(5px) scale(.88)}
 .agenda-day-main{z-index:1;border:2px solid var(--home-ficha-accent);transform:translateY(-5px)}

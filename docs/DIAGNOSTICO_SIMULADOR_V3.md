@@ -9,7 +9,7 @@ El diagnóstico registra las causas observadas en la base antes de cambiarla; la
 
 | Defecto | Causa observada en la base (ruta:línea) | Acción en `mejoras/simulador-v3` |
 |---|---|---|
-| D1 | `src/styles/simulator.css:326-350`: alias de escenario gris azulado y tarjetas planas; las figuras no usan la paleta rica del archivo de referencia. | Tokens `--traza-*`, fondo radial Observatorio, vidrio, estados y paleta clara/oscura aislada. |
+| D1 | `src/styles/simulator.css:326-350`: alias de escenario gris azulado y tarjetas planas; las figuras no usan la paleta rica del archivo de referencia. | Tokens `--senapsis-*`, fondo radial Observatorio, vidrio, estados y paleta clara/oscura aislada. |
 | D2 | `src/ui/simulator.js:873-887`: el listener wheel siempre llama a `zoomAt()`. | Wheel desplaza; Shift/deltaX lateral; Ctrl/⌘+wheel y pellizco hacen zoom; botones dedicados. |
 | D3 | `src/ui/simulator.js:1077-1097`: `fitDiagram()` limita escala a la altura disponible y reinicia el desplazamiento en cero. | Fórmula de ancho de referencia y centrado dentro del área libre. |
 | D4 | `src/ui/simulator.js:425-440`: `setCameraFree()` muestra `#sim-camera-follow`; cámara se desactiva por gesto y no se reactiva en todos los pasos. | Se elimina la llamada/banner; cámara actualiza aria y se reactiva al renderizar el evento siguiente. |

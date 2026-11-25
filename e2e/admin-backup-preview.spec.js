@@ -20,10 +20,10 @@ test("Administrar previsualiza el borrador, muestra historial y exporta/importa 
   await page.locator("[data-admin-preview-close]").click();
   await expect(page.locator("#admin-preview-dialog")).not.toBeVisible();
   const downloadPromise=page.waitForEvent("download");await page.locator("[data-admin-export]").click();
-  const download=await downloadPromise;expect(download.suggestedFilename()).toMatch(/^traza-ficha-\d{4}-\d{2}-\d{2}\.json$/);
+  const download=await downloadPromise;expect(download.suggestedFilename()).toMatch(/^senapsis-ficha-\d{4}-\d{2}-\d{2}\.json$/);
   const replacement=structuredClone(FICHA);replacement.meta.ficha="Respaldo importado";
   page.on("dialog",dialog=>dialog.accept());
-  await page.locator("[data-admin-import]").setInputFiles({name:"respaldo.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify({format:"traza-ficha",schemaVersion:1,payload:replacement}))});
+  await page.locator("[data-admin-import]").setInputFiles({name:"respaldo.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify({format:"senapsis-ficha",schemaVersion:1,payload:replacement}))});
   await expect(page.locator("#admin-feedback")).toContainText("Borrador guardado",{timeout:5000});
   expect(savedPayload.meta.ficha).toBe("Respaldo importado");
   await expect(page.locator('[data-manage-form="meta"] [name="ficha"]')).toHaveValue("Respaldo importado");

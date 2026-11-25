@@ -1,8 +1,8 @@
 import { FICHA } from "../content/ficha.js";
 
-const SNAPSHOT_KEY="traza:v1:ficha-publicada";
-const PREVIEW_KEY="traza:v1:admin-preview";
-const API_BASE=()=>document.querySelector('meta[name="traza-api-base"]')?.content?.replace(/\/$/,"")??"";
+const SNAPSHOT_KEY="senapsis:v1:ficha-publicada";
+const PREVIEW_KEY="senapsis:v1:admin-preview";
+const API_BASE=()=>document.querySelector('meta[name="senapsis-api-base"]')?.content?.replace(/\/$/,"")??"";
 const fields=["meta","competencias","instructores","horario","horarioNotas","comunicados","actividades","clases","documentos","recursos","accesos"];
 let lastRefresh=0,refreshPromise=null;
 
@@ -61,7 +61,7 @@ async function refreshPublishedState(){
     saveSnapshot(state);lastRefresh=Date.now();
     const wasUpdated=Boolean(current&&current.version<state.version);
     showSyncStatus(`${wasUpdated?"Nuevo · ":""}${updatedLabel(state.updatedAt)}`);
-    document.dispatchEvent(new CustomEvent("traza:ficha-actualizada",{detail:{version:state.version,updatedAt:state.updatedAt,source:"remote",newlyPublished:wasUpdated}}));
+    document.dispatchEvent(new CustomEvent("senapsis:ficha-actualizada",{detail:{version:state.version,updatedAt:state.updatedAt,source:"remote",newlyPublished:wasUpdated}}));
   })().catch(()=>{
     const stored=readSnapshot();if(stored)showSyncStatus(`Sin conexión · ${updatedLabel(stored.updatedAt)}`,"offline");
   }).finally(()=>{refreshPromise=null;});
@@ -79,5 +79,5 @@ export function initFichaRepository(){
   const refresh=()=>{if(Date.now()-lastRefresh>30_000)void refreshPublishedState();};
   window.addEventListener("focus",refresh);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refresh();});
-  document.addEventListener("traza:space-change",event=>{const indicator=document.querySelector("#ficha-sync-indicator");if(indicator)indicator.hidden=event.detail?.section!=="ficha"||!indicator.textContent;});
+  document.addEventListener("senapsis:space-change",event=>{const indicator=document.querySelector("#ficha-sync-indicator");if(indicator)indicator.hidden=event.detail?.section!=="ficha"||!indicator.textContent;});
 }

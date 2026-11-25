@@ -133,7 +133,7 @@ test("cada etiqueta de conceptos encontrada en los ejercicios tiene un identific
   assert.ok(conceptos.length>0);
 });
 
-test("la migración aditiva de traza:v2:learn conserva el progreso previo",()=>{
+test("la migración aditiva de senapsis:v2:learn conserva el progreso previo",()=>{
   const old={version:2,completed:["algorithm","for","not-a-lesson"],current:"for",screen:3};
   const migrated=normalizeLearnProgress(old,lessons.map(item=>item.id),temas.map(item=>item.id));
   assert.deepEqual(migrated.completed,["algorithm","for"]);

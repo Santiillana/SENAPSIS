@@ -1,4 +1,4 @@
-export const INTRO_PREFERENCE_KEY = "traza:v1:simulator-intro";
+export const INTRO_PREFERENCE_KEY = "senapsis:v1:simulator-intro";
 
 export function readIntroPreference(storage) {
   try {

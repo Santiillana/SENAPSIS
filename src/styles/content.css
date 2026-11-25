@@ -132,7 +132,7 @@
 @media(max-width:800px){.exercise-home-hero{grid-template-columns:1fr}.exercise-home-stats{max-width:520px}}
 @media(max-width:520px){.exercise-home-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.exercise-home-stats>div{padding:9px 4px}.exercise-home-actions{flex-direction:column}.exercise-home-actions>*{width:100%}}
 
-/* TRAZA V2 · catálogo práctico, lecciones visuales por concepto */
+/* SENAPSIS V2 · catálogo práctico, lecciones visuales por concepto */
 #view-exercises .catalog-intro{margin:7px 0 16px}
 #view-exercises .catalog-intro h2{font-size:clamp(23px,2.5vw,32px)}
 .catalog-filter-panel{
@@ -391,7 +391,7 @@ body.has-exercise-modal{overflow:hidden}
 :root[data-motion="reduced"] .lesson-visual *{animation:none!important;transition:none!important}
 
 
-/* Traza v4 · Aprende: ruta visual, progreso y lectura guiada */
+/* Senapsis v4 · Aprende: ruta visual, progreso y lectura guiada */
 .learn-intro{align-items:center;margin-bottom:18px}
 .learn-intro>div{max-width:850px}
 .learn-intro h2{max-width:760px}
@@ -508,7 +508,7 @@ body.has-exercise-modal{overflow:hidden}
 :root[data-motion="reduced"] .learn-progress-track>span{transition:none!important}
 
 
-/* Traza v4 · Ejercicios: catálogo editorial, filtros claros y fichas enfocadas. */
+/* Senapsis v4 · Ejercicios: catálogo editorial, filtros claros y fichas enfocadas. */
 .exercises-view{max-width:1440px;margin-inline:auto}
 .exercises-view .exercise-hero{
   display:flex;align-items:flex-end;justify-content:space-between;gap:24px;

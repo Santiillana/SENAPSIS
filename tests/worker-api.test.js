@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import worker from "../worker/index.js";
 
-const env={ALLOWED_ORIGIN:"https://traza.example.edu"};
+const env={ALLOWED_ORIGIN:"https://senapsis.example.edu"};
 
 test("CORS responde solo al origen configurado y permite preflight acotado",async()=>{
   const allowed=await worker.fetch(new Request("https://api.example/api/v1/health",{method:"OPTIONS",headers:{Origin:env.ALLOWED_ORIGIN,"Access-Control-Request-Method":"GET"}}),env);

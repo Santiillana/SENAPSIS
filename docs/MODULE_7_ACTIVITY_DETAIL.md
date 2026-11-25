@@ -7,7 +7,7 @@
 - Búsqueda, filtros por estado y competencia, y orden por fecha límite.
 - Detalle de consigna, propósito, instrucciones, entregables, competencia y fechas.
 - Documentos publicados asociados a la sección `actividades` y a su `actividadId`.
-- Seguimiento personal en `traza:v4:ficha`: checklist, notas y resultados transcritos.
+- Seguimiento personal en `senapsis:v4:ficha`: checklist, notas y resultados transcritos.
 - Confirmar el checklist marca la entrega; los resultados transcritos conservan intentos y correcciones.
 - Una aprobación se identifica como transcripción del estudiante, nunca como verificación institucional.
 - La vista bloquea cambios si la lectura estricta detecta almacenamiento dañado o versión desconocida.

@@ -4,10 +4,10 @@ import { parseFichaPayload } from "../worker/validation.js";
 const $=selector=>document.querySelector(selector);
 const copy=value=>JSON.parse(JSON.stringify(value));
 const today=()=>{const now=new Date();return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;};
-const apiBase=()=>$("meta[name='traza-api-base']")?.content?.replace(/\/$/,"")??"";
+const apiBase=()=>$("meta[name='senapsis-api-base']")?.content?.replace(/\/$/,"")??"";
 let state=null,baseVersion=0,dirty=false,saved=false,timer=0,sessionEmail="",classIds=new Map();
 const form=$("#admin-daily-form");
-const PREVIEW_KEY="traza:v1:admin-preview";
+const PREVIEW_KEY="senapsis:v1:admin-preview";
 
 async function api(path,options={}){
   const response=await fetch(`${apiBase()}/api/v1${path}`,{credentials:"same-origin",cache:"no-store",...options});
@@ -90,7 +90,7 @@ async function saveDraft(payloadOverride=null,auditAction="draft_saved"){
   try{payload=payloadOverride?copy(payloadOverride):compileDraft();}catch(error){feedback(error.message,"Revisa los datos");return false;}
   feedback("Guardando borrador…","Guardando");
   try{
-    const result=await api("/admin/draft",{method:"PUT",headers:{"content-type":"application/json","if-match":`"${baseVersion}"`,"x-traza-action":auditAction},body:JSON.stringify(payload)});
+    const result=await api("/admin/draft",{method:"PUT",headers:{"content-type":"application/json","if-match":`"${baseVersion}"`,"x-senapsis-action":auditAction},body:JSON.stringify(payload)});
     state=payload;saved=true;dirty=false;$("[data-admin-publish]").disabled=false;feedback(`Borrador guardado · ${new Date(result.updatedAt).toLocaleTimeString("es-CO",{hour:"2-digit",minute:"2-digit"})}`);return true;
   }catch(error){saved=false;feedback(error.message,"No se pudo guardar");return false;}
 }
@@ -119,15 +119,15 @@ function openPreview(){
   const frame=$("#admin-preview-frame"),dialog=$("#admin-preview-dialog");frame.src=`/?preview=admin&v=${Date.now()}`;dialog.showModal();$("[data-admin-preview-close]").focus();
 }
 function exportBackup(){
-  const backup={format:"traza-ficha",schemaVersion:1,exportedAt:new Date().toISOString(),payload:state};
+  const backup={format:"senapsis-ficha",schemaVersion:1,exportedAt:new Date().toISOString(),payload:state};
   const url=URL.createObjectURL(new Blob([JSON.stringify(backup,null,2)],{type:"application/json"})),link=document.createElement("a");
-  link.href=url;link.download=`traza-ficha-${today()}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  link.href=url;link.download=`senapsis-ficha-${today()}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 async function importBackup(file){
   if(!file)return;
   if(file.size>512_000){feedback("El respaldo supera el máximo de 500 KiB.","Importación rechazada");return;}
   let backup;try{backup=JSON.parse(await file.text());}catch{feedback("El archivo no contiene JSON válido.","Importación rechazada");return;}
-  if(backup?.format!=="traza-ficha"||backup.schemaVersion!==1){feedback("El formato o la versión del respaldo no son compatibles.","Importación rechazada");return;}
+  if(backup?.format!=="senapsis-ficha"||backup.schemaVersion!==1){feedback("El formato o la versión del respaldo no son compatibles.","Importación rechazada");return;}
   const parsed=parseFichaPayload(JSON.stringify(backup.payload));if(parsed.errors.length){feedback(parsed.errors.join(" "),"Respaldo inválido");return;}
   if(!window.confirm("Importar reemplazará el borrador actual de la ficha. ¿Continuar?"))return;
   state=parsed.payload;dirty=true;refreshDailyOptions();renderManagement();

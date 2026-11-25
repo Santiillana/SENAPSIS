@@ -1,8 +1,8 @@
-# Informe de aceptación · Módulo 5 · Traza
+# Informe de aceptación · Módulo 5 · Senapsis
 
-**Fecha:** 16 de noviembre de 2026  
-**Repositorio:** `Santiillana/Traza`  
-**PR:** [#20](https://github.com/Santiillana/Traza/pull/20), abierta y sin fusionar.  
+**Fecha:** 16 de noviembre de 2026
+**Repositorio:** `Santiillana/Senapsis`
+**PR:** [#20](https://github.com/Santiillana/Senapsis/pull/20), abierta y sin fusionar.
 **SHA validado:** `ee804803354a8ea5cf60d17c37405ac90792faa0`.
 
 ## Dictamen
@@ -13,7 +13,7 @@ La auditoría técnica del Módulo 5 pasó completamente en GitHub Actions. La a
 
 ## Evidencia de CI
 
-[GitHub Actions run 43954434334](https://github.com/Santiillana/Traza/actions/runs/43954434334)
+[GitHub Actions run 43954434334](https://github.com/Santiillana/Senapsis/actions/runs/43954434334)
 
 - Node: **267/267**, cero fallos.
 - Playwright/Chromium: **99/99**, cero fallos.
@@ -48,7 +48,7 @@ La auditoría técnica del Módulo 5 pasó completamente en GitHub Actions. La a
 El workflow `.github/workflows/pages.yml` es manual y de respaldo. Su comentario indica Cloudflare Workers como hosting primario, pero no hay una URL de producción visible ni una prueba automática de ese proveedor en el repositorio.
 
 El workflow `.github/workflows/post-deploy.yml` requiere un origen HTTPS real. Antes de declarar release completo debe:
-1. comprobar que la portada publicada expone exactamente la marca `traza-release` del commit esperado;
+1. comprobar que la portada publicada expone exactamente la marca `senapsis-release` del commit esperado;
 2. ejecutar `e2e/production-smoke.spec.js` contra ese origen;
 3. guardar el artefacto de capturas de producción y registrar su run.
 

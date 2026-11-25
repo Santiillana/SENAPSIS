@@ -16,7 +16,7 @@ export function initFicha() {
   initActividades();
   initBiblioteca();
 
-  document.addEventListener("traza:ficha-actualizada", () => {
+  document.addEventListener("senapsis:ficha-actualizada", () => {
     renderControl();
     renderClases();
     renderActividades();

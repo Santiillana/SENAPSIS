@@ -45,9 +45,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          RELEASE="$(grep -oE '<meta name="traza-release" content="[^"]+"' index.html | sed -E 's/.*content="([^"]+)"/\1/')"
+          RELEASE="$(grep -oE '<meta name="senapsis-release" content="[^"]+"' index.html | sed -E 's/.*content="([^"]+)"/\1/')"
           if [[ -z "$RELEASE" ]]; then
-            echo "::error::index.html no contiene meta traza-release."
+            echo "::error::index.html no contiene meta senapsis-release."
             exit 1
           fi
           echo "value=$RELEASE" >> "$GITHUB_OUTPUT"
@@ -63,7 +63,7 @@ jobs:
           found=false
           for attempt in $(seq 1 30); do
             html="$(curl --silent --show-error --fail "$BASE_URL/" || true)"
-            if [[ -n "$html" ]] && grep -Fq "name=\"traza-release\" content=\"$EXPECTED_RELEASE\"" <<< "$html"; then
+            if [[ -n "$html" ]] && grep -Fq "name=\"senapsis-release\" content=\"$EXPECTED_RELEASE\"" <<< "$html"; then
               echo "El sitio sirve la versión exacta: $EXPECTED_RELEASE"
               found=true
               break

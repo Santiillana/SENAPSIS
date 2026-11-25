@@ -1,9 +1,9 @@
 # Módulo 5 · Informe de integración, auditoría y publicación
 
-**Especificación:** Documento maestro V5, Módulo 5.  
-**Repositorio:** `Santiillana/Traza`.  
-**Commit base:** `e80d5773eed6ab0c193ad351e618ce744b0c8441`.  
-**PR:** [#20](https://github.com/Santiillana/Traza/pull/20).  
+**Especificación:** Documento maestro V5, Módulo 5.
+**Repositorio:** `Santiillana/Senapsis`.
+**Commit base:** `e80d5773eed6ab0c193ad351e618ce744b0c8441`.
+**PR:** [#20](https://github.com/Santiillana/Senapsis/pull/20).
 **SHA validado:** `ee804803354a8ea5cf60d17c37405ac90792faa0`.
 
 ## Resultado ejecutivo
@@ -12,7 +12,7 @@
 
 - **Node:** 267/267 pruebas, cero fallos.
 - **Playwright/Chromium:** 99/99 pruebas, cero fallos.
-- **Run:** [GitHub Actions 43954434334](https://github.com/Santiillana/Traza/actions/runs/43954434334).
+- **Run:** [GitHub Actions 43954434334](https://github.com/Santiillana/Senapsis/actions/runs/43954434334).
 - **Capturas:** 18 archivos PNG; artefacto `ui-audit-29b2188dc0b27d9a41da525ea8b589d40b83d1df`, ID `14271616094`, 2,345,099 bytes.
 - **Estado:** auditoría técnica aceptada para el SHA indicado; publicación real y smoke test externo pendientes.
 
@@ -51,7 +51,7 @@ Se retiró el filtro del contenedor superior a anchuras móviles y se aplicó un
 
 ## Artefacto visual
 
-[Descargar/ver artefacto de auditoría en GitHub Actions](https://github.com/Santiillana/Traza/actions/runs/43954434334/artifacts/14271616094)
+[Descargar/ver artefacto de auditoría en GitHub Actions](https://github.com/Santiillana/Senapsis/actions/runs/43954434334/artifacts/14271616094)
 
 El artefacto se genera desde Chromium e incluye capturas de la suite de aceptación configurada en CI. No equivale a una revisión táctil en dispositivos físicos.
 
@@ -59,7 +59,7 @@ El artefacto se genera desde Chromium e incluye capturas de la suite de aceptaci
 
 - `.github/workflows/pages.yml` habilita una publicación manual de respaldo en GitHub Pages.
 - El comentario del workflow identifica Cloudflare Workers como hosting primario, pero el repositorio no contiene una URL pública ni evidencia automatizada de su estado.
-- `.github/workflows/post-deploy.yml` solicita el origen HTTPS real, espera la marca exacta `traza-release` y ejecuta `e2e/production-smoke.spec.js`.
+- `.github/workflows/post-deploy.yml` solicita el origen HTTPS real, espera la marca exacta `senapsis-release` y ejecuta `e2e/production-smoke.spec.js`.
 - No se ejecutó ese workflow porque no se ha podido verificar el origen de producción.
 
 La publicación no se marca como terminada hasta que el smoke test corra sobre el sitio real.

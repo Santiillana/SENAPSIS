@@ -1,4 +1,4 @@
-# Traza: plan maestro de mejoras para Codex
+# Senapsis: plan maestro de mejoras para Codex
 
 Instrucciones de implementación · Versión 1 · 18 de noviembre de 2026 · Rama de trabajo: `mejoras-desarrollo`
 
@@ -175,9 +175,9 @@ Cada step que cambie interfaz debe adjuntar capturas en los 4 tamaños de 4.5 y 
 
 ## Fase 1. Simulador de diagramas de flujo y arquitectura reutilizable
 
-**Objetivo.** Dejar el simulador de diagramas de flujo como la pieza estrella de Traza: mejor que el archivo de referencia del usuario, sin los bugs actuales y construido sobre una arquitectura que sirva a todos los temas futuros. Es la prioridad máxima del proyecto.
+**Objetivo.** Dejar el simulador de diagramas de flujo como la pieza estrella de Senapsis: mejor que el archivo de referencia del usuario, sin los bugs actuales y construido sobre una arquitectura que sirva a todos los temas futuros. Es la prioridad máxima del proyecto.
 
-**Insumo obligatorio.** El archivo de referencia se llama «Diagramas de flujo en movimiento» (`diagramas_de_flujo.html`). El usuario cree que puede estar incrustado en la plataforma. Buscarlo primero en el repo; si no aparece, **detenerse y pedirlo**. Debe quedar copiado, sin modificar, fuera de `src/` (por ejemplo `docs/referencia-simulador/`). Es del usuario, así que se pueden reutilizar sus ideas, pero **no se copia su código tal cual**: se reimplementa con la arquitectura, los tokens y el estilo de Traza.
+**Insumo obligatorio.** El archivo de referencia se llama «Diagramas de flujo en movimiento» (`diagramas_de_flujo.html`). El usuario cree que puede estar incrustado en la plataforma. Buscarlo primero en el repo; si no aparece, **detenerse y pedirlo**. Debe quedar copiado, sin modificar, fuera de `src/` (por ejemplo `docs/referencia-simulador/`). Es del usuario, así que se pueden reutilizar sus ideas, pero **no se copia su código tal cual**: se reimplementa con la arquitectura, los tokens y el estilo de Senapsis.
 
 **Qué tiene la referencia y debe conservarse en espíritu:**
 
@@ -345,7 +345,7 @@ Tarjeta centrada con nivel y número, título, enunciado, datos de ejemplo y tre
 
 ### 1.14 Criterios de aceptación
 
-- El simulador se comporta y se ve como la referencia, adaptado al estilo de Traza, y la **supera** en: cámara continua, globo anclado, escenas reversibles, teclado, paneles sin solapamientos y responsive.
+- El simulador se comporta y se ve como la referencia, adaptado al estilo de Senapsis, y la **supera** en: cámara continua, globo anclado, escenas reversibles, teclado, paneles sin solapamientos y responsive.
 - Con el diagrama cargado, `→` avanza y `←` retrocede sin hacer clic antes en el lienzo, y siguen funcionando tras pulsar cualquier botón.
 - Con «Centrar en la figura activa», la figura del paso queda centrada con zoom suficiente en cada paso, con transición continua. El zoom elegido con − o + se mantiene; «Ajustar» lo restablece.
 - El globo está siempre pegado a la figura activa, dentro del lienzo, y se mueve con la cámara sin retraso.

@@ -23,6 +23,6 @@ test("la preferencia se persiste y normaliza datos dañados", () => {
   const storage = memoryStorage();
   saveIntroPreference({ skip: false, seen: [2, "2", 1] }, storage);
   assert.deepEqual(readIntroPreference(storage), { skip: false, seen: [2, 1] });
-  storage.setItem("traza:v1:simulator-intro", "{bad json");
+  storage.setItem("senapsis:v1:simulator-intro", "{bad json");
   assert.deepEqual(readIntroPreference(storage), { skip: false, seen: [] });
 });

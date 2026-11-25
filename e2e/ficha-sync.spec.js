@@ -18,12 +18,12 @@ test("una nueva publicación se descarga, se conserva localmente y muestra su ve
   await expect(page.locator("#ficha-sync-indicator")).toBeVisible();
   await expect(page.locator(".ficha-demo-notice")).toHaveCount(0);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
-  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem("traza:v1:ficha-publicada")||"null")?.version)).toBe(2);
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem("senapsis:v1:ficha-publicada")||"null")?.version)).toBe(2);
 });
 
 test("la última ficha guardada sigue disponible cuando falla la API",async({page})=>{
   const payload=snapshot();
-  await page.addInitScript(value=>localStorage.setItem("traza:v1:ficha-publicada",JSON.stringify({version:4,updatedAt:"2026-11-18T18:05:00Z",payload:value})),payload);
+  await page.addInitScript(value=>localStorage.setItem("senapsis:v1:ficha-publicada",JSON.stringify({version:4,updatedAt:"2026-11-18T18:05:00Z",payload:value})),payload);
   await page.route("**/api/v1/version",route=>route.abort());
   await page.goto("/");await goToSpace(page,"hoy");
   await expect(page.locator("#ficha-sync-indicator")).toContainText("Sin conexión");

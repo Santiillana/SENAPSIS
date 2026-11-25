@@ -1,9 +1,9 @@
 import { parsearFechaLocal } from "./fechas.js";
 import { ESTADOS_PERSISTIBLES } from "./estados.js";
 
-export const CLAVE_FICHA = "traza:v4:ficha";
+export const CLAVE_FICHA = "senapsis:v4:ficha";
 export const VERSION_FICHA = 1;
-export const FORMATO_RESPALDO_FICHA = "traza-ficha-personal-backup";
+export const FORMATO_RESPALDO_FICHA = "senapsis-ficha-personal-backup";
 export const VERSION_RESPALDO_FICHA = 1;
 const CAMPOS_CHECKLIST = ["subida", "enviada", "confirmada"];
 const esObjeto = valor => valor !== null && typeof valor === "object" && !Array.isArray(valor);

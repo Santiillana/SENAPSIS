@@ -101,10 +101,10 @@ export function initBiblioteca() {
   root.addEventListener("click", event => {
     if (event.target.closest("[data-library-clear]")) { consulta = ""; filtros = { competencia: "todas", tema: "todos", instructor: "todos", tipo: "todos", desde: "", hasta: "" }; renderBiblioteca(); return; }
     const remove = event.target.closest("[data-library-remove]"); if (remove) { const key = remove.dataset.libraryRemove; filtros[key] = key === "competencia" ? "todas" : "todos"; renderBiblioteca(); return; }
-    const clase = event.target.closest("[data-library-class]"); if (clase) document.dispatchEvent(new CustomEvent("traza:clase-seleccionada", { detail: { fecha: clase.dataset.libraryClass } }));
+    const clase = event.target.closest("[data-library-class]"); if (clase) document.dispatchEvent(new CustomEvent("senapsis:clase-seleccionada", { detail: { fecha: clase.dataset.libraryClass } }));
   });
-  document.addEventListener("traza:documento-resaltar", event => resaltarDocumento(event.detail?.id));
-  document.addEventListener("traza:space-change", event => {
+  document.addEventListener("senapsis:documento-resaltar", event => resaltarDocumento(event.detail?.id));
+  document.addEventListener("senapsis:space-change", event => {
     if (event.detail?.space !== "biblioteca") return;
     renderBiblioteca();
     if (destacado) document.getElementById("library-doc-" + destacado)?.scrollIntoView?.({ block: "center", behavior: "smooth" });

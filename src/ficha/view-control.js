@@ -6,7 +6,7 @@ import { clasesDelDia, panel } from "./selectores.js";
 import { ESTADO } from "./estados.js";
 import { competenceKey, competenceLogo } from "./competencias-ui.js";
 
-const KEY_HECHAS = "traza:v4:evidencias-hechas";
+const KEY_HECHAS = "senapsis:v4:evidencias-hechas";
 const nombresDia = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 const leerHechas = () => {
   try { const value = JSON.parse(localStorage.getItem(KEY_HECHAS) || "[]"); return Array.isArray(value) ? value.filter(id => typeof id === "string") : []; }

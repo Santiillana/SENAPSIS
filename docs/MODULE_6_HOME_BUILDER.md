@@ -1,9 +1,9 @@
 # Módulo 6 · Inicio y pulido del Constructor
 
-**Origen de alcance:** Fase 6 de `docs/INFORME_MEJORAS.md` (Traza v2).  
-**Repositorio:** `Santiillana/Traza`.  
-**Rama:** `v4/module-6-home-builder`.  
-**PR:** [#21](https://github.com/Santiillana/Traza/pull/21), abierta y no fusionada.
+**Origen de alcance:** Fase 6 de `docs/INFORME_MEJORAS.md` (Senapsis v2).
+**Repositorio:** `Santiillana/Senapsis`.
+**Rama:** `v4/module-6-home-builder`.
+**PR:** [#21](https://github.com/Santiillana/Senapsis/pull/21), abierta y no fusionada.
 
 ## Contexto y continuidad
 
@@ -16,7 +16,7 @@ La PR #7, fusionada el 15 de noviembre de 2026, ya había integrado la primera v
 ### Inicio
 - Añadido progreso real de Aprende: lecciones completadas de 17, porcentaje y barra accesible con `role=progressbar`, `aria-valuenow` y `aria-valuetext`.
 - Añadido mensaje contextual: empezar, continuar o ruta completada.
-- El progreso se lee del estado existente `traza:v2:learn`; no se introduce una segunda clave ni se modifica la estructura persistida.
+- El progreso se lee del estado existente `senapsis:v2:learn`; no se introduce una segunda clave ni se modifica la estructura persistida.
 - Añadidos accesos rápidos directos a Ejercicios, Simulador y Laboratorio.
 - La continuidad del último espacio visitado se conserva.
 
@@ -41,7 +41,7 @@ Archivo: `e2e/module-6-home-builder.spec.js`.
 <badge>CI aprobada</badge>
 
 - SHA probado: `a3c38a7ba3c72f6aabe1a1686dbe3166f5911cd4`.
-- Run: [GitHub Actions 43961209113](https://github.com/Santiillana/Traza/actions/runs/43961209113).
+- Run: [GitHub Actions 43961209113](https://github.com/Santiillana/Senapsis/actions/runs/43961209113).
 - Node: **267/267**, cero fallos.
 - Playwright/Chromium: **103/103**, cero fallos.
 - Capturas: 18 PNG, artefacto `ui-audit-7ff31ec21cce8e9256bd5be23ce0f204181c52ca`, ID `14274866581`.

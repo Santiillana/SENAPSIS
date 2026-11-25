@@ -38,8 +38,8 @@ function restoreSimulatorStage(){
 }
 function showSimulatorEntry(){
   const entry=$("#simulator-entry"),view=$("#view-simulator");if(!entry||!view)return;
-  document.dispatchEvent(new CustomEvent("traza:close-source-simulator"));
-  document.dispatchEvent(new CustomEvent("traza:close-math-player"));
+  document.dispatchEvent(new CustomEvent("senapsis:close-source-simulator"));
+  document.dispatchEvent(new CustomEvent("senapsis:close-math-player"));
   if(!stageBeforeEntry.size){for(const element of view.children){if(element===entry||element.classList.contains("simulator-statusbar"))continue;stageBeforeEntry.set(element,element.hidden);element.hidden=true;}}
   renderCompetences(entry);entry.hidden=false;
   const intro=$("#simulator-intro");if(intro?.open)intro.close();
@@ -52,11 +52,11 @@ function launchExercise(button){
   restoreSimulatorStage();
   launchingFromEntry=true;
   try{
-    if(kind==="flow")document.dispatchEvent(new CustomEvent("traza:request-simulation",{detail:{exerciseId:item.item.id,methodIndex:0}}));
-    else if(kind==="source")document.dispatchEvent(new CustomEvent("traza:open-source-simulator",{detail:{scenarioId:item.item.scenario}}));
+    if(kind==="flow")document.dispatchEvent(new CustomEvent("senapsis:request-simulation",{detail:{exerciseId:item.item.id,methodIndex:0}}));
+    else if(kind==="source")document.dispatchEvent(new CustomEvent("senapsis:open-source-simulator",{detail:{scenarioId:item.item.scenario}}));
     else if(kind==="math"){
       const exercise=mathExerciseById(item.item.id)??item.item;
-      document.dispatchEvent(new CustomEvent("traza:open-math-player",{detail:{exerciseId:exercise.id,exercise}}));
+      document.dispatchEvent(new CustomEvent("senapsis:open-math-player",{detail:{exerciseId:exercise.id,exercise}}));
     }
   }finally{launchingFromEntry=false;}
   requestAnimationFrame(()=>{
@@ -73,10 +73,10 @@ export function initSimulatorEntry(){
     const exercise=event.target.closest("[data-sim-exercise]");if(exercise)launchExercise(exercise);
   });
   const markDeepLaunch=()=>{if(!launchingFromEntry)enterAfterNavigation=true;};
-  document.addEventListener("traza:request-simulation",()=>{markDeepLaunch();document.dispatchEvent(new CustomEvent("traza:close-source-simulator"));document.dispatchEvent(new CustomEvent("traza:close-math-player"));});
-  document.addEventListener("traza:open-source-simulator",()=>{markDeepLaunch();document.dispatchEvent(new CustomEvent("traza:close-source-simulator"));document.dispatchEvent(new CustomEvent("traza:close-math-player"));});
-  document.addEventListener("traza:open-math-player",()=>{markDeepLaunch();document.dispatchEvent(new CustomEvent("traza:close-source-simulator"));document.dispatchEvent(new CustomEvent("traza:close-math-player"));});
-  document.addEventListener("traza:space-change",event=>{
+  document.addEventListener("senapsis:request-simulation",()=>{markDeepLaunch();document.dispatchEvent(new CustomEvent("senapsis:close-source-simulator"));document.dispatchEvent(new CustomEvent("senapsis:close-math-player"));});
+  document.addEventListener("senapsis:open-source-simulator",()=>{markDeepLaunch();document.dispatchEvent(new CustomEvent("senapsis:close-source-simulator"));document.dispatchEvent(new CustomEvent("senapsis:close-math-player"));});
+  document.addEventListener("senapsis:open-math-player",()=>{markDeepLaunch();document.dispatchEvent(new CustomEvent("senapsis:close-source-simulator"));document.dispatchEvent(new CustomEvent("senapsis:close-math-player"));});
+  document.addEventListener("senapsis:space-change",event=>{
     if(event.detail?.space!=="simulator")return;
     requestAnimationFrame(()=>{
       if(enterAfterNavigation){enterAfterNavigation=false;restoreSimulatorStage();return;}

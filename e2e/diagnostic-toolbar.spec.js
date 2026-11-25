@@ -12,7 +12,7 @@ test("el panel de controles se adapta a escritorio, tableta y móvil",async({pag
         return [selector,box?{x:box.x,right:box.right,width:box.width,height:box.height,display:getComputedStyle(element).display}:null];
       }));
     });
-    console.log("TRAZA_LAYOUT "+width+" "+JSON.stringify(data));
+    console.log("SENAPSIS_LAYOUT "+width+" "+JSON.stringify(data));
     expect(data["#diagram-stage"].width).toBeGreaterThan(0);
     expect(data["#dock"].right).toBeLessThanOrEqual(width+1);
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);

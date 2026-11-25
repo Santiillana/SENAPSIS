@@ -1,8 +1,8 @@
-# Auditoría inicial — Traza v2
+# Auditoría inicial — Senapsis v2
 
 Fecha: 15 de noviembre de 2026
 Repositorio: Santiillana/Diagramas-de-flujo-
-Rama de trabajo: mejoras/traza-v2
+Rama de trabajo inspeccionada: iteración histórica de mejoras del Simulador v2
 Base verificada: main en d63acf146860209b2866460fbe34294b7c2d28ae
 
 ## 1. Estado real de la base
@@ -10,7 +10,7 @@ Base verificada: main en d63acf146860209b2866460fbe34294b7c2d28ae
 - El árbol de main contiene 64 rutas; la aplicación ya tiene cinco espacios, 40 ejercicios, 14 lecciones, parser/intérprete, SVG, simulador, seis actividades de laboratorio y constructor estructurado.
 - package.json declara solo @playwright/test 1.56.1 como dependencia de desarrollo. Scripts disponibles: npm test y npm run test:browser. No existe script lint ni formatter.
 - README y docs/IMPLEMENTATION_STATUS.md registran la integración de los cinco módulos y la aceptación histórica de 222 pruebas Node y 38 pruebas Chromium. La última confirmación principal consultada es d63acf; no hay ejecución de CI asociada a ese commit en la consulta de workflow runs. Por tanto, esos números son evidencia histórica del cierre anterior, no una repetición de la línea base en esta sesión.
-- La rama mejoras/traza-v2 fue creada desde main. main no se ha modificado.
+- La rama de mejoras de esa iteración se creó desde `main`; la integración actual está consolidada en `main`.
 
 ## 2. Matriz de equivalencia del prototipo
 
@@ -48,7 +48,7 @@ src/core/interpreter.js es zona protegida.
 
 - El objetivo inmediato es el **Simulador inmersivo**, no volver a construir Aprende, Ejercicios, Laboratorio ni Constructor.
 - Se modifica únicamente la capa del Simulador y sus estilos/pruebas específicas. `src/core/*`, `src/content/exercises.js`, `src/content/lessons.js`, `reference/*`, `.github/*`, Constructor y Laboratorio quedan fuera de alcance.
-- La rama de trabajo sigue siendo `mejoras/traza-v2`; no se fusiona y `main` permanece intacta.
+- En ese momento la rama de trabajo se mantenía separada; esta restricción dejó de aplicar al integrar la versión vigente en `main`.
 - El motor mantiene su contrato y límites actuales (2.500 eventos y 500 iteraciones). Los efectos visuales consumen eventos ya emitidos; no añaden lógica de ejecución al pseudocódigo.
 
 ### 5.2. Riesgos técnicos que deben resolverse
@@ -74,7 +74,7 @@ La referencia aportada llama “ejercicio 14” al algoritmo **Mayor de 10 núme
 
 - Se conserva la navegación global existente, en el mismo orden y con la misma función: **01 Aprende · 02 Ejercicios · 03 Simulador · 04 Laboratorio · 05 Constructor**. No se reutilizan sus botones como selector de ejercicios.
 - La barra de ejercicios será una segunda navegación, local a `#view-simulator`, visible solo dentro del Simulador. No cambia de espacio global ni duplica la barra 01–05.
-- Se alimentará de los ejercicios ya existentes en memoria (lectura únicamente); cada selección cambiará `exerciseId` y `methodIndex` a través del flujo actual `prepare()` / `traza:request-simulation`. No se crean, renombran, reordenan ni corrigen ejercicios.
+- Se alimentará de los ejercicios ya existentes en memoria (lectura únicamente); cada selección cambiará `exerciseId` y `methodIndex` a través del flujo actual `prepare()` / `senapsis:request-simulation`. No se crean, renombran, reordenan ni corrigen ejercicios.
 - La barra indicará el ejercicio activo y su variante/método; conservará selección y ejecución al minimizar/restaurar ventanas. La selección de otro ejercicio sí preparará una ejecución nueva, como hoy.
 - En escritorio se mantiene compacta en el borde superior del Simulador. En móvil se hace desplazable horizontalmente y no reduce el área táctil del lienzo. La zona de trabajo comienza debajo de la barra superior global y de esta barra local; nunca se superponen para ocultar controles.
 
@@ -119,7 +119,7 @@ El conteo corresponde a valores numéricos explícitos; no incluye tamaños here
 - index.html: línea 86 contiene «CONTEXTO DEL RETO».
 - index.html: línea 253 contiene «REDISEÑO V5» y una nota de transición.
 - navigation.js: SPACE_META contiene encabezados «ESPACIO 01 / 05» a «ESPACIO 05 / 05».
-- content-view.js añade etiquetas internas de visualización y marca «TRAZA · APRENDE».
+- content-view.js añade etiquetas internas de visualización y marca «SENAPSIS · APRENDE».
 - index.html tiene seis actividades de laboratorio, en líneas 178–183.
 
 ## 8. Discrepancias del documento de mejoras frente al repo
@@ -135,7 +135,7 @@ El conteo corresponde a valores numéricos explícitos; no incluye tamaños here
 
 ## 9. CI y antecedentes de trabajo
 
-- .github/workflows/quality.yml ejecuta npm test y npm run test:browser en push a main y module-1/** … module-5/**; pull_request contra main también ejecuta CI. La rama mejoras/traza-v2 no está incluida en el filtro push. La comprobación de CI se hará mediante el pull request final.
+- El registro histórico de CI describía filtros de rama anteriores. La configuración vigente está en `.github/workflows/quality.yml` y se debe consultar antes de publicar cambios.
 - Se encontró la rama independiente instruction-2/live-lab-phase, 90 commits por delante de main. No se reutiliza: su diff modifica src/content/exercises.js, altera tests/reference-results.test.js, toca .github y agrega dependencias/archivos, contradiciendo la zona protegida.
 - Su ejecución más reciente consultada fue Actions run 43669616951. La suite Node pasó, pero falló la suite de navegador con 18 pruebas fallidas. Los fallos incluyen errores de análisis del simulador, controles que no se estabilizan, expectativas de salida y zoom, y contraste positivo de 3,16:1 en tema claro.
 - No se ejecutó un entorno local de Node/Playwright desde esta conexión de GitHub; no se generan capturas ficticias. Las capturas quedan pendientes de la CI del pull request.

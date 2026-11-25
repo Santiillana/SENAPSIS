@@ -237,7 +237,7 @@ test("localStorage tolera ausencia, JSON corrupto, versión desconocida y errore
 
 test("guardar, leer y borrar ficha conserva los datos sin alterar otras claves", () => {
   const almacenamiento = crearAlmacenamiento();
-  almacenamiento.setItem("traza:v2:learn", JSON.stringify({ completed: ["algorithm"] }));
+  almacenamiento.setItem("senapsis:v2:learn", JSON.stringify({ completed: ["algorithm"] }));
   const datos = crearFichaInicial();
   datos.favoritos.push("recurso-uno");
   datos.actividades["actividad-diagrama"] = registro(ESTADO.EN_CURSO);
@@ -246,7 +246,7 @@ test("guardar, leer y borrar ficha conserva los datos sin alterar otras claves",
   assert.deepEqual(leerFicha(almacenamiento), datos);
   assert.equal(borrarFicha(almacenamiento), true);
   assert.deepEqual(leerFicha(almacenamiento), crearFichaInicial());
-  assert.ok(almacenamiento.getItem("traza:v2:learn"));
+  assert.ok(almacenamiento.getItem("senapsis:v2:learn"));
 });
 
 test("las transiciones protegen Aprobada y reservan los juicios al instructor", () => {

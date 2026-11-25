@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "traza-content-api",
+  "name": "senapsis-content-api",
   "main": "worker/index.js",
   "compatibility_date": "2026-11-19",
   "vars": {
@@ -12,7 +12,7 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "traza-content",
+      "database_name": "senapsis-content",
       "database_id": "REPLACE_WITH_D1_DATABASE_ID",
       "migrations_dir": "migrations"
     }

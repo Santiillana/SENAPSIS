@@ -1,11 +1,11 @@
-# Estado de implementación · Traza
+# Estado de implementación · Senapsis
 
 **Actualizado:** 20 de noviembre de 2026
-**Repositorio:** `Santiillana/Traza`  
-**Rama principal:** `main`  
-**SHA de main después de M6 Mi ficha:** `1d6628f081ea413dd84eecdb6574072c9d0720f4`  
-**PR M6 Inicio/Constructor:** [#21](https://github.com/Santiillana/Traza/pull/21), fusionada el 16 de noviembre de 2026.  
-**PR M6 Mi ficha:** [#24](https://github.com/Santiillana/Traza/pull/24), fusionada el 17 de noviembre de 2026.
+**Repositorio:** `Santiillana/Senapsis`
+**Rama principal:** `main`
+**SHA de main después de M6 Mi ficha:** `1d6628f081ea413dd84eecdb6574072c9d0720f4`
+**PR M6 Inicio/Constructor:** [#21](https://github.com/Santiillana/Senapsis/pull/21), fusionada el 16 de noviembre de 2026.
+**PR M6 Mi ficha:** [#24](https://github.com/Santiillana/Senapsis/pull/24), fusionada el 17 de noviembre de 2026.
 
 ## Estado ejecutivo
 
@@ -40,8 +40,8 @@ El Documento maestro V5 define cinco módulos. El Módulo 6 que se ejecuta ahora
 La iteración v4 reorganiza la plataforma en Inicio, Mi ficha y Aprende. El rediseño del catálogo de Ejercicios fue integrado mediante PR #19; su merge commit fue `e80d5773eed6ab0c193ad351e618ce744b0c8441`.
 
 ### M5 · Integración, auditoría, rendimiento y publicación
-- PR #20: [fusionada](https://github.com/Santiillana/Traza/pull/20), merge commit `ea25db33153afbb6ee506647496a74e6dc0f9fde`.
-- CI de auditoría: [run 43955709695](https://github.com/Santiillana/Traza/actions/runs/43955709695).
+- PR #20: [fusionada](https://github.com/Santiillana/Senapsis/pull/20), merge commit `ea25db33153afbb6ee506647496a74e6dc0f9fde`.
+- CI de auditoría: [run 43955709695](https://github.com/Santiillana/Senapsis/actions/runs/43955709695).
 - Resultado: **267/267 Node**, **99/99 Playwright/Chromium**, 18 capturas.
 - M5 queda aceptado a nivel de código, documentación y CI.
 - El deployment público sigue pendiente porque no se ha verificado un origen HTTPS real ni se ha ejecutado el smoke test de producción.
@@ -50,14 +50,14 @@ La iteración v4 reorganiza la plataforma en Inicio, Mi ficha y Aprende. El redi
 El alcance procede de la Fase 6 del informe de mejoras v2. La PR #7 fue fusionada el 15 de noviembre de 2026 (merge commit `893dd1cf4192be1a627d8e21eea49d012506e3fb`) e integró la base del panel de Inicio y el historial de 60 estados del Constructor. El rediseño v4 posterior sustituyó esa portada por una portada de secciones, y el M6 actual completa su continuidad:
 
 - Inicio muestra lecciones completadas de 17, porcentaje, barra de progreso accesible y mensaje contextual.
-- El dato se lee de la clave persistente existente `traza:v2:learn`; no se duplica ni cambia su esquema.
+- El dato se lee de la clave persistente existente `senapsis:v2:learn`; no se duplica ni cambia su esquema.
 - Inicio ofrece atajos directos a Ejercicios, Simulador y Laboratorio.
 - Los botones Deshacer/Rehacer anuncian nombres accesibles y atajos de teclado.
 - El historial existente de 60 snapshots no se reimplementa; se añaden pruebas del límite real, undo/redo, atajos y descarte de rama futura.
 
 #### Resultado CI de M6
-- PR: [#21](https://github.com/Santiillana/Traza/pull/21), fusionada en `main` mediante `cd9c7598969d9487c779234451a32d9e5f3d67c6`.
-- Workflow: [GitHub Actions 43961209113](https://github.com/Santiillana/Traza/actions/runs/43961209113).
+- PR: [#21](https://github.com/Santiillana/Senapsis/pull/21), fusionada en `main` mediante `cd9c7598969d9487c779234451a32d9e5f3d67c6`.
+- Workflow: [GitHub Actions 43961209113](https://github.com/Santiillana/Senapsis/actions/runs/43961209113).
 - SHA probado: `a3c38a7ba3c72f6aabe1a1686dbe3166f5911cd4`.
 - Node: **267/267**, cero fallos.
 - Playwright/Chromium: **103/103**, cero fallos.
@@ -74,7 +74,7 @@ El alcance procede de la Fase 6 del informe de mejoras v2. La PR #7 fue fusionad
 ## Publicación y limitaciones
 
 - `.github/workflows/pages.yml` permite una ejecución manual de respaldo en GitHub Pages. El comentario del workflow identifica Cloudflare Workers como hosting primario, pero no hay evidencia automatizada del estado actual de ese hosting.
-- `.github/workflows/post-deploy.yml` requiere el origen HTTPS real, espera la marca exacta `traza-release` y ejecuta `e2e/production-smoke.spec.js`. No se ha ejecutado porque no se ha verificado el origen de producción.
+- `.github/workflows/post-deploy.yml` requiere el origen HTTPS real, espera la marca exacta `senapsis-release` y ejecuta `e2e/production-smoke.spec.js`. No se ha ejecutado porque no se ha verificado el origen de producción.
 - No afirmar que la aplicación está publicada hasta completar ese smoke test.
 - Responsive se prueba en Chromium emulado, no en un teléfono o tableta física.
 - El constructor es estructurado (secuencia, ramas V/F y ciclos anidados); no es un editor libre de conexiones manuales arbitrarias entre puertos SVG.

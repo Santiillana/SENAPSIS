@@ -12,7 +12,7 @@ const SPACE_META = {
 const FICHA_SPACES = new Set(["hoy", "clases", "actividades", "biblioteca"]);
 const APRENDE_SPACES = new Set(["learn", "exercises", "simulator"]);
 const DEFAULT_LAST = { ficha: "hoy", aprende: "learn", section: "aprende" };
-const LAST_KEY = "traza:v4:last";
+const LAST_KEY = "senapsis:v4:last";
 function readLastViews() {
   try {
     const saved = JSON.parse(window.localStorage.getItem(LAST_KEY) || "null");
@@ -86,7 +86,7 @@ export function initNavigation() {
       heading?.setAttribute("tabindex", "-1");
       heading?.focus({ preventScroll: true });
     }
-    document.dispatchEvent(new CustomEvent("traza:space-change", {
+    document.dispatchEvent(new CustomEvent("senapsis:space-change", {
       detail: { space, section }
     }));
   }

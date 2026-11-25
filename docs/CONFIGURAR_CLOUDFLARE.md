@@ -15,7 +15,7 @@ Desde la raíz del repositorio, inicia sesión con Wrangler en la cuenta correct
 
 ```sh
 npx wrangler login
-npx wrangler d1 create traza-content
+npx wrangler d1 create senapsis-content
 ```
 
 Copia el `database_id` que devuelve Wrangler en `wrangler.jsonc`, reemplazando `REPLACE_WITH_D1_DATABASE_ID`. Completa las cuatro variables `REPLACE_WITH_…` con el Team domain, Audience tag, correo autorizado y origen público exacto (por ejemplo `https://senapsis.example.edu`). No añadas barra final al origen. No pongas secretos en el navegador.
@@ -23,7 +23,7 @@ Copia el `database_id` que devuelve Wrangler en `wrangler.jsonc`, reemplazando `
 Aplica las migraciones remotas después de revisar cuenta, base y configuración:
 
 ```sh
-npx wrangler d1 migrations apply traza-content --remote
+npx wrangler d1 migrations apply senapsis-content --remote
 ```
 
 ## Proteger rutas y conectar el Worker
@@ -35,7 +35,7 @@ En Cloudflare Zero Trust, crea una aplicación Self-hosted con política Allow p
 
 El Worker también verifica firma, audiencia, emisor y correo permitido en cada operación administrativa. No dependas solo de la política de Access.
 
-En Workers & Pages, añade una ruta del Worker `traza-content-api` para `<tu-dominio>/api/v1/*`, manteniendo la zona proxied. La lectura pública (`/api/v1/state` y `/api/v1/version`) queda pública; Access se limita al panel y rutas administrativas. La ruta debe apuntar al mismo Worker y al binding D1 `DB` definido en `wrangler.jsonc`.
+En Workers & Pages, añade una ruta del Worker `senapsis-content-api` para `<tu-dominio>/api/v1/*`, manteniendo la zona proxied. La lectura pública (`/api/v1/state` y `/api/v1/version`) queda pública; Access se limita al panel y rutas administrativas. La ruta debe apuntar al mismo Worker y al binding D1 `DB` definido en `wrangler.jsonc`.
 
 ## Revisión y despliegue
 

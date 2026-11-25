@@ -35,8 +35,8 @@ export async function goToSpace(page, space, options = {}) {
     await page.evaluate(() => {
       try {
         let preference = { skip: false, seen: [] };
-        preference = JSON.parse(localStorage.getItem("traza:v1:simulator-intro") || "null") || preference;
-        localStorage.setItem("traza:v1:simulator-intro", JSON.stringify({ ...preference, skip: true }));
+        preference = JSON.parse(localStorage.getItem("senapsis:v1:simulator-intro") || "null") || preference;
+        localStorage.setItem("senapsis:v1:simulator-intro", JSON.stringify({ ...preference, skip: true }));
       }
       catch { /* La preferencia de pruebas parte de un valor válido. */ }
     });

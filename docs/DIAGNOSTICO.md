@@ -1,8 +1,8 @@
-# Diagnóstico del simulador Traza
+# Diagnóstico del simulador Senapsis
 
-Fecha de inspección: 15 de noviembre de 2026  
-Rama inspeccionada: `mejoras/traza-v2`  
-HEAD inspeccionado: `b126f8eaa491a6e108c938e0cee634c78983b4ae`  
+Fecha de inspección: 15 de noviembre de 2026
+Rama inspeccionada: iteración histórica de mejoras del Simulador v2
+HEAD inspeccionado: `b126f8eaa491a6e108c938e0cee634c78983b4ae`
 Referencia original: `reference/diagramas_de_flujo_original.html` (blob `9f7f5a3d68d10b004e2ea306df1109906f13bc33`).
 
 ## Resumen ejecutivo

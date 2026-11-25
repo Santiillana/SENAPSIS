@@ -92,7 +92,7 @@ test("las vistas de Mi ficha están conectadas a la aplicación y tienen estilos
   assert.match(html, /styles\/ficha\.css/);
   assert.match(app, /import \{ initFicha \}/);
   assert.match(app, /initFicha\(\)/);
-  for (const marker of ["initControl", "renderControl", "initClases", "renderClases", "traza:ficha-actualizada"]) {
+  for (const marker of ["initControl", "renderControl", "initClases", "renderClases", "senapsis:ficha-actualizada"]) {
     assert.ok(init.includes(marker), "Falta conectar " + marker);
   }
   for (const selector of [".class-week-grid", ".class-month-grid", ".ficha-activity-card", ".class-rail"]) {
@@ -106,7 +106,7 @@ test("Centro de control usa paneles de horario, evidencias, comunicados e instru
   assert.match(view, /function renderEvidencias/);
   assert.match(view, /function renderComunicados/);
   assert.match(view, /function renderInstructores/);
-  assert.match(view, /KEY_HECHAS = "traza:v4:evidencias-hechas"/);
+  assert.match(view, /KEY_HECHAS = "senapsis:v4:evidencias-hechas"/);
   assert.match(view, /data-evidence-undo/);
   assert.match(view, /data-evidence-open/);
   assert.match(view, /control-evidence-dialog/);

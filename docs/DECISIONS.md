@@ -74,7 +74,7 @@ El Simulador utiliza los valores cromáticos de la referencia y el tamaño base 
 La aceptación compara bounding boxes del HTML original y del Simulador a 1920×1080. Las medidas de referencia se leen durante la ejecución de Playwright; no se duplican como fixtures fijos. Criterio máximo de diferencia: 6 px por elemento.
 
 ## D-025 · Despliegue separado de revisión
-Los cambios se publican únicamente en `mejoras/traza-v2` y se mantienen en la PR #7. No se actualiza `main` ni se fusiona la PR. La disponibilidad del preview de Cloudflare se configura externamente y no se presume desde GitHub.
+Registro histórico de la iteración de mejoras v2: los cambios se desarrollaron en una rama separada y se mantuvo `main` intacta hasta su integración. Esa restricción ya no aplica; la versión vigente está en `main`.
 
 ## D-026 · Cámara como transformación única del mundo
 El SVG mantiene sus dimensiones base tras prepararse el ejercicio. Desplazamiento y zoom se aplican juntos en una única transformación de #flow-diagram-container; no se utiliza scroll para navegar el diagrama. El zoom conserva el punto bajo el cursor y los gestos de puntero usan captura para evitar saltos al salir del área.
@@ -105,7 +105,7 @@ La clase `body.focus` es la fuente de verdad del modo Concentración. La Fullscr
 La pregunta se prepara desde el siguiente snapshot del intérprete y pausa la reproducción. Responder no modifica la traza; «Ver el paso» confirma el evento real y conserva el estado de reproducción anterior. El Laboratorio mantiene sus propias actividades, sin botón duplicado en la barra del Simulador.
 
 ## D-036 · Paleta del Observatorio aislada por tokens
-Los tokens `--traza-*` definen escenario, vidrio, texto y acentos. La paleta oscura es la inicial y la paleta clara sigue el atributo `data-theme`; los alias solo se aplican dentro de `data-active-space="simulator"`.
+Los tokens `--senapsis-*` definen escenario, vidrio, texto y acentos. La paleta oscura es la inicial y la paleta clara sigue el atributo `data-theme`; los alias solo se aplican dentro de `data-active-space="simulator"`.
 
 ## D-037 · La rueda no es un control de zoom
 La rueda vertical desplaza el lienzo, Shift/deltaX desplazan horizontalmente y solo Ctrl/⌘+rueda, pellizco y botones modifican la escala. Esto conserva el comportamiento de desplazamiento espacial y evita el zoom involuntario.
@@ -117,7 +117,7 @@ El repositorio no contiene una configuración de despliegue ni una URL pública 
 La rama `respaldo/antes-simulador-v3` y la etiqueta `v2-antes-simulador-v3` apuntan al SHA `893dd1cf4192be1a627d8e21eea49d012506e3fb`. El PR se fusionará solo tras el éxito de pruebas unitarias, e2e, paridad y controles del Simulador; la etiqueta permite identificar el estado anterior.
 
 ## D-040 · Marca de release verificable contra un origen explícito
-Cada entrega del Simulador v3 incorpora una meta `traza-release` y la misma cadena en el pie de página. El workflow post-deploy solo se ejecuta manualmente y exige el origen HTTPS real como entrada. Espera la marca exacta y ejecuta humo de navegador contra ese origen antes de declarar la versión verificada.
+Cada entrega del Simulador v3 incorpora una meta `senapsis-release` y la misma cadena en el pie de página. El workflow post-deploy solo se ejecuta manualmente y exige el origen HTTPS real como entrada. Espera la marca exacta y ejecuta humo de navegador contra ese origen antes de declarar la versión verificada.
 
 ## D-041 · Evidencia antes que afirmaciones
 La incapacidad de clonar el repositorio desde el entorno de trabajo no se sustituye por resultados simulados. Las pruebas se consideran aprobadas solo con el resumen real de GitHub Actions para el SHA exacto del PR y, para producción, con la marca HTTP y la ejecución del workflow post-deploy sobre un origen proporcionado y verificable.
@@ -147,7 +147,7 @@ Las pruebas de aceptación deben seleccionar los ejercicios respetando la pagina
 
 
 ## D-022 · El cierre de M5 se ancla al repositorio y SHA vigentes
-La evidencia de integración se registra contra `Santiillana/Traza`, su rama `main` y el SHA exacto validado. Los historiales que mencionan `Santiillana/Diagramas-de-flujo-`, PR antiguos o commits de una iteración previa se conservan solo como historial, no como estado vigente.
+La evidencia de integración se registra contra `Santiillana/Senapsis`, su rama `main` y el SHA exacto validado. Los historiales que mencionan `Santiillana/Diagramas-de-flujo-`, PR antiguos o commits de una iteración previa se conservan solo como historial, no como estado vigente.
 
 ## D-023 · Las verificaciones automatizadas no equivalen a publicación
 La suite CI demuestra el comportamiento del commit en el entorno de Actions. La publicación requiere completar un workflow de despliegue y ejecutar el smoke test contra el origen HTTPS real. Una URL no comprobada nunca se describe como producción activa.

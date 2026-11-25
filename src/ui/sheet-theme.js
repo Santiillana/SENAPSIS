@@ -1,4 +1,4 @@
-const STORAGE_KEY = "traza:v1:sheet-theme";
+const STORAGE_KEY = "senapsis:v1:sheet-theme";
 const SHEET_SELECTOR = ".sheet-theme-surface";
 
 function readPreference() {

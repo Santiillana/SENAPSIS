@@ -1,8 +1,8 @@
 {
-  "name": "traza-laboratorio-diagramas",
+  "name": "senapsis-ficha-formacion",
   "version": "0.2.0",
   "private": true,
-  "description": "Rediseño modular del laboratorio visual de diagramas de flujo.",
+  "description": "Plataforma colaborativa para la gestión de una ficha de formación.",
   "type": "module",
   "scripts": {
     "dev": "python3 -m http.server 8000",

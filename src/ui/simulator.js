@@ -53,7 +53,7 @@ function showSimulatorIntro(){
 
 function readPseudocodeSize(){
   try{
-    const value=Number(window.localStorage.getItem("traza:v2:pseudocode-size")??window.localStorage.getItem("traza-pseudocode-size"));
+    const value=Number(window.localStorage.getItem("senapsis:v2:pseudocode-size")??window.localStorage.getItem("senapsis-pseudocode-size"));
     return Number.isFinite(value)&&value>=13&&value<=26?value:17;
   }catch{return 17;}
 }
@@ -81,11 +81,11 @@ function getWindowElement(id){
   return meta?document.querySelector(meta.selector):null;
 }
 function persistWindowState(){
-  try{localStorage.setItem("traza:v3:windows",JSON.stringify([...hiddenWindows]));}catch{}
+  try{localStorage.setItem("senapsis:v3:windows",JSON.stringify([...hiddenWindows]));}catch{}
 }
 function loadWindowState(){
   try{
-    const saved=JSON.parse(localStorage.getItem("traza:v3:windows")||"[]");
+    const saved=JSON.parse(localStorage.getItem("senapsis:v3:windows")||"[]");
     if(Array.isArray(saved))saved.filter(id=>WINDOW_META.some(item=>item.id===id)).forEach(id=>hiddenWindows.add(id));
   }catch{}
 }
@@ -743,7 +743,7 @@ function currentSpeedFactor(){
 }
 function publishTrace(){
   if(!execution||!timeline)return;
-  document.dispatchEvent(new CustomEvent("traza:execution-updated",{detail:{
+  document.dispatchEvent(new CustomEvent("senapsis:execution-updated",{detail:{
     exercise,exerciseId,methodIndex,method:method(),execution,
     event:timeline.current,index:timeline.index,length:timeline.length,
     diagram,source:method()?.pseudocode??""
@@ -1387,7 +1387,7 @@ function setPseudocodeSize(size){
   const smaller=$("#simulator-text-smaller"),larger=$("#simulator-text-larger");
   if(smaller)smaller.disabled=pseudocodeSize<=13;
   if(larger)larger.disabled=pseudocodeSize>=26;
-  try{window.localStorage.setItem("traza:v2:pseudocode-size",String(pseudocodeSize));}catch{}
+  try{window.localStorage.setItem("senapsis:v2:pseudocode-size",String(pseudocodeSize));}catch{}
 }
 function fitDiagram(){
   const stage=$("#diagram-stage"),svg=$("#flow-svg"),canvas=$("#flow-diagram-container");
@@ -1546,7 +1546,7 @@ function setMobilePanel(name){
 function setPresentationMode(value){
   const mode=value==="complete"?"complete":"appear";
   document.body.dataset.presentationMode=mode;
-  try{localStorage.setItem("traza:v3:presentation-mode",mode);}catch{}
+  try{localStorage.setItem("senapsis:v3:presentation-mode",mode);}catch{}
   const control=$("#simulator-presentation-mode");if(control)control.value=mode;
 }
 function positionControlsPanel(){
@@ -1746,7 +1746,7 @@ function bind(){
     if(event.detail?.space==="simulator")document.addEventListener("keydown",onSimulatorKeydown);
     else document.removeEventListener("keydown",onSimulatorKeydown);
   };
-  document.addEventListener("traza:space-change",syncSimulatorKeyListener);
+  document.addEventListener("senapsis:space-change",syncSimulatorKeyListener);
   if(document.body.dataset.activeSpace==="simulator")document.addEventListener("keydown",onSimulatorKeydown);
   document.querySelector('[data-space="simulator"]')?.addEventListener("click",()=>{
     if(!execution)prepare();
@@ -1771,7 +1771,7 @@ function bind(){
     });
     observer.observe(stage);
   }else window.addEventListener("resize",()=>requestAnimationFrame(()=>fitDiagram()));
-  document.addEventListener("traza:request-simulation",event=>{
+  document.addEventListener("senapsis:request-simulation",event=>{
     exerciseId=Number(event.detail?.exerciseId)||1;
     methodIndex=Number(event.detail?.methodIndex)||0;
     selectedVariable=null;
@@ -1779,7 +1779,7 @@ function bind(){
     showSimulatorIntro();
     requestAnimationFrame(()=>{fitDiagram();if(timeline&&cameraAuto)centerActiveNode(timeline.current,"auto");});
   });
-  document.addEventListener("traza:jump-to-step",event=>{
+  document.addEventListener("senapsis:jump-to-step",event=>{
     if(Number.isInteger(event.detail?.index))seek(event.detail.index);
   });
 }
@@ -1789,7 +1789,7 @@ export function initSimulator(){
   setPseudocodeSize(readPseudocodeSize());
   paintExerciseSelector();
   document.documentElement.style.setProperty("--fs",String(pseudocodeSize));
-  setPresentationMode((()=>{try{return localStorage.getItem("traza:v3:presentation-mode")||"appear";}catch{return "appear";}})());
+  setPresentationMode((()=>{try{return localStorage.getItem("senapsis:v3:presentation-mode")||"appear";}catch{return "appear";}})());
   document.documentElement.style.setProperty("--sim-speed",String(currentSpeedFactor()));
   document.documentElement.style.setProperty("--sim-animation-duration",Math.round(Math.max(100,Math.min(5000,500/currentSpeedFactor())))+"ms");
   syncDockHeight();

@@ -125,7 +125,7 @@ test("la vista de lista y los filtros se adaptan a móvil sin desbordar",async({
 
 test("una direccion del Simulador restaura directamente el ejercicio solicitado",async({page})=>{
   await page.emulateMedia({reducedMotion:"reduce"});
-  await page.addInitScript(()=>localStorage.setItem("traza:v1:simulator-intro",JSON.stringify({skip:true,seen:[]})));
+  await page.addInitScript(()=>localStorage.setItem("senapsis:v1:simulator-intro",JSON.stringify({skip:true,seen:[]})));
   await page.goto("/?pestana=simulador&competencia=evaluar-requisitos&tema=diagramas-flujo&ejercicio=flujo%3A23");
   const splash=page.locator("#brand-splash");
   if(await splash.isVisible()){await page.locator("#brand-enter").click();await expect(splash).toHaveCount(0);}

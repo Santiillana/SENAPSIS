@@ -44,9 +44,9 @@ function openExercise(id,provided){activeExercise=provided?.id===id?provided:mat
 function hidePlayer(){stop();document.body.classList.remove("math-focus");const root=$("#math-player"),view=$("#view-simulator");if(root)root.hidden=true;if(view)delete view.dataset.mathPlayer;}
 function close(){hidePlayer();document.querySelector('#primary-nav [data-space="exercises"]')?.click();}
 function bind(){
-  document.addEventListener("traza:open-math-player",event=>openExercise(event.detail?.exerciseId,event.detail?.exercise));
-  document.addEventListener("traza:close-math-player",hidePlayer);
-  document.addEventListener("traza:space-change",event=>{if(event.detail?.space==="simulator"&&activeExercise)render();});
+  document.addEventListener("senapsis:open-math-player",event=>openExercise(event.detail?.exerciseId,event.detail?.exercise));
+  document.addEventListener("senapsis:close-math-player",hidePlayer);
+  document.addEventListener("senapsis:space-change",event=>{if(event.detail?.space==="simulator"&&activeExercise)render();});
   document.addEventListener("keydown",event=>{if(event.key==="Escape"&&document.body.classList.contains("math-focus")){document.body.classList.remove("math-focus");render();}});
   $("#math-player")?.addEventListener("click",event=>{
     if(event.target.closest("[data-math-player-close]")){close();return;}

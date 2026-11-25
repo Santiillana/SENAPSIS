@@ -220,7 +220,7 @@ function renderIntentos(registro) {
           ${intento.enlace
             ? '<a href="' + escaparHTML(intento.enlace) + '" target="_blank" rel="noopener noreferrer">Ver evidencia ↗</a>'
             : ""}
-          <small>Resultado transcrito por el estudiante; no verificado por Traza.</small>
+          <small>Resultado transcrito por el estudiante; no verificado por Senapsis.</small>
         </li>`).join("")}
     </ol>`;
 }
@@ -340,7 +340,7 @@ function renderDetalle(personal) {
       <section class="ficha-activity-section">
         <h3>Devoluciones y resultados</h3>
         <p class="ficha-activity-help">
-          Transcribe el resultado que recibiste. Traza no autentica al instructor ni verifica la calificación.
+          Transcribe el resultado que recibiste. Senapsis no autentica al instructor ni verifica la calificación.
         </p>
         ${renderIntentos(registro)}
         <form id="activity-result-form" class="ficha-activity-result-form">
@@ -392,7 +392,7 @@ function guardarCambios(datos) {
   }
 
   mensajeGuardado = "Cambios guardados en este navegador.";
-  document.dispatchEvent(new CustomEvent("traza:ficha-actualizada"));
+  document.dispatchEvent(new CustomEvent("senapsis:ficha-actualizada"));
   return true;
 }
 
@@ -559,8 +559,8 @@ export function initActividades() {
     guardarCambios(resultado.datos);
   });
 
-  document.addEventListener("traza:filtros-ficha-cambiados", renderActividades);
-  document.addEventListener("traza:space-change", event => {
+  document.addEventListener("senapsis:filtros-ficha-cambiados", renderActividades);
+  document.addEventListener("senapsis:space-change", event => {
     if (event.detail?.space !== "actividades") return;
     busqueda = "";
     filtroCompetencia = "todas";

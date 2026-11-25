@@ -1,9 +1,9 @@
-# Decisiones de implementación — mejoras Traza v2
+# Decisiones de implementación — mejoras Senapsis v2
 
 ## Base
 
 - La referencia para modificar es main, commit d63acf146860209b2866460fbe34294b7c2d28ae.
-- El trabajo se realiza en mejoras/traza-v2. main y la rama instruction-2/live-lab-phase permanecen intactas.
+- El registro corresponde a la iteración histórica de mejoras v2; la versión vigente está consolidada en `main`.
 - La rama instruction-2/live-lab-phase no se integra: modifica ejercicios, pruebas protegidas y configuración CI, y su CI más reciente falla en navegador.
 - El intérprete tiene límites explícitos: 2.500 eventos y 500 iteraciones. El adaptador visual consumirá sus eventos sin modificar src/core.
 - Los ejercicios permanecen sin cambio. Las etiquetas «De clase» se derivan en archivo adicional.

@@ -1,6 +1,6 @@
 import { test, expect, goToSpace } from "./navigation.js";
 
-test("la referencia conserva su archivo y Traza conserva el significado del ejercicio",async({page})=>{
+test("la referencia conserva su archivo y Senapsis conserva el significado del ejercicio",async({page})=>{
   const response=await page.request.get("/reference/diagramas_de_flujo_original.html");
   expect(response.ok()).toBeTruthy();
   await page.goto("/");

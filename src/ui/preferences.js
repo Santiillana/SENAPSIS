@@ -1,7 +1,7 @@
 const STORAGE_KEYS = {
-  legacyTheme: "traza:v2:theme",
-  themePrefix: "traza:v4:theme:",
-  motion: "traza:v2:motion"
+  legacyTheme: "senapsis:v2:theme",
+  themePrefix: "senapsis:v4:theme:",
+  motion: "senapsis:v2:motion"
 };
 const DEFAULT_THEMES = { ficha: "light" };
 
@@ -28,7 +28,7 @@ function readSectionTheme(section) {
   if (saved === "dark" || saved === "light") return saved;
 
   if (section === "aprende") {
-    const legacy = readPreference(STORAGE_KEYS.legacyTheme, null, "traza-theme");
+    const legacy = readPreference(STORAGE_KEYS.legacyTheme, null, "senapsis-theme");
     if (legacy === "light" || legacy === "dark") return legacy;
   }
   return DEFAULT_THEMES[section] || systemTheme();
@@ -83,7 +83,7 @@ export function initPreferences() {
     applyMotion(levels[(levels.indexOf(root.dataset.motion) + 1) % levels.length]);
   });
 
-  document.addEventListener("traza:space-change", event => {
+  document.addEventListener("senapsis:space-change", event => {
     const section = event.detail?.section || root.dataset.section || "home";
     applyTheme(readSectionTheme(section), section);
   });
@@ -93,6 +93,6 @@ export function initPreferences() {
   applyMotion(readPreference(
     STORAGE_KEYS.motion,
     prefersReduced ? "reduced" : "full",
-    "traza-motion"
+    "senapsis-motion"
   ) );
 }

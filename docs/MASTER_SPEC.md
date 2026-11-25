@@ -46,7 +46,7 @@ La plataforma debe enseñar exclusivamente los conceptos que aparecen en el HTML
 - Centinelas y condiciones de parada.
 - Ciclos anidados.
 - Máximos, mínimos, posiciones, promedios y series numéricas construidas con esos elementos.
-- Trazado de ejecución, seguimiento de variables, resultados y análisis de errores.
+- Senapsisdo de ejecución, seguimiento de variables, resultados y análisis de errores.
 
 **No enseñar ni usar como objetivo de aprendizaje:** arreglos, listas, matrices como estructuras de datos, funciones, procedimientos, recursividad, búsqueda binaria, algoritmos de ordenamiento, objetos, clases, programación orientada a objetos, archivos, bases de datos, redes ni otros temas ajenos al archivo.
 

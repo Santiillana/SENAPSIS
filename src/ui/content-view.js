@@ -121,7 +121,7 @@ export function exerciseConceptLabels(item){
 }
 function readLearnProgress(){
   try{
-    const value=JSON.parse(localStorage.getItem("traza:v2:learn")||"null");
+    const value=JSON.parse(localStorage.getItem("senapsis:v2:learn")||"null");
     return normalizeLearnProgress(value, lessons.map(item=>item.id), temas.map(item=>item.id));
   }catch{return normalizeLearnProgress(null, lessons.map(item=>item.id), temas.map(item=>item.id));}
 }
@@ -129,7 +129,7 @@ function saveLearnProgress(){
   learnProgress.current=selectedLesson;
   learnProgress.screen=lessonScreenStep;
   learnProgress.theme=selectedTheme;
-  try{localStorage.setItem("traza:v2:learn",JSON.stringify(learnProgress));}catch{}
+  try{localStorage.setItem("senapsis:v2:learn",JSON.stringify(learnProgress));}catch{}
 }
 function completeLesson(){
   const wasCompleted=learnProgress.completed.includes(selectedLesson);
@@ -211,14 +211,14 @@ function completedExerciseKeys(){
 }
 function readExerciseProgress(){
   try{
-    const value=JSON.parse(localStorage.getItem("traza:v1:exercise-progress")||"{}");
+    const value=JSON.parse(localStorage.getItem("senapsis:v1:exercise-progress")||"{}");
     if(Array.isArray(value))return {viewed:new Set(),resolved:new Set(value.filter(item=>typeof item==="string"))};
     return {viewed:new Set(Array.isArray(value.viewed)?value.viewed.filter(item=>typeof item==="string"):[]),resolved:new Set(Array.isArray(value.resolved)?value.resolved.filter(item=>typeof item==="string"):[])};
   }catch{return {viewed:new Set(),resolved:new Set()};}
 }
 function markExerciseViewed(themeId,id){
   const progress=readExerciseProgress();progress.viewed.add(themeId+":"+id);
-  try{localStorage.setItem("traza:v1:exercise-progress",JSON.stringify({viewed:[...progress.viewed],resolved:[...progress.resolved]}));}catch{}
+  try{localStorage.setItem("senapsis:v1:exercise-progress",JSON.stringify({viewed:[...progress.viewed],resolved:[...progress.resolved]}));}catch{}
 }
 function exerciseStatus(themeId,id){
   const key=themeId+":"+id,progress=readExerciseProgress();
@@ -838,18 +838,18 @@ function confirmExerciseInSimulator(){
   if(selectedMathExercise){
     simulatorRouteExerciseId="matematicas:"+selectedMathExercise.id;
     document.querySelector('#primary-nav [data-space="simulator"]')?.click();
-    document.dispatchEvent(new CustomEvent("traza:open-math-player",{detail:{exerciseId:selectedMathExercise.id,exercise:selectedMathExercise}}));
+    document.dispatchEvent(new CustomEvent("senapsis:open-math-player",{detail:{exerciseId:selectedMathExercise.id,exercise:selectedMathExercise}}));
     return;
   }
   const item=selectedExercise;if(!item)return;
   simulatorRouteExerciseId="flujo:"+item.id;
   selectedMethod=0;
-  document.dispatchEvent(new CustomEvent("traza:request-simulation",{detail:{exerciseId:item.id,methodIndex:0}}));
+  document.dispatchEvent(new CustomEvent("senapsis:request-simulation",{detail:{exerciseId:item.id,methodIndex:0}}));
   document.querySelector('#primary-nav [data-space="simulator"]')?.click();
 }
 function openSourceSimulator(scenarioId="tienda-marta"){
   if(selectedSourceExercise)simulatorRouteExerciseId="fuentes:"+selectedSourceExercise.id;
-  document.dispatchEvent(new CustomEvent("traza:open-source-simulator",{detail:{scenarioId}}));
+  document.dispatchEvent(new CustomEvent("senapsis:open-source-simulator",{detail:{scenarioId}}));
   document.querySelector('#primary-nav [data-space="simulator"]')?.click();
 }
 function selectExercise(id){
@@ -931,8 +931,8 @@ function bindContentEvents(){
     if(card){const topic=temaPorId(card.dataset.topicOpen);if(topic?.estado==="disponible")openTheme(topic.id);}
   });
   $("#learn-competence-filters")?.addEventListener("click",event=>{const card=event.target.closest("[data-learn-competence]");if(!card)return;selectedCompetence=card.dataset.learnCompetence;selectedTheme=null;selectedExerciseTheme=null;saveLearnProgress();renderLearnCatalog();renderExerciseThemeCatalog();syncLearnRoute("learn");});
-  document.addEventListener("traza:abrir-leccion",event=>{const id=event.detail?.id;if(typeof id==="string")navigateToLesson(id);});
-  document.addEventListener("traza:space-change",event=>{
+  document.addEventListener("senapsis:abrir-leccion",event=>{const id=event.detail?.id;if(typeof id==="string")navigateToLesson(id);});
+  document.addEventListener("senapsis:space-change",event=>{
     const space=event.detail?.space;
     if(space!=="learn")lessonWorkspace?.closeList();
     if(space!=="exercises")exerciseWorkspace?.closeList();
@@ -1038,7 +1038,7 @@ function bindContentEvents(){
     const card=event.target.closest("[data-select-exercise]");if(card)selectExercise(card.dataset.selectExercise);
   });
   $("#exercise-detail")?.addEventListener("click",event=>{
-    const resolved=event.target.closest("[data-exercise-resolved]");if(resolved&&selectedExercise){const progress=readExerciseProgress(),key=selectedExerciseTheme+":"+selectedExercise.id;progress.resolved.has(key)?progress.resolved.delete(key):progress.resolved.add(key);try{localStorage.setItem("traza:v1:exercise-progress",JSON.stringify({viewed:[...progress.viewed],resolved:[...progress.resolved]}));}catch{}const isResolved=progress.resolved.has(key);resolved.setAttribute("aria-pressed",String(isResolved));resolved.textContent=isResolved?"✓ Resuelto · Marcar como pendiente":"Marcar como resuelto";renderExerciseCards();renderExerciseThemeCatalog();return;}
+    const resolved=event.target.closest("[data-exercise-resolved]");if(resolved&&selectedExercise){const progress=readExerciseProgress(),key=selectedExerciseTheme+":"+selectedExercise.id;progress.resolved.has(key)?progress.resolved.delete(key):progress.resolved.add(key);try{localStorage.setItem("senapsis:v1:exercise-progress",JSON.stringify({viewed:[...progress.viewed],resolved:[...progress.resolved]}));}catch{}const isResolved=progress.resolved.has(key);resolved.setAttribute("aria-pressed",String(isResolved));resolved.textContent=isResolved?"✓ Resuelto · Marcar como pendiente":"Marcar como resuelto";renderExerciseCards();renderExerciseThemeCatalog();return;}
     const sourceAnswer=event.target.closest("[data-source-exercise-answer]");if(sourceAnswer&&selectedSourceExercise){sourceExerciseAnswers.set(selectedSourceExercise.id,Number(sourceAnswer.dataset.sourceExerciseAnswer));renderExerciseDetail();return;}
     const sourceNeighbor=event.target.closest("[data-source-exercise-neighbor]");if(sourceNeighbor&&selectedSourceExercise){selectSourceExercise(sourceExercises[sourceExercises.indexOf(selectedSourceExercise)+Number(sourceNeighbor.dataset.sourceExerciseNeighbor)]?.id);return;}
     const sourceSimulator=event.target.closest("[data-start-source-simulator]");if(sourceSimulator){openSourceSimulator(sourceSimulator.dataset.startSourceSimulator);return;}
@@ -1109,13 +1109,13 @@ export function restoreLearnSimulatorRoute(){
   const route=readLearnRoute(window.location.search);
   if(route?.view!=="simulador"||!route.exerciseId)return;
   const [bank,id]=route.exerciseId.split(":");
-  if(bank==="flujo"&&/^\d+$/.test(id))document.dispatchEvent(new CustomEvent("traza:request-simulation",{detail:{exerciseId:Number(id),methodIndex:0}}));
+  if(bank==="flujo"&&/^\d+$/.test(id))document.dispatchEvent(new CustomEvent("senapsis:request-simulation",{detail:{exerciseId:Number(id),methodIndex:0}}));
   else if(bank==="matematicas"){
     const exercise=mathCatalogItems().find(item=>String(item.id)===id);
-    if(exercise)document.dispatchEvent(new CustomEvent("traza:open-math-player",{detail:{exerciseId:exercise.id,exercise}}));
+    if(exercise)document.dispatchEvent(new CustomEvent("senapsis:open-math-player",{detail:{exerciseId:exercise.id,exercise}}));
   }else if(bank==="fuentes"){
     const exercise=sourceExercises.find(item=>item.id===id);
-    if(exercise)document.dispatchEvent(new CustomEvent("traza:open-source-simulator",{detail:{scenarioId:exercise.scenario}}));
+    if(exercise)document.dispatchEvent(new CustomEvent("senapsis:open-source-simulator",{detail:{scenarioId:exercise.scenario}}));
   }
 }
 

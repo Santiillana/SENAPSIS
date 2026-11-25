@@ -32,7 +32,7 @@ test("Actividades permite consultar, filtrar y registrar seguimiento personal", 
   await expect(page.locator("#ficha-activity-detail .ficha-state")).toContainText("Por corregir");
   await expect(page.locator("#activity-result-form button[type=submit]")).toBeDisabled();
 
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("traza:v4:ficha")));
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("senapsis:v4:ficha")));
   expect(saved.actividades["actividad-comparaciones"].intentos).toHaveLength(1);
   expect(saved.actividades["actividad-comparaciones"].notas).toBe("Revisar los ejemplos antes de enviar.");
 });
@@ -68,9 +68,9 @@ test("Actividades se adapta a móvil y no sobrescribe almacenamiento dañado", a
     expect(overflow, "desbordamiento de Actividades en " + width).toBeLessThanOrEqual(1);
   }
   await page.goto("/");
-  await page.evaluate(() => localStorage.setItem("traza:v4:ficha", "{dañado"));
+  await page.evaluate(() => localStorage.setItem("senapsis:v4:ficha", "{dañado"));
   await page.reload();
   await goToSpace(page, "actividades");
   await expect(page.locator("#ficha-activity-detail .ficha-storage-error")).toBeVisible();
-  expect(await page.evaluate(() => localStorage.getItem("traza:v4:ficha"))).toBe("{dañado");
+  expect(await page.evaluate(() => localStorage.getItem("senapsis:v4:ficha"))).toBe("{dañado");
 });

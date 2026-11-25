@@ -91,7 +91,7 @@ export function initClases() {
   let suprimirClic = false;
   root.addEventListener("click", event => {
     const doc = event.target.closest("[data-library-highlight]");
-    if (doc) document.dispatchEvent(new CustomEvent("traza:documento-resaltar", { detail: { id: doc.dataset.libraryHighlight } }));
+    if (doc) document.dispatchEvent(new CustomEvent("senapsis:documento-resaltar", { detail: { id: doc.dataset.libraryHighlight } }));
     if (suprimirClic) { suprimirClic = false; event.preventDefault(); return; }
     const view = event.target.closest("[data-class-view]"); if (view) { vista = view.dataset.classView; renderClases(); return; }
     if (event.target.closest("[data-class-today]")) { cambiarFecha(hoy()); return; }
@@ -99,7 +99,7 @@ export function initClases() {
     const month = event.target.closest("[data-class-month]"); if (month) { const d = new Date(fechaSeleccionada); d.setMonth(d.getMonth() + Number(month.dataset.classMonth)); cambiarFecha(d); return; }
     const day = event.target.closest("[data-class-date]"); if (day) cambiarFecha(new Date(day.dataset.classDate + "T12:00:00"), 1, vista === "diaria");
   });
-  document.addEventListener("traza:clase-seleccionada", event => {
+  document.addEventListener("senapsis:clase-seleccionada", event => {
     if (!event.detail?.fecha) return;
     vista = "diaria";
     cambiarFecha(new Date(event.detail.fecha + "T12:00:00"));

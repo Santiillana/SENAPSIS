@@ -20,7 +20,7 @@ export function actualizarFiltro(campo, valor, emitir = true) {
   }
   activos = { ...activos, [campo]: valor };
   if (emitir && typeof document !== "undefined") {
-    document.dispatchEvent(new CustomEvent("traza:filtros-ficha-cambiados"));
+    document.dispatchEvent(new CustomEvent("senapsis:filtros-ficha-cambiados"));
   }
   return obtenerFiltros();
 }
@@ -28,7 +28,7 @@ export function actualizarFiltro(campo, valor, emitir = true) {
 export function limpiarFiltros(emitir = true) {
   activos = { ...INICIALES };
   if (emitir && typeof document !== "undefined") {
-    document.dispatchEvent(new CustomEvent("traza:filtros-ficha-cambiados"));
+    document.dispatchEvent(new CustomEvent("senapsis:filtros-ficha-cambiados"));
   }
   return obtenerFiltros();
 }

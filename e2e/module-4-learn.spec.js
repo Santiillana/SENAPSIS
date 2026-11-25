@@ -123,7 +123,7 @@ test("la escena avanza con controles y muestra su secuencia estática",async({pa
 });
 
 test("el movimiento reducido abre la secuencia estática y evita reproducir",async({page})=>{
-  await page.addInitScript(()=>localStorage.setItem("traza:v2:motion","reduced"));
+  await page.addInitScript(()=>localStorage.setItem("senapsis:v2:motion","reduced"));
   await page.goto("/");
   await openDiagramLessons(page);
   await page.locator('#lesson-catalog [data-lesson-id="while"]').click();

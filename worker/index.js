@@ -10,7 +10,7 @@ const json=(body,status=200,headers={})=>new Response(JSON.stringify(body),{
 function corsHeaders(request,env){
   const origin=request.headers.get("Origin");
   if(!origin||origin!==env.ALLOWED_ORIGIN)return null;
-  return {"access-control-allow-origin":origin,"access-control-allow-methods":"GET, POST, PUT, DELETE, OPTIONS","access-control-allow-headers":"Content-Type, If-Match, If-None-Match, Cf-Access-Jwt-Assertion, X-Traza-Action","access-control-expose-headers":"ETag","vary":"Origin"};
+  return {"access-control-allow-origin":origin,"access-control-allow-methods":"GET, POST, PUT, DELETE, OPTIONS","access-control-allow-headers":"Content-Type, If-Match, If-None-Match, Cf-Access-Jwt-Assertion, X-Senapsis-Action","access-control-expose-headers":"ETag","vary":"Origin"};
 }
 function withHeaders(response,headers){
   if(!Object.keys(headers).length)return response;

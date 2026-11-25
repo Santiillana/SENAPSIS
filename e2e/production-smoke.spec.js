@@ -9,7 +9,7 @@ test("humo de producción: Factorial, Mayor de 10 números, Concentración y Pre
   page.on("pageerror",error=>consoleErrors.push(error.message));
   await page.setViewportSize({width:1920,height:1080});
   await page.goto("/");
-  await expect(page.locator('meta[name="traza-release"]')).toHaveAttribute("content",/^simulador-v3-/);
+  await expect(page.locator('meta[name="senapsis-release"]')).toHaveAttribute("content",/^senapsis-v1-/);
   await goToSpace(page, "simulator");
   await page.locator("#simulator-controls-toggle").click();
   await expect(page.locator("#flow-svg")).toBeVisible();

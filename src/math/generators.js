@@ -5,7 +5,7 @@ function randomSource(seed){let state=hashSeed(seed)||1;return ()=>{state^=state
 const integer=(random,min=2,max=12)=>Math.floor(random()*(max-min+1))+min;
 const signed=(random,min=2,max=12)=>integer(random,min,max)*(random()<.5?-1:1);
 
-export function generateMathExercise(topic,difficulty=1,seed="traza"){
+export function generateMathExercise(topic,difficulty=1,seed="senapsis"){
   if(!["enteros","racionales","regla-de-tres"].includes(topic))throw new RangeError("Tema matemático desconocido.");
   if(!Number.isInteger(difficulty)||difficulty<1||difficulty>4)throw new RangeError("La dificultad debe estar entre 1 y 4.");
   const random=randomSource(`${topic}:${difficulty}:${seed}`),id=`GEN-${topic.toUpperCase()}-${difficulty}-${hashSeed(seed).toString(16)}`;

@@ -126,7 +126,7 @@ export const sourceLessonGlossary=Object.freeze([
   ["Encuesta","Conjunto de preguntas comparables para recoger respuestas de varias personas."],
   ["Observación","Registro sistemático de acciones y situaciones mientras ocurren."],
   ["Taller","Actividad colaborativa para proponer, agrupar y acordar ideas o requisitos."],
-  ["Trazabilidad","Relación entre un requisito y la evidencia, fuente y decisión que lo justifican."],
+  ["Senapsisbilidad","Relación entre un requisito y la evidencia, fuente y decisión que lo justifican."],
   ["Triangulación","Contraste de información obtenida de varias fuentes o técnicas para revisar coincidencias y diferencias."]
 ]);
 

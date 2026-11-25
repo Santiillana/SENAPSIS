@@ -21,11 +21,11 @@
   --fig-terminal:#879A91;--fig-input:#527CA8;--fig-process:#638E83;--fig-output:#588B89;
   --fig-decision:#D69A00;--fig-loop:#B77B36;--dur-fast:150ms;--dur:250ms;--dur-slow:400ms;
   --focus-ring:0 0 0 3px rgba(255,196,0,.28);
-  --traza-observatory:#F6F2E7;--traza-glass:#FFFDF7;--traza-text:#1B2A3A;
-  --traza-muted:#53687A;--traza-blue:#356FC2;--traza-violet:#B08A4D;--traza-cyan:#527CA8;
-  --traza-green:#1F9A67;--traza-pink:#D94761;--traza-amber:#FFC400;--traza-glow:#FFC400;
-  --traza-stage-grid:rgba(76,103,127,.12);--traza-stage-grid-major:rgba(76,103,127,.17);
-  --traza-shadow:0 8px 22px rgba(27,42,58,.10);
+  --senapsis-observatory:#F6F2E7;--senapsis-glass:#FFFDF7;--senapsis-text:#1B2A3A;
+  --senapsis-muted:#53687A;--senapsis-blue:#356FC2;--senapsis-violet:#B08A4D;--senapsis-cyan:#527CA8;
+  --senapsis-green:#1F9A67;--senapsis-pink:#D94761;--senapsis-amber:#FFC400;--senapsis-glow:#FFC400;
+  --senapsis-stage-grid:rgba(76,103,127,.12);--senapsis-stage-grid-major:rgba(76,103,127,.17);
+  --senapsis-shadow:0 8px 22px rgba(27,42,58,.10);
   --learn-level-basic:#167653;--learn-level-basic-fill:#E5F5ED;
   --learn-level-intermediate:#3159BD;--learn-level-intermediate-fill:#EAF0FF;
   --learn-level-advanced:#9A3B7E;--learn-level-advanced-fill:#FBEAF5;
@@ -54,11 +54,11 @@
   --grid-line:rgba(154,186,215,.065);--shadow-sm:0 1px 3px rgba(0,0,0,.18);
   --shadow-md:0 6px 18px rgba(0,0,0,.22);--shadow-lg:0 14px 32px rgba(0,0,0,.28);
   --focus-ring:0 0 0 3px rgba(255,196,0,.32);
-  --traza-observatory:#0F1A24;--traza-glass:#162431;--traza-text:#EDF2F7;
-  --traza-muted:#B0BFCC;--traza-blue:#7AA8FF;--traza-violet:#B08A4D;--traza-cyan:#7AA8FF;
-  --traza-green:#3CCF8E;--traza-pink:#FF6B85;--traza-amber:#FFC400;--traza-glow:#FFC400;
-  --traza-stage-grid:rgba(154,186,215,.10);--traza-stage-grid-major:rgba(154,186,215,.16);
-  --traza-shadow:0 10px 28px rgba(0,0,0,.30);
+  --senapsis-observatory:#0F1A24;--senapsis-glass:#162431;--senapsis-text:#EDF2F7;
+  --senapsis-muted:#B0BFCC;--senapsis-blue:#7AA8FF;--senapsis-violet:#B08A4D;--senapsis-cyan:#7AA8FF;
+  --senapsis-green:#3CCF8E;--senapsis-pink:#FF6B85;--senapsis-amber:#FFC400;--senapsis-glow:#FFC400;
+  --senapsis-stage-grid:rgba(154,186,215,.10);--senapsis-stage-grid-major:rgba(154,186,215,.16);
+  --senapsis-shadow:0 10px 28px rgba(0,0,0,.30);
   --learn-level-basic:#3FBF8A;--learn-level-basic-fill:#173D31;
   --learn-level-intermediate:#8AB4FF;--learn-level-intermediate-fill:#1D3047;
   --learn-level-advanced:#F06BB0;--learn-level-advanced-fill:#482832;
@@ -89,7 +89,7 @@ button,a{-webkit-tap-highlight-color:transparent}
 a{color:inherit}
 ::selection{color:var(--ink);background:rgba(240,189,75,.3)}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-:root[data-theme="dark"] .simulator-view{background:var(--traza-observatory)}
+:root[data-theme="dark"] .simulator-view{background:var(--senapsis-observatory)}
 
 /* Compatibilidad semántica con los módulos SVG y los estilos anteriores */
 :root{
@@ -150,7 +150,7 @@ a{color:inherit}
 }
 
 /*
- * Aprende conserva la paleta real que ya utiliza Traza.
+ * Aprende conserva la paleta real que ya utiliza Senapsis.
  * La cuadrícula, la tipografía y los tokens del Simulador no se redefinen aquí.
  */
 :root[data-section="aprende"][data-theme="dark"]{
@@ -533,9 +533,9 @@ body{background-size:24px 24px}
   --fig-terminal:var(--c-green);--fig-input:var(--c-blue);--fig-process:var(--c-violet);
   --fig-output:var(--c-pink);--fig-decision:var(--c-mustard);--fig-loop:var(--c-orange);
   --fig-variable:var(--c-teal);--fig-counter:var(--c-lime);
-  --traza-blue:var(--c-blue);--traza-violet:var(--c-violet);--traza-green:var(--c-green);
-  --traza-pink:var(--c-pink);--traza-amber:var(--c-mustard);--traza-observatory:var(--simulator-paper);
-  --traza-glass:var(--surface-card);--traza-stage-grid:color-mix(in srgb,var(--simulator-grid) 62%,transparent);--traza-stage-grid-major:color-mix(in srgb,var(--simulator-grid) 88%,transparent);
+  --senapsis-blue:var(--c-blue);--senapsis-violet:var(--c-violet);--senapsis-green:var(--c-green);
+  --senapsis-pink:var(--c-pink);--senapsis-amber:var(--c-mustard);--senapsis-observatory:var(--simulator-paper);
+  --senapsis-glass:var(--surface-card);--senapsis-stage-grid:color-mix(in srgb,var(--simulator-grid) 62%,transparent);--senapsis-stage-grid-major:color-mix(in srgb,var(--simulator-grid) 88%,transparent);
   --track:var(--surface-card);
 }
 :root[data-section="aprende"][data-theme="dark"]{
@@ -564,9 +564,9 @@ body{background-size:24px 24px}
   --fig-terminal:var(--c-green);--fig-input:var(--c-blue);--fig-process:var(--c-violet);
   --fig-output:var(--c-pink);--fig-decision:var(--c-mustard);--fig-loop:var(--c-orange);
   --fig-variable:var(--c-teal);--fig-counter:var(--c-lime);
-  --traza-blue:var(--c-blue);--traza-violet:var(--c-violet);--traza-green:var(--c-green);
-  --traza-pink:var(--c-pink);--traza-amber:var(--c-mustard);--traza-observatory:var(--simulator-paper);
-  --traza-glass:var(--surface-card);--traza-stage-grid:color-mix(in srgb,var(--simulator-grid) 62%,transparent);--traza-stage-grid-major:color-mix(in srgb,var(--simulator-grid) 88%,transparent);
+  --senapsis-blue:var(--c-blue);--senapsis-violet:var(--c-violet);--senapsis-green:var(--c-green);
+  --senapsis-pink:var(--c-pink);--senapsis-amber:var(--c-mustard);--senapsis-observatory:var(--simulator-paper);
+  --senapsis-glass:var(--surface-card);--senapsis-stage-grid:color-mix(in srgb,var(--simulator-grid) 62%,transparent);--senapsis-stage-grid-major:color-mix(in srgb,var(--simulator-grid) 88%,transparent);
   --track:var(--surface-page);
 }
 :root[data-section="aprende"]{--section-accent:var(--c-green)}

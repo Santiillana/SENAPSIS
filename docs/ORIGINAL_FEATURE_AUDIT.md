@@ -6,7 +6,7 @@ Esta tabla diferencia una función migrada y probada, una sustitución intencion
 
 ## Matriz de equivalencia
 
-| Capacidad original | Evidencia de prototipo | Equivalencia en Traza | Estado |
+| Capacidad original | Evidencia de prototipo | Equivalencia en Senapsis | Estado |
 |---|---|---|---|
 | Selector numerado de 40 ejercicios | `#ch` | Catálogo filtrable de 40 fichas 20/10/10 | Migrada |
 | Puerta de reto antes de revelar | `#gt`, `#rv` | Modo reto en ficha: análisis, proceso, pistas y revelado voluntario | Migrada |
@@ -72,7 +72,7 @@ El original tenía paneles/actividades que se podían alternar. En móvil el nue
 Solo una prueba funcional puede convertir una fila de “parcial” a “migrada”. Una equivalencia de interfaz puede ser intencionalmente distinta, pero debe conservar la acción educativa, declarar su cambio visual y mantener los datos del mismo motor.
 
 
-## Actualización de equivalencia para la versión integrada en Traza (16-11-2026)
+## Actualización de equivalencia para la versión integrada en Senapsis (16-11-2026)
 
 La interfaz actual de la rama `main` amplía la navegación y el catálogo respecto de la línea base de este documento:
 - Inicio enlaza Mi ficha y Aprende.
