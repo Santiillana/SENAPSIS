@@ -1,13 +1,14 @@
-# ESTADO · Traza · 19 de noviembre de 2026
+# ESTADO · Senapsis · 25 de noviembre de 2026
+
+Instantánea de la rama `mejoras-desarrollo` en `30271c1` (`Últimos cambios de mejoras`). Los informes por fase conservan sus resultados y fechas originales; no representan una ejecución nueva de pruebas.
 ## Avance
 
-| Fase | Estado | Último commit |
-| --- | --- | --- |
-| 0–4 | completas | commits previos de la rama |
-| 5 | completa, pasos 1–7 | `007d18d` (paso 7) |
-| 6 | excluida temporalmente; no implementar multi-ficha | — |
-| 7 | implementación steps 1–6 completa; configuración de cuenta pendiente | `5f0fd6e` (paso 6) |
-| 8 | implementación y validación focalizada completas; suite global conserva fallos en otras áreas | `e572461` (step 5) |
+| Fase | Estado |
+| --- | --- |
+| 0–5 | completas según el historial del proyecto |
+| 6 | excluida; no implementar multi-ficha |
+| 7 | código y configuración local completos; configuración de cuenta y despliegue pendientes |
+| 8 | implementación completa; consultar la validación registrada más abajo |
 
 ## Arquitectura y decisiones
 
@@ -20,11 +21,11 @@
 - Fase 7 implementa Worker, D1 singleton, Access JWT, lectura con caché y respaldo offline, escritura versionada con auditoría y `/administrar.html`; incluye gestión, vista previa real, historial y respaldo JSON validado. Guía Cloudflare en `docs/CONFIGURAR_CLOUDFLARE.md`. Multi-ficha y sincronización de estado personal quedan fuera.
 - El panel incluye registro diario y, al completar step 5, gestión de competencias, horarios, instructores, comunicados y metadatos; contactos públicos requieren consentimiento y los borrados son lógicos.
 - No desplegar ni cambiar la cuenta de Cloudflare. Pasos preparados en `docs/CONFIGURAR_CLOUDFLARE.md`; el usuario crea D1, configura Access/rutas y aprueba.
-- Cambios ajenos ya presentes en el árbol: README, mapa, progreso, simulador, prueba de contrato de teclado y archivos de `mejoras imp/`. Mantenerlos fuera de commits salvo necesidad clara y origen identificable.
+- La rama incorpora el rediseño de Aprende documentado en `mejoras imp/` y en `docs/SIMULATOR_VISUAL_REFINEMENT.md`.
 
-## Próximos pasos
+## Pendientes externos y validación registrada
 - Fase 7: configuración de D1 y Access en la cuenta del usuario; despliegue solo con aprobación expresa.
-- Fase 8: cierre funcional verificado. La última suite global registrada quedó en 159/170 antes de corregir el recorrido móvil de Fuentes; 10 E2E restantes fallaron en suites de otras áreas. La suite focalizada posterior de Fuentes, Matemáticas y entrada al Simulador pasó 10/10; `npm test` pasó 379/379.
+- Validación histórica del cierre de Fase 8: la suite global registrada quedó en 159/170 antes de corregir el recorrido móvil de Fuentes; después se registró la suite focalizada de Fuentes, Matemáticas y entrada al Simulador en 10/10 y `npm test` en 379/379. Los fallos globales descritos pertenecen a esa corrida y deben revalidarse antes de tomar decisiones sobre el estado actual.
 
 ## Validación reciente
 

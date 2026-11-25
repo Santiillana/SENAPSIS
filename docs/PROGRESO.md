@@ -1,16 +1,20 @@
 # Progreso del plan maestro
 
-Actualizado: 17 de noviembre de 2026
+Actualizado: 25 de noviembre de 2026
+
+## Estado actual
+
+Las fases 0–5 están completas; la fase 6 (multi-ficha) está excluida; la fase 7 está implementada y espera configuración externa de Cloudflare; y la fase 8 está implementada. La instantánea de alcance y los pendientes vigentes están en [`docs/ESTADO.md`](ESTADO.md). Los apartados siguientes conservan el registro histórico del trabajo por fases y no son una lista de trabajo pendiente.
 
 ## Auditoría inicial
 
-El plan de `docs/PLAN_MAESTRO.md` coincide byte por byte con `/home/santiago/Descargas/Traza plan maestro de mejoras para Codex.md`. Se auditaron los commits posteriores a `feat(step-20): add source lab and project contract` y el estado actual del código.
+El plan de ejecución está documentado en `docs/PLAN_MAESTRO.md`. Se auditaron los commits posteriores a `feat(step-20): add source lab and project contract` y el estado del código en ese momento.
 
 | Área | Estado | Evidencia inicial y trabajo restante |
 | --- | --- | --- |
 | Steps 1–20 | Implementados en commits separados | `git log` contiene `feat(step-1)` a `feat(step-20)`. Verificar criterios a lo largo de las fases que los usan; no recrear capacidades existentes. |
 | Fase 0, pasos 1–7 | Completa | Cabecera sticky consistente (101 px), nueve rutas, subsección «Lecciones», modo Concentración opcional y helper E2E en cuatro tamaños/dos temas. Informe y 72 capturas en `docs/informes/fase-0/`. La matriz y la suite completa pasaron. |
-| Fases 1–8 | Pendientes de auditoría detallada | Se evaluarán en orden después de cerrar Fase 0, sin rehacer código existente. La referencia se copió a `docs/referencia-simulador/`. |
+| Fases 1–8 | Implementadas, con resultados registrados por fase | La tabla original de auditoría inicial se conserva en el historial; el estado vigente está en `docs/ESTADO.md`. |
 
 ## Fase 1 · Simulador de diagramas de flujo
 
