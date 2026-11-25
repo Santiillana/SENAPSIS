@@ -21,7 +21,7 @@ Instantánea de la rama `mejoras-desarrollo` en `30271c1` (`Últimos cambios de 
 - Fase 7 implementa Worker, D1 singleton, Access JWT, lectura con caché y respaldo offline, escritura versionada con auditoría y `/administrar.html`; incluye gestión, vista previa real, historial y respaldo JSON validado. Guía Cloudflare en `docs/CONFIGURAR_CLOUDFLARE.md`. Multi-ficha y sincronización de estado personal quedan fuera.
 - El panel incluye registro diario y, al completar step 5, gestión de competencias, horarios, instructores, comunicados y metadatos; contactos públicos requieren consentimiento y los borrados son lógicos.
 - No desplegar ni cambiar la cuenta de Cloudflare. Pasos preparados en `docs/CONFIGURAR_CLOUDFLARE.md`; el usuario crea D1, configura Access/rutas y aprueba.
-- La rama incorpora el rediseño de Aprende documentado en `mejoras imp/` y en `docs/SIMULATOR_VISUAL_REFINEMENT.md`.
+- La rama incorpora el rediseño de Aprende; su estado y decisiones se resumen en `docs/SIMULATOR_VISUAL_REFINEMENT.md`.
 
 ## Pendientes externos y validación registrada
 - Fase 7: configuración de D1 y Access en la cuenta del usuario; despliegue solo con aprobación expresa.
