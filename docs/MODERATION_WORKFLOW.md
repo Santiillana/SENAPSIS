@@ -1,105 +1,39 @@
-# Flujo de moderación · Mi ficha
+# Administración y publicación de Mi ficha
 
-## Estado actual y permisos
+Senapsis usa **Mi ficha** como espacio compartido para la información académica de una ficha de formación. Los aprendices consultan allí sus clases, actividades y recursos. Las personas autorizadas actualizan los datos comunes desde la administración.
 
-Traza se sirve como aplicación estática. Actualmente no existe una cuenta de moderador, inicio de sesión, panel administrativo, API de escritura ni almacenamiento compartido administrado por Traza. No se debe publicar una pantalla de carga como si esas capacidades existieran.
+## Acceso y alcance
 
-El moderador actualiza el contenido oficial mediante cambios versionados en el repositorio. Los cambios pasan por Pull Request, pruebas y revisión antes de llegar a `main`.
+- La consulta de la ficha es pública. La aplicación recupera la última versión publicada desde el Worker y conserva una copia local para consultar la información si no hay conexión.
+- La administración está en `/administrar.html`. El Worker valida el JWT de Cloudflare Access y limita el acceso a los correos configurados en `ACCESS_ALLOWED_EMAILS`.
+- El acceso autorizado administra la ficha completa; todavía no hay cuentas individuales para aprendices ni permisos limitados por instructor.
+- Esta instalación administra una ficha. La configuración multi-ficha está excluida.
+- `src/content/ficha.js` aporta los datos iniciales y de demostración. Los datos actuales están marcados como demostración y deben confirmarse antes de presentarlos como información oficial.
 
-## 1. Actualizar el horario
+## Qué puede actualizarse
 
-Archivo: `src/content/ficha.js`, propiedad `FICHA.horario`.
+En el panel de administración se puede:
 
-Cada bloque contiene identificador, día (1=lunes a 6=sábado), hora inicial/final en formato 24 h, competencia, instructor y vigencia opcional.
+- Registrar una clase o indicar que no hubo clase; agregar los temas vistos, enlaces compartidos y una evidencia con su fecha límite.
+- Gestionar competencias, horarios, instructores, comunicados y metadatos de la ficha.
+- Guardar borradores, revisar la ficha como aprendiz, consultar el historial, deshacer la última publicación y exportar o importar un respaldo JSON.
 
-Para cambiar un bloque desde una fecha:
-1. Conserva el bloque anterior y fija `vigenteHasta` al día anterior al cambio.
-2. Añade el nuevo bloque con un identificador único y `vigenteDesde` igual a la fecha efectiva.
-3. Mantén los nombres de materias e instructores como datos confirmados; usa «por confirmar» cuando falte información.
-4. Comprueba Hoy, Semana y Calendario tanto antes como después de la fecha de cambio.
+Los cambios guardados como borrador no se muestran a los aprendices. Al publicar, el Worker guarda una nueva versión compartida en D1. La aplicación de consulta detecta la versión nueva y actualiza su copia local.
 
-Las fechas de vigencia son fechas civiles inclusivas con formato `YYYY-MM-DD`. La interpretación del horario de lunes a viernes y sábado se documenta en `OFFICIAL_CLASS_SCHEDULE.md`.
+Los documentos se registran como enlaces HTTPS; el panel no carga archivos binarios. Los archivos deben estar alojados en un servicio autorizado y accesible para la ficha.
 
-## 2. Publicar o actualizar una actividad
+## Seguimiento personal del aprendiz
 
-Archivo: `src/content/ficha.js`, propiedad `FICHA.actividades`.
+Los datos compartidos de horario, clases, actividades y recursos provienen de la ficha publicada. En cambio, el checklist, las notas, las devoluciones transcritas y el progreso de Lecciones se guardan en el navegador de cada aprendiz; no se sincronizan entre dispositivos.
 
-Cada actividad oficial debe tener:
-- `id` único y estable.
-- `competenciaId` existente.
-- Título y descripción claros.
-- Propósito, instrucciones y entregables.
-- Fechas de apertura y límite confirmadas (o `null` si no hay fecha).
-- Fuente y fecha de actualización.
-- Identificadores existentes en `leccionIds` y `ejercicioIds`.
-- `documentoIds` si se utiliza un inventario documental adicional.
+## Preparar la administración
 
-La vista de Actividades solo presenta el catálogo oficial como contenido de consulta. El checklist, las notas y las devoluciones transcritas se guardan en el navegador de cada estudiante y no modifican el catálogo.
+La infraestructura está implementada en `worker/`, las migraciones están en `migrations/` y la configuración inicial está en `wrangler.jsonc`. Para conectar la cuenta, proteger `/administrar.html` y `/api/v1/admin/*`, aplicar D1 y desplegar, sigue [`CONFIGURAR_CLOUDFLARE.md`](CONFIGURAR_CLOUDFLARE.md). No se debe anunciar la administración como disponible en un sitio hasta configurar y verificar esa infraestructura.
 
-Cuando se sustituyan todos los ejemplos por información institucional confirmada, actualiza `FICHA.meta.esDemostracion` a `false` y corrige `meta.fuente`, `meta.actualizado` y la versión.
+## Antes de publicar información oficial
 
-## 3. Publicar documentos en una sección
-
-Archivo: `src/content/ficha.js`, propiedad `FICHA.documentos`.
-
-Antes de registrar metadata, el moderador debe cargar el archivo binario en un servicio de almacenamiento compartido autorizado y obtener una URL HTTPS estable. No se deben guardar binarios ni enlaces temporales en `localStorage`.
-
-Contrato de metadata:
-- `id`, `titulo`, `descripcion`, `nombreArchivo`.
-- `mimeType` y `tamanoBytes`.
-- `url` HTTPS sin credenciales o ruta local segura.
-- `secciones`: una o más de `clases`, `actividades`, `biblioteca`.
-- `claseId` cuando se asocia a una clase.
-- `actividadId` cuando se asocia a una actividad.
-- `estadoPublicacion`: `borrador` o `publicado`.
-- `publicadoEn`, `actualizado` y `fuente`.
-
-Ejemplo conceptual de documento publicado:
-```js
-{
-  id: "guia-actividad-diagrama",
-  titulo: "Guía de la actividad",
-  descripcion: "Instrucciones y criterios de entrega",
-  nombreArchivo: "guia-actividad.pdf",
-  mimeType: "application/pdf",
-  tamanoBytes: 245760,
-  url: "https://archivos.ejemplo.edu/guia-actividad.pdf",
-  secciones: ["actividades", "biblioteca"],
-  actividadId: "actividad-diagrama",
-  estadoPublicacion: "publicado",
-  publicadoEn: "2026-11-18",
-  actualizado: "2026-11-18",
-  fuente: "Instructor responsable"
-}
-```
-
-Reglas:
-- Un documento en borrador no aparece a los estudiantes.
-- Un documento publicado necesita URL segura y fecha válida.
-- Un documento asociado a una actividad debe incluir la sección `actividades`.
-- Un documento asociado a una clase debe incluir la sección `clases`.
-- Los enlaces con protocolos distintos de HTTPS, credenciales incrustadas o rutas locales con traversal se rechazan.
-- `documentosPublicados` vuelve a validar metadata antes de devolver documentos a una vista.
-
-## 4. Revisión y publicación
-
-Antes de abrir una PR:
-1. Revisar que los identificadores sean únicos y que las relaciones apunten a actividades, clases, competencias, lecciones y ejercicios existentes.
-2. Validar cada documento con `validarDocumentoOficial`.
-3. Confirmar que solo los materiales aprobados estén en estado `publicado`.
-4. Ejecutar `npm test` y `npm run test:browser`.
-5. Revisar las vistas afectadas en escritorio y móvil.
-6. Abrir PR con resumen de cambios, fecha efectiva y fuente de la información.
-
-## 5. Qué falta para una carga directa desde Traza
-
-Para que un moderador pueda iniciar sesión, cargar archivos y publicarlos desde la propia aplicación se necesita un servicio adicional:
-- autenticación y sesiones;
-- roles y autorización comprobada en servidor;
-- almacenamiento de archivos con permisos y límites de tamaño/tipo;
-- API para borradores, publicación, retirada y versiones;
-- auditoría de quién cambió qué y cuándo;
-- validación de archivos en servidor y política de acceso;
-- almacenamiento compartido que entregue URLs estables.
-
-Hasta que esa infraestructura exista, el flujo versionado anterior es el único flujo de publicación real.
+1. Confirma los datos de la ficha, horarios, competencias e instructores con su fuente.
+2. Comprueba que las actividades y documentos correspondan a la ficha y que los enlaces sean HTTPS y estén autorizados.
+3. Revisa el borrador en la vista previa como aprendiz.
+4. Publica y verifica que la versión compartida se actualice.
+5. Cambia `meta.esDemostracion` a `false` solo cuando los datos de demostración hayan sido reemplazados y confirmados.

@@ -7,7 +7,11 @@ const read = path => readFile(new URL(path, import.meta.url));
 test("la marca SENAPSIS declara título, metadatos y favicon en la app y administración", async () => {
   const [app, admin, navigation] = await Promise.all([read("../index.html"), read("../administrar.html"), read("../src/ui/navigation.js")]);
   const appHtml = app.toString("utf8"), adminHtml = admin.toString("utf8");
-  assert.match(appHtml, /<title>SENAPSIS — plataforma de aprendizaje<\/title>/);
+  assert.match(appHtml, /<title>SENAPSIS — plataforma colaborativa para fichas de formación<\/title>/);
+  assert.match(appHtml, /name="description" content="SENAPSIS reúne la información de tu ficha de formación/);
+  assert.match(appHtml, /FICHA DE FORMACIÓN · ADSO/);
+  assert.match(appHtml, /<h1 id="home-title">La información de tu ficha, en un solo lugar\.<\/h1>/);
+  assert.match(appHtml, /Repasa las competencias de tu ficha con lecciones y ejercicios\./);
   assert.match(appHtml, /name="application-name" content="SENAPSIS"/);
   assert.match(appHtml, /property="og:site_name" content="SENAPSIS"/);
   assert.match(adminHtml, /<title>Administrar · SENAPSIS<\/title>/);

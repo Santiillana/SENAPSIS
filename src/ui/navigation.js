@@ -1,5 +1,5 @@
 const SPACE_META = {
-  home: { title: "Inicio", description: "Tu ficha y tu aprendizaje, en un solo lugar." },
+  home: { title: "Inicio", description: "La información compartida de tu ficha y recursos para repasar sus competencias." },
   hoy: { title: "Centro de control", description: "Tu agenda académica y lo que requiere tu atención." },
   clases: { title: "Clases", description: "Consulta tus clases por día, semana o mes." },
   actividades: { title: "Actividades", description: "Tus entregas, estados y retroalimentación." },

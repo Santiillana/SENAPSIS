@@ -1,10 +1,13 @@
 # Mapa del repositorio · Senapsis (código Traza)
 
-Conteos derivados de los catálogos actuales: **5 temas, 40 lecciones, 108 ejercicios y 4 actividades de Mi ficha**. Detalle: 17/45 en diagramas, 8/24 en fuentes y 15/39 en matemáticas. TICs y Comunicación permanecen como competencias próximas sin temas vacíos.
+Senapsis organiza la información compartida de una ficha para aprendices e instructores autorizados; **Mi ficha** es el espacio central y **Aprende** complementa la formación con material de repaso. Esta instalación administra una ficha. Conteos derivados de los catálogos actuales: **5 temas, 40 lecciones, 108 ejercicios y 4 actividades de Mi ficha**. Detalle: 17/45 en diagramas, 8/24 en fuentes y 15/39 en matemáticas. TICs y Comunicación permanecen como competencias próximas sin temas vacíos.
 
 | Ruta | Responsabilidad | Pruebas principales |
 |---|---|---|
 | `index.html` | Shell semántico, cabecera común y navegación de los ocho espacios | `architecture`, `shared-navigation-header`, E2E |
+| `administrar.html`, `src/admin.js` | Panel protegido para actualizar la ficha, revisar borradores, publicar y consultar historial | `admin-*`, `worker-api`, E2E |
+| `worker/`, `migrations/`, `wrangler.jsonc` | API de estado compartido, autenticación de administración con Access y persistencia D1 | `access`, `state-api`, `write-auth` |
+| `src/ficha/repository.js` | Recuperar la ficha publicada, anunciar cambios y conservar una copia para uso sin conexión | `ficha-sync`, `state-api`, E2E |
 | `src/assets/senapsis-symbol.png`, `senapsis-wordmark.png`, `senapsis-tagline.png` | Piezas recortadas de la marca Senapsis | Revisión visual |
 | `src/ui/brand-splash.js`, `src/styles/brand.css` | Bienvenida interactiva, composición animada y adaptación de identidad | Revisión visual |
 | `src/app.js` | Inicialización de vistas y módulos | `ui-modules`, E2E |

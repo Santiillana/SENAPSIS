@@ -1,6 +1,8 @@
-# Senapsis · plataforma de aprendizaje
+# Senapsis · plataforma colaborativa para una ficha de formación
 
-Senapsis conecta, comprende y transforma el aprendizaje. La plataforma educativa interactiva permite analizar problemas, construir algoritmos y comprender su ejecución mediante diagramas de flujo, pseudocódigo y seguimiento de variables. El nombre técnico del repositorio y sus contratos internos siguen siendo Traza.
+Senapsis reúne en un espacio compartido la información importante de una ficha de formación. Los aprendices pueden consultar sus clases, horarios, actividades y materiales; los instructores y moderadores autorizados pueden mantener actualizada la información de la ficha. **Aprende** complementa ese espacio con lecciones, ejercicios y simuladores para repasar las competencias que cursa el aprendiz. El nombre técnico del repositorio y sus contratos internos siguen siendo Traza.
+
+Esta versión administra una ficha compartida. La configuración para varias fichas y las cuentas individuales de aprendices están fuera del alcance actual. Los permisos de administración aún no se separan por instructor: las personas autorizadas pueden gestionar la ficha completa. El panel se protege con Cloudflare Access cuando se configura y despliega el Worker; las marcas personales de actividades y el progreso de Lecciones se guardan en el navegador de cada aprendiz.
 
 ## Contenido disponible
 
@@ -9,13 +11,13 @@ La aplicación reúne **5 temas activos y 40 lecciones**: 17 de diagramas de flu
 ## Espacios
 
 ### Inicio
-Acceso a Mi ficha y Aprende y continuidad del último espacio visitado. El progreso detallado de las 40 lecciones está en la vista Lecciones.
+Presenta la ficha como espacio central y da acceso a **Mi ficha** y a **Aprende**, que sirve de apoyo para repasar. Recuerda el último espacio visitado.
 
 ### Mi ficha
-Cuatro espacios para organizar el trabajo académico: **Centro de control, Clases, Actividades y Biblioteca**. Clases ofrece vistas diaria, semanal y mensual. Incluye cuatro actividades publicadas; el seguimiento personal se conserva en este navegador.
+Espacio compartido de la ficha para consultar **Centro de control, Clases, Actividades y Biblioteca**. Clases ofrece vistas diaria, semanal y mensual. Los aprendices encuentran aquí la agenda, lo visto en clase, las actividades y los recursos publicados. Las personas autorizadas actualizan la información compartida en `/administrar.html`; el checklist personal, las notas y las devoluciones se conservan en el navegador de cada aprendiz. Los datos actuales son de demostración y deben confirmarse antes de usarse como información oficial.
 
 ### Aprende
-Tres espacios: **Lecciones, Ejercicios y Simulador**. El selector principal conserva el nombre «Aprende».
+Complemento de estudio para repasar contenidos relacionados con las competencias de la ficha. Incluye **Lecciones, Ejercicios y Simulador**.
 
 - **Lecciones:** 40 lecciones por tema, con explicación intuitiva y técnica, escenas, ejemplos, errores frecuentes y comprobación. El progreso se conserva localmente.
 - **Ejercicios:** catálogo de 108 retos (45 algoritmos, 24 fuentes y 39 matemáticas), con búsqueda, filtros y ficha de solución.
@@ -71,6 +73,7 @@ La aplicación es estática. El workflow `.github/workflows/pages.yml` permite u
 - Auditoría de equivalencia original: `docs/ORIGINAL_FEATURE_AUDIT.md`
 - Aceptación y limitaciones: `docs/FINAL_ACCEPTANCE.md`
 - Plan y estado de las diez mejoras visuales y pedagógicas del Simulador: `docs/SIMULATOR_VISUAL_REFINEMENT.md`
+- Administración de la ficha, publicación y límites actuales: `docs/MODERATION_WORKFLOW.md`
 
 
 ## Mi ficha · Actividades

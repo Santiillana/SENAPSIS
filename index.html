@@ -2,10 +2,10 @@
 <html lang="es" data-section="home" data-theme="dark" data-motion="full">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="SENAPSIS conecta, comprende y transforma el aprendizaje de algoritmos, matemáticas y análisis de información.">
-  <meta name="application-name" content="SENAPSIS"><meta property="og:site_name" content="SENAPSIS"><meta property="og:title" content="SENAPSIS — plataforma de aprendizaje">
+  <meta name="description" content="SENAPSIS reúne la información de tu ficha de formación y ofrece lecciones, ejercicios y simuladores para repasar sus competencias.">
+  <meta name="application-name" content="SENAPSIS"><meta property="og:site_name" content="SENAPSIS"><meta property="og:title" content="SENAPSIS — plataforma colaborativa para fichas de formación">
   <meta name="traza-release" content="simulador-v3-20261115-1850">
-  <meta name="theme-color" content="#F7F1E3"><title>SENAPSIS — plataforma de aprendizaje</title>
+  <meta name="theme-color" content="#F7F1E3"><title>SENAPSIS — plataforma colaborativa para fichas de formación</title>
   <link rel="icon" type="image/png" sizes="128x128" href="./src/assets/senapsis-favicon.png">
   <script>let theme,motion;try{theme=localStorage.getItem("traza:v4:theme:home");motion=localStorage.getItem("traza:v2:motion")||localStorage.getItem("traza-motion")}catch{}if(theme!=="light"&&theme!=="dark")theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";if(!["full","soft","reduced"].includes(motion))motion=matchMedia("(prefers-reduced-motion: reduce)").matches?"reduced":"full";document.documentElement.dataset.theme=theme;document.documentElement.dataset.motion=motion;document.querySelector('meta[name="theme-color"]').content=theme==="dark"?"#0D1524":"#F7F1E3"</script>
   <link rel="stylesheet" href="./src/styles/tokens.css"><link rel="stylesheet" href="./src/styles/layout.css">
@@ -80,14 +80,14 @@
 
     <section class="space-view home-view" id="view-home" data-view="home" aria-labelledby="home-title" hidden>
       <header class="home-intro">
-        <p class="eyebrow">ADSO · FICHA 3602557</p>
-        <h1 id="home-title">¿Qué vas a trabajar hoy?</h1>
+        <p class="eyebrow">FICHA DE FORMACIÓN · ADSO</p>
+        <h1 id="home-title">La información de tu ficha, en un solo lugar.</h1>
       </header>
       <div class="home-grid">
-        <a class="home-card" data-home-section="ficha" href="#view-hoy" data-go="hoy" aria-label="Abrir Mi ficha: tu horario, tus evidencias y tus documentos">
+        <a class="home-card" data-home-section="ficha" href="#view-hoy" data-go="hoy" aria-label="Abrir Mi ficha: consulta clases, actividades, horarios y recursos compartidos">
           <span class="home-card-kicker">MI FICHA</span>
           <h2>Mi ficha</h2>
-          <p>Tu horario, tus evidencias y tus documentos.</p>
+          <p>Consulta clases, actividades, horarios y recursos compartidos.</p>
           <span class="home-illustration home-agenda" aria-hidden="true">
             <span class="agenda-day agenda-day-left"><small>Lun</small><b>16</b></span>
             <span class="agenda-day agenda-day-main"><small>Mar</small><b>17</b><i></i><em>2</em></span>
@@ -95,10 +95,10 @@
           </span>
           <span class="home-card-enter" aria-hidden="true">↓</span>
         </a>
-        <a class="home-card" data-home-section="aprende" href="#view-learn" data-go="learn" aria-label="Abrir Aprende: entiende la lógica, paso a paso">
+        <a class="home-card" data-home-section="aprende" href="#view-learn" data-go="learn" aria-label="Abrir Aprende: repasa competencias con lecciones, ejercicios y simuladores">
           <span class="home-card-kicker">APRENDE</span>
           <h2>Aprende</h2>
-          <p>Entiende la lógica, paso a paso.</p>
+          <p>Repasa las competencias de tu ficha con lecciones y ejercicios.</p>
           <svg class="home-illustration home-flow" viewBox="0 0 360 230" aria-hidden="true">
             <path class="flow-line" d="M180 42v24m0 34v24m0 36v24"/>
             <ellipse class="flow-shape flow-terminal" cx="180" cy="24" rx="48" ry="18"/><text class="flow-text-strong" x="180" y="29">Inicio</text>

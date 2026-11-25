@@ -1,6 +1,6 @@
 # ESTADO · Senapsis · 25 de noviembre de 2026
 
-Instantánea de la rama `mejoras-desarrollo` en `30271c1` (`Últimos cambios de mejoras`). Los informes por fase conservan sus resultados y fechas originales; no representan una ejecución nueva de pruebas.
+Instantánea de la rama principal `main`. Los informes por fase conservan sus resultados y fechas originales; no representan una ejecución nueva de pruebas.
 ## Avance
 
 | Fase | Estado |
@@ -12,6 +12,7 @@ Instantánea de la rama `mejoras-desarrollo` en `30271c1` (`Últimos cambios de 
 
 ## Arquitectura y decisiones
 
+- Senapsis organiza la información compartida de una ficha para aprendices e instructores autorizados. **Mi ficha** es el espacio central; **Aprende** complementa la formación con material de repaso vinculado a competencias. La instalación actual administra una ficha; multi-ficha y cuentas individuales de aprendices quedan fuera de alcance.
 - `src/content/` y `src/math/` son fuente de verdad. Los bancos actuales contienen 108 ejercicios; `exercise-adapter.js` adapta y valida sin mutar los catálogos.
 - Fase 3b espera aprobación expresa del informe antes de redactar o reescribir contenido. `MAT-ENT-15` requiere confirmar transcripción. `reference/` está protegida.
 - Aprende ofrece competencias → temas → ejercicios, lista ordenada, filtros, estado local y hojas de contenido con apartados disponibles, tema compartido, enlaces, pseudocódigo opcional, simulador, resolución y scroll restaurado. Rediseño Aprende, PASOS 1–6: paleta, marcadores y diagramas accesibles; marca SENAPSIS con wordmark y lema; navegación con competencia/tema compartidos; lecciones y ejercicios en dos zonas con cajón móvil accesible, filtros de dificultad y conceptos en ejercicios, enlaces directos al Simulador y retorno al mismo ítem. El rombo de decisión usa superficie neutra y trazo estructural. El Simulador conserva su diseño.
